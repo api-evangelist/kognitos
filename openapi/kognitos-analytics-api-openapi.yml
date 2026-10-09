@@ -1,0 +1,966 @@
+openapi: 3.2.0
+info:
+  title: Kognitos Analytics API
+  version: 1.0.0
+  contact:
+    name: Kognitos
+    url: https://kognitos.com
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  description: 'Operations tagged Analytics across 2 of this provider''s published API definitions: kognitos-openapi.yaml, kognitos-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://app.us-1.kognitos.com
+security:
+- BearerAuth: []
+tags:
+- name: Analytics
+  description: Query dashboards, automation estimates, insights, and metrics.
+paths:
+  /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/dashboards:configureAutomationEstimates:
+    post:
+      summary: Configure Automation Estimates
+      operationId: ConfigureAutomationEstimates
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/dashboardsConfigureAutomationEstimatesResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConfigureAutomationEstimatesBody'
+        required: true
+      tags:
+      - Analytics
+    servers:
+    - url: https://app.us-1.kognitos.com
+  /api/v1/organizations/{organization_id}/dashboards:queryInsights:
+    get:
+      summary: Query Insights
+      operationId: QueryInsights
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/dashboardsQueryInsightsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: filter.workspace_ids
+        description: 'Optional list of workspace IDs to filter insights.
+
+          Format: organizations/{organization}/workspaces/{workspace}
+
+          If empty, insights for all workspaces are returned.'
+        in: query
+        required: false
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: filter.automation_ids
+        description: 'Optional list of automation IDs to filter insights.
+
+          Format: organizations/{organization}/workspaces/{workspace}/automations/{automation}
+
+          If empty, insights for all automations are returned.'
+        in: query
+        required: false
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: filter.time_window.start_time
+        description: The start time of the window (inclusive).
+        in: query
+        required: true
+        schema:
+          type: string
+          format: date-time
+      - name: filter.time_window.end_time
+        description: The end time of the window (inclusive).
+        in: query
+        required: true
+        schema:
+          type: string
+          format: date-time
+      - name: filter.time_window.time_zone
+        description: 'The timezone for interpreting the time window.
+
+          Format: IANA timezone identifier (e.g., "America/New_York", "Europe/London").
+
+          Defaults to "UTC" if not specified.'
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - Analytics
+    servers:
+    - url: https://app.us-1.kognitos.com
+  /api/v1/organizations/{organization_id}/dashboards:queryAutomationEstimates:
+    get:
+      summary: Query Automation Estimates
+      operationId: QueryAutomationEstimates
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/dashboardsQueryAutomationEstimatesResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Analytics
+    servers:
+    - url: https://app.us-1.kognitos.com
+  /api/v1/organizations/{organization_id}/metrics:query:
+    get:
+      summary: Query Metrics
+      description: 'This RPC retrieves time-series metric data for a specific organization,
+
+        supporting multiple metrics in a single request. Results can be filtered,
+
+        grouped, and sorted by tag dimensions.
+
+
+        The response contains one result per requested metric. Each result includes
+
+        multiple time series (one per unique group_by combination), with each series
+
+        containing chronologically ordered data points showing the aggregated metric
+
+        value over time.
+
+
+        Use the filter parameter (AIP-160 syntax) to restrict data to specific
+
+        tag values, and group_by to break down results by tag dimensions. The
+
+        order_by and page_size parameters enable sorting and limiting results
+
+        (useful for "top N" queries). The interval and aggregation parameters
+
+        control how data is aggregated. If not specified, the server will determine
+
+        appropriate defaults based on the time range.
+
+
+        Example use cases:
+
+        - Dashboard view: metrics=["runs", "pages"], group_by=["status"]
+
+        - Top 10 workspaces: metrics=["runs"], group_by=["workspace_id"],
+
+        order_by="value desc", page_size=10
+
+        - Success rate: metrics=["runs"], filter=''status = "success"''
+
+        - Multi-metric comparison: metrics=["files", "automations"],
+
+        group_by=["workspace_id"]'
+      operationId: QueryMetrics
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1QueryMetricsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: metrics
+        description: 'The names of the metrics to query.
+
+
+          Identifies which metric types to retrieve data for in a single request.
+
+          All metrics will use the same filter, group_by, time range, interval,
+
+          and aggregation settings.
+
+
+          Examples: ["runs"], ["runs", "pages"], ["files", "automations"]'
+        in: query
+        required: true
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: filter
+        description: 'Filter expression to apply before aggregation.
+
+
+          Reduces the dataset to only records matching the filter criteria.
+
+          Uses the AIP-160 filtering syntax for flexible query expressions.
+
+          An empty string means no filtering (all records included).
+
+
+          Supported operators: =, !=, AND, OR, NOT, IN
+
+
+          Examples:
+
+          - ''status = "success"''
+
+          - ''status = "success" AND workspace_id = "ws_123"''
+
+          - ''status IN ["success", "pending"]''
+
+          - ''workspace_id = "ws_123" OR workspace_id = "ws_456"''
+
+
+          See https://google.aip.dev/160 for full syntax specification.'
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: group_by
+        description: 'Tag dimensions to group results by.
+
+
+          Each unique combination of these tag values becomes a separate time series.
+
+          An empty list means no grouping (single aggregated series).
+
+
+          Examples: ["status"], ["workspace_id", "status"]'
+        in: query
+        required: false
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: start_time
+        description: 'Start time for the query range (inclusive).
+
+
+          Data points with timestamps on or after this time will be included.'
+        in: query
+        required: true
+        schema:
+          type: string
+          format: date-time
+      - name: end_time
+        description: 'End time for the query range (exclusive).
+
+
+          Data points with timestamps before this time will be included.'
+        in: query
+        required: true
+        schema:
+          type: string
+          format: date-time
+      - name: interval
+        description: "Requested time interval for aggregation.\n\nSpecifies the desired granularity for data points. The server may\nadjust this based on the time range or data availability.\n\nIf unspecified, the server will determine an appropriate interval.\n\n - METRIC_INTERVAL_UNSPECIFIED: Unspecified interval. Server will determine appropriate interval.\n - METRIC_INTERVAL_HOUR: Hourly aggregation.\n - METRIC_INTERVAL_DAY: Daily aggregation.\n - METRIC_INTERVAL_WEEK: Weekly aggregation.\n - METRIC_INTERVAL_MONTH: Monthly aggregation."
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - METRIC_INTERVAL_UNSPECIFIED
+          - METRIC_INTERVAL_HOUR
+          - METRIC_INTERVAL_DAY
+          - METRIC_INTERVAL_WEEK
+          - METRIC_INTERVAL_MONTH
+          default: METRIC_INTERVAL_UNSPECIFIED
+      - name: aggregation
+        description: "Aggregation function to apply to metric values.\n\nSpecifies how values should be combined within each interval.\n\nIf unspecified, defaults to COUNT.\n\n - AGGREGATION_FUNCTION_UNSPECIFIED: Unspecified aggregation. Defaults to COUNT.\n - AGGREGATION_FUNCTION_COUNT: Count of occurrences.\n - AGGREGATION_FUNCTION_SUM: Sum of values.\n - AGGREGATION_FUNCTION_AVG: Average of values.\n - AGGREGATION_FUNCTION_MIN: Minimum value.\n - AGGREGATION_FUNCTION_MAX: Maximum value."
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - AGGREGATION_FUNCTION_UNSPECIFIED
+          - AGGREGATION_FUNCTION_COUNT
+          - AGGREGATION_FUNCTION_SUM
+          - AGGREGATION_FUNCTION_AVG
+          - AGGREGATION_FUNCTION_MIN
+          - AGGREGATION_FUNCTION_MAX
+          default: AGGREGATION_FUNCTION_UNSPECIFIED
+      - name: order_by
+        description: 'Ordering for series results within each metric.
+
+
+          Uses AIP-132 syntax: "field_name [asc|desc]"
+
+          Multiple orderings can be comma-separated.
+
+
+          Supported fields:
+
+          - Tag names from group_by (e.g., "workspace_id asc", "status desc")
+
+          - "value" for sorting by aggregated metric value (uses last data point)
+
+
+          Examples:
+
+          - "value desc" - Highest values first (e.g., top workspaces)
+
+          - "workspace_id asc" - Alphabetical by workspace ID
+
+          - "value desc, workspace_id asc" - By value descending, then workspace ascending
+
+
+          If unspecified, series are returned in arbitrary order.
+
+
+          See https://google.aip.dev/132 for full syntax specification.'
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: page_size
+        description: 'Maximum number of series to return per metric.
+
+
+          Limits the number of time series in each metric''s results.
+
+          Useful with order_by for "top N" queries.
+
+
+          If unspecified or zero, all matching series are returned.
+
+          If page_size is larger than the number of matching series, all series
+
+          are returned.
+
+
+          Example: order_by="value desc", page_size=10 returns top 10 series.'
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: page_token
+        description: 'Pagination token for retrieving the next page of series.
+
+
+          When a response contains more series than page_size, the next_page_token
+
+          from the response can be passed here to retrieve the next page.
+
+
+          If empty, returns the first page of results.
+
+
+          See https://google.aip.dev/158 for pagination specification.'
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - Analytics
+    servers:
+    - url: https://app.us-1.kognitos.com
+components:
+  schemas:
+    rpcStatus:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/protobufAny'
+    v1MetricInterval:
+      type: string
+      enum:
+      - METRIC_INTERVAL_UNSPECIFIED
+      - METRIC_INTERVAL_HOUR
+      - METRIC_INTERVAL_DAY
+      - METRIC_INTERVAL_WEEK
+      - METRIC_INTERVAL_MONTH
+      default: METRIC_INTERVAL_UNSPECIFIED
+      description: "Time interval for metric aggregation.\n\nSpecifies the granularity at which metric data points are aggregated.\nThe server may adjust the requested interval based on the time range\nor data availability.\n\n - METRIC_INTERVAL_UNSPECIFIED: Unspecified interval. Server will determine appropriate interval.\n - METRIC_INTERVAL_HOUR: Hourly aggregation.\n - METRIC_INTERVAL_DAY: Daily aggregation.\n - METRIC_INTERVAL_WEEK: Weekly aggregation.\n - METRIC_INTERVAL_MONTH: Monthly aggregation."
+    dashboardsConfigureAutomationEstimatesResponse:
+      type: object
+      properties:
+        automation_estimates:
+          type: array
+          items:
+            $ref: '#/components/schemas/dashboardsAutomationEstimate'
+          description: The list of configured automation estimates.
+          readOnly: true
+      description: 'Response message for ConfigureAutomationEstimates method.
+
+        Returns the configured automation estimates for the workspace.'
+    v1QueryMetricsResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1MetricResult'
+          description: 'Results for each requested metric.
+
+
+            Ordered in the same sequence as the metrics field in the request.
+
+            Each result contains the time series data for one metric.'
+          readOnly: true
+        next_page_token:
+          type: string
+          description: 'Token for retrieving the next page of results.
+
+
+            If non-empty, there are more results available. Pass this value as
+
+            page_token in the next request to retrieve the next page.
+
+
+            If empty, there are no more results (this is the last page).
+
+
+            When paginating, all metrics will include their next page of series.
+
+
+            See https://google.aip.dev/158 for pagination specification.'
+          readOnly: true
+      description: 'Response message for the QueryMetrics RPC.
+
+
+        Contains results for each requested metric, with time series data
+
+        and metadata about the query execution.'
+      required:
+      - results
+    dashboardsCumulativeCompletionInsight:
+      type: object
+      properties:
+        window_label:
+          type: string
+          description: The display label of the time period (e.g., "Week 1", "January 2025").
+          readOnly: true
+        auto_completed_count:
+          type: string
+          format: int64
+          description: Number of runs that completed automatically without manual intervention.
+          readOnly: true
+        manually_resolved_count:
+          type: string
+          format: int64
+          description: Number of runs that required manual resolution.
+          readOnly: true
+      description: CumulativeCompletionInsight contains completion metrics for a specific time period.
+    protobufAny:
+      type: object
+      properties:
+        '@type':
+          type: string
+      additionalProperties: {}
+    dashboardsTrend:
+      type: object
+      properties:
+        percent_change:
+          type: number
+          format: double
+          description: 'The percentage change compared to the previous time window.
+
+            Positive values indicate increase, negative values indicate decrease.'
+          readOnly: true
+        comparison_window:
+          type: string
+          description: The label of the time window being compared against (e.g., "Last Week", "Previous Month").
+          readOnly: true
+      description: Trend represents a percentage change compared to a previous time window.
+    dashboardsQueryAutomationEstimatesResponse:
+      type: object
+      properties:
+        workspace_estimates:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/dashboardsAutomationEstimateList'
+          title: 'Automation estimates grouped per workspace.
+
+            Key: workspace_id (format: organizations/{org}/workspaces/{workspace})'
+          readOnly: true
+      description: 'Response message for QueryAutomationEstimates method.
+
+        Contains automation estimates grouped by workspace.'
+    v1AggregationFunction:
+      type: string
+      enum:
+      - AGGREGATION_FUNCTION_UNSPECIFIED
+      - AGGREGATION_FUNCTION_COUNT
+      - AGGREGATION_FUNCTION_SUM
+      - AGGREGATION_FUNCTION_AVG
+      - AGGREGATION_FUNCTION_MIN
+      - AGGREGATION_FUNCTION_MAX
+      default: AGGREGATION_FUNCTION_UNSPECIFIED
+      description: "Aggregation function for metric values.\n\nSpecifies how metric values should be aggregated within each interval.\n\n - AGGREGATION_FUNCTION_UNSPECIFIED: Unspecified aggregation. Defaults to COUNT.\n - AGGREGATION_FUNCTION_COUNT: Count of occurrences.\n - AGGREGATION_FUNCTION_SUM: Sum of values.\n - AGGREGATION_FUNCTION_AVG: Average of values.\n - AGGREGATION_FUNCTION_MIN: Minimum value.\n - AGGREGATION_FUNCTION_MAX: Maximum value."
+    dashboardsRunInsight:
+      type: object
+      properties:
+        total_runs_count:
+          type: string
+          format: int64
+          description: Total number of runs across all automations and workspaces.
+          readOnly: true
+        insights_per_automation_per_workspace:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/dashboardsAutomationRunInsightList'
+          title: 'Run insights grouped per automation per workspace.
+
+            Key: workspace_id (format: organizations/{org}/workspaces/{workspace})'
+          readOnly: true
+        insights_per_period_per_workspace:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/dashboardsCumulativeRunInsightList'
+          title: 'Run insights grouped per time period per workspace.
+
+            Key: workspace_id (format: organizations/{org}/workspaces/{workspace})'
+          readOnly: true
+        trend:
+          $ref: '#/components/schemas/dashboardsTrend'
+      description: RunInsight contains aggregated runCount metrics.
+    dashboardsValueInsight:
+      type: object
+      properties:
+        total_money_saved_usd:
+          type: string
+          description: Total money saved across all automations and workspaces in USD.
+          readOnly: true
+        total_time_saved_secs:
+          type: string
+          format: int64
+          description: Total time saved across all automations and workspaces in seconds.
+          readOnly: true
+        insights_per_automation_per_workspace:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/dashboardsAutomationValueInsightList'
+          title: 'Value insights grouped per automation per workspace.
+
+            Key: workspace_id (format: organizations/{org}/workspaces/{workspace})'
+          readOnly: true
+        insights_per_period_per_workspace:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/dashboardsCumulativeValueInsightList'
+          title: 'Value insights grouped per time period per workspace.
+
+            Key: workspace_id (format: organizations/{org}/workspaces/{workspace})'
+          readOnly: true
+      description: ValueInsight contains aggregated value metrics (cost and time savings).
+    dashboardsAutomationEstimate:
+      type: object
+      properties:
+        automation_id:
+          type: string
+          title: 'The automation ID this estimate applies to.
+
+            Format: organizations/{organization}/workspaces/{workspace}/automations/{automation}'
+        cost_usd:
+          type: string
+          description: The estimated cost saved per run in USD.
+        time_saved_secs:
+          type: integer
+          format: int32
+          description: The estimated time saved per run in seconds.
+      description: AutomationEstimate represents the estimated value metrics for an automation.
+      required:
+      - automation_id
+      - cost_usd
+      - time_saved_secs
+    dashboardsCumulativeRunInsightList:
+      type: object
+      properties:
+        values:
+          type: array
+          items:
+            $ref: '#/components/schemas/dashboardsCumulativeRunInsight'
+          description: List of run insights per time period.
+          readOnly: true
+      description: CumulativeRunInsightList contains run insights grouped per time period within a workspace.
+    v1MetricSeries:
+      type: object
+      properties:
+        tags:
+          type: object
+          additionalProperties:
+            type: string
+          description: 'Tags identifying this series.
+
+
+            The unique combination of group_by tag values that define this series.
+
+            If group_by is empty, this will be an empty map.
+
+
+            Example: {"status": "success", "workspace_id": "ws_123"}'
+          readOnly: true
+        points:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1MetricDataPoint'
+          description: 'Time series data points for this specific tag combination.
+
+
+            Chronologically ordered data points showing the metric value over time.'
+          readOnly: true
+      description: 'A single time series for a specific combination of tag values.
+
+
+        Each series represents one unique combination of the group_by dimensions,
+
+        containing data points over time for that specific combination.'
+      required:
+      - tags
+      - points
+    dashboardsCompletionInsight:
+      type: object
+      properties:
+        total_percent_completions:
+          type: number
+          format: double
+          description: Overall completion percentage across all runs.
+          readOnly: true
+        completions_per_period:
+          type: array
+          items:
+            $ref: '#/components/schemas/dashboardsCumulativeCompletionInsight'
+          description: Completion insights grouped per time period.
+          readOnly: true
+        trend:
+          $ref: '#/components/schemas/dashboardsTrend'
+        stp:
+          type: number
+          format: double
+          description: Straight-through processing rate.
+          readOnly: true
+      description: CompletionInsight contains completion rate metrics.
+    dashboardsQueryInsightsResponse:
+      type: object
+      properties:
+        value_insight:
+          $ref: '#/components/schemas/dashboardsValueInsight'
+        run_insight:
+          $ref: '#/components/schemas/dashboardsRunInsight'
+        completion_insight:
+          $ref: '#/components/schemas/dashboardsCompletionInsight'
+        awaiting_guidance_insight:
+          $ref: '#/components/schemas/dashboardsAwaitingGuidanceInsight'
+      description: 'Response message for QueryInsights method.
+
+        Contains aggregated analytics insights across value, runs, and completions.'
+    dashboardsAutomationValueInsightList:
+      type: object
+      properties:
+        values:
+          type: array
+          items:
+            $ref: '#/components/schemas/dashboardsAutomationValueInsight'
+          description: List of value insights per automation.
+          readOnly: true
+      description: AutomationValueInsightList contains value insights for automations within a workspace.
+    dashboardsAutomationRunInsight:
+      type: object
+      properties:
+        automation_id:
+          type: string
+          title: 'The automation ID.
+
+            Format: organizations/{organization}/workspaces/{workspace}/automations/{automation}'
+          readOnly: true
+        display_name:
+          type: string
+          description: The display name of the automation.
+          readOnly: true
+        runs_count:
+          type: string
+          format: int64
+          description: Number of runs for this automation.
+          readOnly: true
+      description: AutomationRunInsight contains run count metrics for a specific automation.
+    dashboardsRunsAwaitingGuidanceByPeriod:
+      type: object
+      properties:
+        window_label:
+          type: string
+          description: The display label of the time period (e.g., "January 2026", "December 2025").
+          readOnly: true
+        runs_awaiting_guidance:
+          type: string
+          format: int64
+          description: Number of runs created in this period that are awaiting guidance.
+          readOnly: true
+      description: RunsAwaitingGuidanceByPeriod contains runs awaiting guidance for a specific time period.
+    dashboardsCumulativeValueInsight:
+      type: object
+      properties:
+        window_label:
+          type: string
+          description: The display label of the time period (e.g., "Week 1", "January 2025").
+          readOnly: true
+        time_saved_secs:
+          type: string
+          format: int64
+          description: Time saved during this period in seconds.
+          readOnly: true
+        money_saved_usd:
+          type: string
+          description: Money saved during this period in USD.
+          readOnly: true
+      description: CumulativeValueInsight contains value metrics for a specific time period.
+    v1MetricResult:
+      type: object
+      properties:
+        metric:
+          type: string
+          description: 'The name of this metric.
+
+
+            Echoes back the metric name from the request.'
+          readOnly: true
+        interval:
+          $ref: '#/components/schemas/v1MetricInterval'
+        aggregation:
+          $ref: '#/components/schemas/v1AggregationFunction'
+        series:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1MetricSeries'
+          description: 'Multiple time series, one per unique group_by combination.
+
+
+            If group_by is empty, there will be exactly one series with empty tags.
+
+            If group_by has values, there will be one series per unique combination
+
+            found in the data.
+
+
+            Series are ordered according to the order_by parameter in the request.
+
+            If page_size was specified, results are paginated across all metrics.
+
+
+            The list may be empty if no data exists for the requested time range.'
+          readOnly: true
+      description: 'Result for a single metric query.
+
+
+        Contains the time series data and metadata for one metric.'
+      required:
+      - metric
+      - interval
+      - aggregation
+      - series
+    dashboardsAutomationEstimateList:
+      type: object
+      properties:
+        estimates:
+          type: array
+          items:
+            $ref: '#/components/schemas/dashboardsAutomationEstimate'
+          description: List of automation estimates for a workspace.
+          readOnly: true
+      description: Wrapper for a list of automation estimates.
+    dashboardsAutomationValueInsight:
+      type: object
+      properties:
+        automation_id:
+          type: string
+          title: 'The automation ID.
+
+            Format: organizations/{organization}/workspaces/{workspace}/automations/{automation}'
+          readOnly: true
+        display_name:
+          type: string
+          description: The display name of the automation.
+          readOnly: true
+        time_saved_secs:
+          type: string
+          format: int64
+          description: Time saved by this automation in seconds.
+          readOnly: true
+        money_saved_usd:
+          type: string
+          description: Money saved by this automation in USD.
+          readOnly: true
+      description: AutomationValueInsight contains value metrics for a specific automation.
+    dashboardsAwaitingGuidanceInsight:
+      type: object
+      properties:
+        total_runs_awaiting_guidance:
+          type: string
+          format: int64
+          description: Total number of runs awaiting guidance.
+          readOnly: true
+        runs_per_period:
+          type: array
+          items:
+            $ref: '#/components/schemas/dashboardsRunsAwaitingGuidanceByPeriod'
+          description: Runs awaiting guidance grouped per time period.
+          readOnly: true
+      description: AwaitingGuidanceInsight contains metrics for runs awaiting guidance.
+    dashboardsCumulativeRunInsight:
+      type: object
+      properties:
+        window_label:
+          type: string
+          description: The display label of the time period (e.g., "Week 1", "January 2025").
+          readOnly: true
+        runs_count:
+          type: string
+          format: int64
+          description: Number of runs during this period.
+          readOnly: true
+      description: CumulativeRunInsight contains run count metrics for a specific time period.
+    dashboardsAutomationRunInsightList:
+      type: object
+      properties:
+        values:
+          type: array
+          items:
+            $ref: '#/components/schemas/dashboardsAutomationRunInsight'
+          description: List of run insights per automation.
+          readOnly: true
+      description: AutomationRunInsightList contains run insights for automations within a workspace.
+    dashboardsCumulativeValueInsightList:
+      type: object
+      properties:
+        values:
+          type: array
+          items:
+            $ref: '#/components/schemas/dashboardsCumulativeValueInsight'
+          description: List of value insights per time period.
+          readOnly: true
+      description: CumulativeValueInsightList contains value insights grouped per time period within a workspace.
+    v1MetricDataPoint:
+      type: object
+      properties:
+        start_time:
+          type: string
+          format: date-time
+          description: 'The start time for this data point''s interval.
+
+
+            Represents the start of the interval for which the value is aggregated.'
+          readOnly: true
+        value:
+          type: number
+          format: double
+          description: 'The aggregated metric value for this interval.
+
+
+            Result of applying the aggregation function to all matching records
+
+            within this interval for this series'' tag combination.'
+          readOnly: true
+        window_label:
+          type: string
+          description: 'Human-readable label for the time window.
+
+
+            Provides a formatted display name for the interval, formatted according
+
+            to the interval granularity and the user''s locale preferences.
+
+
+            Examples:
+
+            - HOUR: "Jan 15, 2025 10:00 AM", "2025-01-15 10:00"
+
+            - DAY: "January 15, 2025", "2025-01-15"
+
+            - WEEK: "Week of Jan 15, 2025", "2025-W03"
+
+            - MONTH: "January 2025", "2025-01"'
+          readOnly: true
+      description: 'A single data point in a metric time series.
+
+
+        Represents an aggregated metric value at a specific point in time.'
+      required:
+      - start_time
+      - value
+      - window_label
+    ConfigureAutomationEstimatesBody:
+      type: object
+      properties:
+        automation_estimates:
+          type: array
+          items:
+            $ref: '#/components/schemas/dashboardsAutomationEstimate'
+          description: The list of automation estimates to configure.
+      description: 'Request message for ConfigureAutomationEstimates method.
+
+        Configures the estimated cost and time savings for automations within a workspace.'
+      required:
+      - automation_estimates
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: Personal Access Token.
+x-refined-from:
+- kognitos-openapi.yaml
+- kognitos-openapi.yml

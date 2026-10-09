@@ -1,0 +1,97 @@
+generated: '2026-10-09'
+method: probed
+source: pre-flight dossier (docs platform, portal detections) + CNAME chains and response headers of the hosts apis.yml names
+registry: all/0-working/vendors.yml
+areas_vocabulary:
+- documentation
+- developer-portal
+- api-gateway
+- cdn
+- hosting
+- sdk-generation
+- api-collections
+- status-page
+- support
+- community
+- identity
+- mcp-hosting
+vendors:
+- vendor: cloudflare
+  name: Cloudflare
+  area: cdn
+  host: docs.kognitos.com
+  evidence: header:cf-ray
+  signal: header
+  confidence: high
+  kin_score:
+  - https_enforced
+  - hsts
+- vendor: cloudfront
+  name: Amazon CloudFront
+  area: cdn
+  host: app.us-1.kognitos.com
+  evidence: header:x-amz-cf-id
+  signal: header
+  confidence: high
+  kin_score: []
+- vendor: gitbook
+  name: GitBook
+  area: documentation
+  host: docs.kognitos.com
+  evidence: cname:gitbook.io
+  signal: docs-platform
+  confidence: high
+  kin_score:
+  - openapi_published
+  - llms_txt
+- vendor: vercel
+  name: Vercel
+  area: hosting
+  host: www.kognitos.com
+  evidence: header:x-vercel-id
+  signal: header
+  confidence: high
+  kin_score: []
+- vendor: auth0
+  name: Auth0 (Okta)
+  area: identity
+  host: auth.app.us-1.kognitos.com
+  evidence: kognitos-auth-oauth-authorization-server.json names auth0 in its OAuth metadata
+  signal: oauth-metadata
+  confidence: high
+  kin_score:
+  - authentication
+- vendor: incident-io
+  name: incident.io
+  area: status-page
+  host: status.kognitos.com
+  evidence: cname:incident.io
+  signal: cname
+  confidence: high
+  kin_score:
+  - status_page
+reliance:
+  areas_vendor_served:
+  - cdn
+  - documentation
+  - hosting
+  - identity
+  - status-page
+  vendor_count: 6
+  areas_observed: 12
+  share_of_observable_areas: 0.417
+  note: areas where a third party was DETECTED serving this provider; an area absent here was either self-run or not observed, and this script
+    cannot tell those apart
+checked:
+- 'docs-platform: gitbook'
+- www.kognitos.com (Website)
+- www.kognitos.com (DeveloperPortal)
+- docs.kognitos.com (Documentation)
+- docs.kognitos.com (APIReference)
+- docs.kognitos.com (GettingStarted)
+- app.us-1.kognitos.com (Login)
+- status.kognitos.com (StatusPage)
+- www.kognitos.com (Support)
+- app.us-1.kognitos.com (baseURL)
+- mcp.us-1.kognitos.com (baseURL)
+- mcp.us-1.kognitos.com (mcp)

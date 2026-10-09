@@ -1,0 +1,19 @@
+# harvested from https://github.com/kognitos/openapi/blob/edf6b8b8988fd6aff8938039aaa1e96c2ec88b6b/.spectral.yaml on 2026-10-09 — a Spectral ruleset published in the provider's own GitHub repository (kognitos/openapi); found by GitHub code search, fetched verbatim
+x-method: harvested
+x-stamped: 2026-10-09
+x-source-url: https://github.com/kognitos/openapi/blob/edf6b8b8988fd6aff8938039aaa1e96c2ec88b6b/.spectral.yaml
+extends:
+  - spectral:oas
+
+rules:
+  # Require operation descriptions
+  operation-description: warn
+
+  # Require operation IDs
+  operation-operationId: error
+
+  # Require info contact
+  info-contact: off
+
+  # Require info license
+  info-license: off

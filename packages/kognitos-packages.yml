@@ -1,0 +1,52 @@
+generated: '2026-10-09'
+method: searched
+source: https://github.com/kognitos
+packages:
+- name: '@kognitos/node'
+  registry: npm
+  url: https://www.npmjs.com/package/@kognitos/node
+  language: TypeScript
+  official: true
+  version: 1.0.2
+  published: '2026-03-10'
+  repository: https://github.com/kognitos/kognitos-node
+  description: Kognitos Node.js SDK - TypeScript SDK for the Kognitos API (retry with backoff, pagination iterators, NDJSON streaming, us/eu/uk regions).
+  evidence: Repo in the kognitos GitHub org; package.json name @kognitos/node; version/date from registry.npmjs.org.
+- name: kognitos-bdk-api
+  registry: pypi
+  url: https://pypi.org/project/kognitos-bdk-api/
+  language: Python
+  official: true
+  version: 2.8.0
+  published: '2026-10-01'
+  description: Kognitos Book Development Kit - the core Python library for custom Book development.
+  evidence: PyPI author email @kognitos.com; BDK documented at https://docs.kognitos.com/legacy/legacy-experience/books/custom-books
+- name: kognitos-bdk-runtime-client
+  registry: pypi
+  url: https://pypi.org/project/kognitos-bdk-runtime-client/
+  language: Python
+  official: true
+  version: 1.37.0
+  published: '2025-10-14'
+  description: Kognitos Book Runtime Client.
+  evidence: PyPI author email @kognitos.com
+- name: kognitos-bdk-poetry-plugin
+  registry: pypi
+  url: https://pypi.org/project/kognitos-bdk-poetry-plugin/
+  language: Python
+  official: true
+  version: 1.7.1
+  published: '2026-06-01'
+  description: Kognitos BDK Poetry Plugin (manages dependencies, versioning and documentation for books).
+  evidence: PyPI author email @kognitos.com
+- name: kognitos-bdk-klang
+  registry: pypi
+  url: https://pypi.org/project/kognitos-bdk-klang/
+  language: Python
+  official: true
+  version: 2.2.2
+  published: '2024-12-19'
+  description: A Signature parser for Kognitos book development kit (BDK).
+  evidence: PyPI author email @kognitos.com
+note: The BDK packages build custom Books (integrations) for the platform rather than wrapping the REST API;
+  @kognitos/node is the only REST API client SDK found. Probed and absent - npm "kognitos", PyPI "kognitos".

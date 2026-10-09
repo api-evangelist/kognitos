@@ -1,0 +1,10 @@
+name: Kognitos Rate Limits
+generated: '2026-10-09'
+method: none
+source: https://docs.kognitos.com/guides/api-reference/api-reference
+limit_count: 0
+limits: []
+note: No request rate limits are published in the REST API docs (overview, API keys, MCP pages read). The first-party
+  Node SDK (https://github.com/kognitos/kognitos-node) exposes a RateLimitError carrying retryAfter in seconds,
+  implying throttling with a retry-after signal, but no numbers, headers or status code are documented. The API keys
+  page states a key quota of up to 10 API keys per organization (a resource quota, not a rate).

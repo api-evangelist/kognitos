@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/kognitos/main/json-schema/kognitos-v1-guide-entry-schema.json",
+  "title": "A troubleshooting guide entry for an automation",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/kognitos-openapi.yml#/components/schemas/v1GuideEntry",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "title": "Resource name\nFormat: organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}/guideEntries/{guide_entry_id}"
+    },
+    "content": {
+      "type": "string",
+      "description": "Markdown-formatted entry content\nDeprecated: Use resolution_steps and resolution_code instead."
+    },
+    "source_exception": {
+      "type": "string",
+      "title": "Exception that led to this entry's creation"
+    },
+    "source_run": {
+      "type": "string",
+      "title": "Run where this entry was first created"
+    },
+    "create_time": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Creation timestamp",
+      "readOnly": true
+    },
+    "update_time": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Last update timestamp",
+      "readOnly": true
+    },
+    "delete_time": {
+      "type": "string",
+      "format": "date-time",
+      "description": "The time when this guide entry was soft-deleted.\nIf not set, the entry has not been deleted.\nSoft-deleted entries are not physically removed but marked as deleted.\nAlways set the state to STATE_ARCHIVED whenever the entry is soft-deleted.",
+      "readOnly": true
+    },
+    "title": {
+      "type": "string",
+      "description": "Title of the guide entry\nMarked as optional for backwards compatibility.\nCan be set when creating or updating the guide entry."
+    },
+    "automation": {
+      "type": "string",
+      "title": "The automation that the guide entry belongs to.\nFormat: organizations/{organization}/workspaces/{workspace}/automations/{automation}",
+      "readOnly": true
+    },
+    "root_cause": {
+      "type": "string",
+      "description": "Root cause analysis explaining why the exception occurred.\nThis provides technical context about what caused the issue.\nMarked as optional for backwards compatibility."
+    },
+    "state": {
+      "$ref": "#/$defs/v1GuideEntryState"
+    },
+    "version": {
+      "type": "string",
+      "title": "Semantic version of this specific version of the guide entry (format: major.minor).\nIncremented each time the guide entry is updated.\nExamples: \"0.1\", \"1.0\", \"1.1\", \"2.0\"",
+      "readOnly": true
+    },
+    "resolution_steps": {
+      "type": "string",
+      "description": "Human-readable explanation of the resolution action and steps.\nGitHub Flavored Markdown (GFM) formatted.\n\nResolution Field Guidelines:\n- At least one of resolution_steps, resolution_code, or resolution_notes should be present\n  for the guide entry to be useful. Entries with none of these fields are considered incomplete.\n- These fields are complementary and can be used together:\n  - resolution_steps: The primary resolution instructions\n  - resolution_code: Supporting code examples\n  - resolution_notes: Additional context or caveats"
+    },
+    "resolution_code": {
+      "type": "string",
+      "description": "Example code illustrating how this type of exception was resolved.\nServes as a reference when handling similar exceptions in future runs.\nMay require adaptation based on specific context and should not be applied verbatim."
+    },
+    "resolution_notes": {
+      "type": "string",
+      "description": "Additional notes, caveats, or context about the resolution.\nGitHub Flavored Markdown (GFM) formatted.\nUse for edge cases, warnings, or supplementary information."
+    }
+  },
+  "$defs": {
+    "v1GuideEntryState": {
+      "type": "string",
+      "enum": [
+        "STATE_UNSPECIFIED",
+        "STATE_PENDING_APPROVAL",
+        "STATE_APPROVED",
+        "STATE_REJECTED",
+        "STATE_ARCHIVED"
+      ],
+      "default": "STATE_UNSPECIFIED",
+      "description": "The state of a guide entry.\n\n - STATE_UNSPECIFIED: The state is not specified.\n - STATE_PENDING_APPROVAL: The guide entry is pending approval.\n - STATE_APPROVED: The guide entry is approved.\n - STATE_REJECTED: The guide entry is rejected.\n - STATE_ARCHIVED: The guide entry is archived."
+    }
+  }
+}

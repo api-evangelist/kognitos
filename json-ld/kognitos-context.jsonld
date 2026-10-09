@@ -1,0 +1,968 @@
+{
+  "@context": {
+    "@vocab": "https://kognitos.com/schema#",
+    "schema": "https://schema.org/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "dcterms": "http://purl.org/dc/terms/",
+    "kognitos": "https://kognitos.com/schema#",
+    "v1QueryAutomationRunAggregatesResponse": "kognitos:v1QueryAutomationRunAggregatesResponse",
+    "automation_run_aggregates": {
+      "@id": "kognitos:automation_run_aggregates",
+      "@container": "@list"
+    },
+    "v1AutomationRunAggregateEntry": "kognitos:v1AutomationRunAggregateEntry",
+    "automation_id": {
+      "@id": "kognitos:automation_id",
+      "@type": "xsd:string"
+    },
+    "stats": {
+      "@id": "kognitos:stats",
+      "@type": "@id"
+    },
+    "v1AutomationRunAggregate": "kognitos:v1AutomationRunAggregate",
+    "total_runs": {
+      "@id": "kognitos:total_runs",
+      "@type": "xsd:string"
+    },
+    "completed_runs": {
+      "@id": "kognitos:completed_runs",
+      "@type": "xsd:string"
+    },
+    "v1ListWorkspaceRolesResponse": "kognitos:v1ListWorkspaceRolesResponse",
+    "roles": {
+      "@id": "kognitos:roles",
+      "@container": "@list"
+    },
+    "next_page_token": {
+      "@id": "kognitos:next_page_token",
+      "@type": "xsd:string"
+    },
+    "v1Role": "kognitos:v1Role",
+    "name": {
+      "@id": "kognitos:name",
+      "@type": "xsd:string"
+    },
+    "title": {
+      "@id": "kognitos:title",
+      "@type": "xsd:string"
+    },
+    "description": {
+      "@id": "kognitos:description",
+      "@type": "xsd:string"
+    },
+    "permissions": {
+      "@id": "kognitos:permissions",
+      "@container": "@list"
+    },
+    "v1ListAutomationTriggersResponse": "kognitos:v1ListAutomationTriggersResponse",
+    "automation_triggers": {
+      "@id": "kognitos:automation_triggers",
+      "@container": "@list"
+    },
+    "v1AutomationTrigger": "kognitos:v1AutomationTrigger",
+    "trigger_id": {
+      "@id": "kognitos:trigger_id",
+      "@type": "xsd:string"
+    },
+    "automation": {
+      "@id": "kognitos:automation",
+      "@type": "xsd:string"
+    },
+    "input_mapping": {
+      "@id": "kognitos:input_mapping"
+    },
+    "phase_type": {
+      "@id": "kognitos:phase_type",
+      "@type": "@id"
+    },
+    "phase_sub_type": {
+      "@id": "kognitos:phase_sub_type",
+      "@type": "@id"
+    },
+    "is_active": {
+      "@id": "kognitos:is_active",
+      "@type": "xsd:boolean"
+    },
+    "v1PhaseType": "kognitos:v1PhaseType",
+    "v1PhaseSubType": "kognitos:v1PhaseSubType",
+    "v1Workspace": "kognitos:v1Workspace",
+    "workspace_icon": {
+      "@id": "kognitos:workspace_icon",
+      "@type": "xsd:string"
+    },
+    "workspace_icon_color": {
+      "@id": "kognitos:workspace_icon_color",
+      "@type": "xsd:string"
+    },
+    "create_time": {
+      "@id": "kognitos:create_time",
+      "@type": "xsd:dateTime"
+    },
+    "update_time": {
+      "@id": "kognitos:update_time",
+      "@type": "xsd:dateTime"
+    },
+    "creator_display_name": {
+      "@id": "kognitos:creator_display_name",
+      "@type": "xsd:string"
+    },
+    "creator_email": {
+      "@id": "kognitos:creator_email",
+      "@type": "xsd:string"
+    },
+    "v1ListRunEventsResponse": "kognitos:v1ListRunEventsResponse",
+    "run_events": {
+      "@id": "kognitos:run_events",
+      "@container": "@list"
+    },
+    "v1RunEvent": "kognitos:v1RunEvent",
+    "run_update": {
+      "@id": "kognitos:run_update",
+      "@type": "@id"
+    },
+    "execution_journal": {
+      "@id": "kognitos:execution_journal",
+      "@type": "@id"
+    },
+    "v1ExecutionJournal": "kognitos:v1ExecutionJournal",
+    "execution_id": {
+      "@id": "kognitos:execution_id",
+      "@type": "xsd:string"
+    },
+    "run_id": {
+      "@id": "kognitos:run_id",
+      "@type": "xsd:string"
+    },
+    "event_time": {
+      "@id": "kognitos:event_time",
+      "@type": "xsd:dateTime"
+    },
+    "started": {
+      "@id": "kognitos:started",
+      "@type": "@id"
+    },
+    "completed": {
+      "@id": "kognitos:completed",
+      "@type": "@id"
+    },
+    "stopped": {
+      "@id": "kognitos:stopped",
+      "@type": "@id"
+    },
+    "failed": {
+      "@id": "kognitos:failed",
+      "@type": "@id"
+    },
+    "node_started": {
+      "@id": "kognitos:node_started",
+      "@type": "@id"
+    },
+    "node_executed": {
+      "@id": "kognitos:node_executed",
+      "@type": "@id"
+    },
+    "node_skipped": {
+      "@id": "kognitos:node_skipped",
+      "@type": "@id"
+    },
+    "node_patched": {
+      "@id": "kognitos:node_patched",
+      "@type": "@id"
+    },
+    "patched_node_started": {
+      "@id": "kognitos:patched_node_started",
+      "@type": "@id"
+    },
+    "patched_node_executed": {
+      "@id": "kognitos:patched_node_executed",
+      "@type": "@id"
+    },
+    "automation_phase_id": {
+      "@id": "kognitos:automation_phase_id",
+      "@type": "xsd:string"
+    },
+    "code_hash": {
+      "@id": "kognitos:code_hash",
+      "@type": "xsd:string"
+    },
+    "stage": {
+      "@id": "kognitos:stage",
+      "@type": "@id"
+    },
+    "workspace_id": {
+      "@id": "kognitos:workspace_id",
+      "@type": "xsd:string"
+    },
+    "organization_id": {
+      "@id": "kognitos:organization_id",
+      "@type": "xsd:string"
+    },
+    "extra_metadata": {
+      "@id": "kognitos:extra_metadata"
+    },
+    "v1ExecutionCompleted": "kognitos:v1ExecutionCompleted",
+    "outputs": {
+      "@id": "kognitos:outputs"
+    },
+    "commonV1Value": "kognitos:commonV1Value",
+    "null_value": {
+      "@id": "kognitos:null_value",
+      "@type": "xsd:string"
+    },
+    "bool_value": {
+      "@id": "kognitos:bool_value",
+      "@type": "xsd:boolean"
+    },
+    "number": {
+      "@id": "kognitos:number",
+      "@type": "@id"
+    },
+    "text": {
+      "@id": "kognitos:text",
+      "@type": "xsd:string"
+    },
+    "date": {
+      "@id": "kognitos:date",
+      "@type": "@id"
+    },
+    "timeofday": {
+      "@id": "kognitos:timeofday",
+      "@type": "@id"
+    },
+    "datetime": {
+      "@id": "kognitos:datetime",
+      "@type": "@id"
+    },
+    "time_zone": {
+      "@id": "kognitos:time_zone",
+      "@type": "@id"
+    },
+    "duration": {
+      "@id": "kognitos:duration",
+      "@type": "xsd:string"
+    },
+    "list": {
+      "@id": "kognitos:list",
+      "@type": "@id"
+    },
+    "dictionary": {
+      "@id": "kognitos:dictionary",
+      "@type": "@id"
+    },
+    "file": {
+      "@id": "kognitos:file",
+      "@type": "@id"
+    },
+    "table": {
+      "@id": "kognitos:table",
+      "@type": "@id"
+    },
+    "set": {
+      "@id": "kognitos:set",
+      "@type": "@id"
+    },
+    "typeDateTime": "kognitos:typeDateTime",
+    "year": {
+      "@id": "kognitos:year",
+      "@type": "xsd:integer"
+    },
+    "month": {
+      "@id": "kognitos:month",
+      "@type": "xsd:integer"
+    },
+    "day": {
+      "@id": "kognitos:day",
+      "@type": "xsd:integer"
+    },
+    "hours": {
+      "@id": "kognitos:hours",
+      "@type": "xsd:integer"
+    },
+    "minutes": {
+      "@id": "kognitos:minutes",
+      "@type": "xsd:integer"
+    },
+    "seconds": {
+      "@id": "kognitos:seconds",
+      "@type": "xsd:integer"
+    },
+    "nanos": {
+      "@id": "kognitos:nanos",
+      "@type": "xsd:integer"
+    },
+    "utc_offset": {
+      "@id": "kognitos:utc_offset",
+      "@type": "xsd:string"
+    },
+    "typeTimeZone": "kognitos:typeTimeZone",
+    "id": {
+      "@id": "kognitos:id",
+      "@type": "xsd:string"
+    },
+    "version": {
+      "@id": "kognitos:version",
+      "@type": "xsd:string"
+    },
+    "v1Number": "kognitos:v1Number",
+    "lo": {
+      "@id": "kognitos:lo",
+      "@type": "xsd:integer"
+    },
+    "mid": {
+      "@id": "kognitos:mid",
+      "@type": "xsd:integer"
+    },
+    "hi": {
+      "@id": "kognitos:hi",
+      "@type": "xsd:integer"
+    },
+    "flags": {
+      "@id": "kognitos:flags",
+      "@type": "xsd:integer"
+    },
+    "v1FileValue": "kognitos:v1FileValue",
+    "remote": {
+      "@id": "kognitos:remote",
+      "@type": "xsd:string"
+    },
+    "inline": {
+      "@id": "kognitos:inline",
+      "@type": "@id"
+    },
+    "v1File": "kognitos:v1File",
+    "file_name": {
+      "@id": "kognitos:file_name",
+      "@type": "xsd:string"
+    },
+    "content": {
+      "@id": "kognitos:content",
+      "@type": "xsd:string"
+    },
+    "typeTimeOfDay": "kognitos:typeTimeOfDay",
+    "v1TableValue": "kognitos:v1TableValue",
+    "v1Table": "kognitos:v1Table",
+    "columns": {
+      "@id": "kognitos:columns",
+      "@container": "@list"
+    },
+    "v1Column": "kognitos:v1Column",
+    "values": {
+      "@id": "kognitos:values",
+      "@container": "@list"
+    },
+    "bdkV1Value": "kognitos:bdkV1Value",
+    "conceptual_value": {
+      "@id": "kognitos:conceptual_value",
+      "@type": "@id"
+    },
+    "text_value": {
+      "@id": "kognitos:text_value",
+      "@type": "xsd:string"
+    },
+    "number_value": {
+      "@id": "kognitos:number_value",
+      "@type": "xsd:decimal"
+    },
+    "boolean_value": {
+      "@id": "kognitos:boolean_value",
+      "@type": "xsd:boolean"
+    },
+    "datetime_value": {
+      "@id": "kognitos:datetime_value",
+      "@type": "xsd:dateTime"
+    },
+    "date_value": {
+      "@id": "kognitos:date_value",
+      "@type": "@id"
+    },
+    "time_value": {
+      "@id": "kognitos:time_value",
+      "@type": "@id"
+    },
+    "file_value": {
+      "@id": "kognitos:file_value",
+      "@type": "@id"
+    },
+    "dictionary_value": {
+      "@id": "kognitos:dictionary_value",
+      "@type": "@id"
+    },
+    "list_value": {
+      "@id": "kognitos:list_value",
+      "@type": "@id"
+    },
+    "opaque_value": {
+      "@id": "kognitos:opaque_value",
+      "@type": "@id"
+    },
+    "table_value": {
+      "@id": "kognitos:table_value",
+      "@type": "@id"
+    },
+    "sensitive_value": {
+      "@id": "kognitos:sensitive_value",
+      "@type": "@id"
+    },
+    "v1DictionaryValue": "kognitos:v1DictionaryValue",
+    "fields": {
+      "@id": "kognitos:fields",
+      "@container": "@list"
+    },
+    "is_a": {
+      "@id": "kognitos:is_a",
+      "@container": "@list"
+    },
+    "v1NounPhrase": "kognitos:v1NounPhrase",
+    "modifiers": {
+      "@id": "kognitos:modifiers",
+      "@container": "@list"
+    },
+    "head": {
+      "@id": "kognitos:head",
+      "@type": "xsd:string"
+    },
+    "v1DictionaryValueField": "kognitos:v1DictionaryValueField",
+    "key": {
+      "@id": "kognitos:key",
+      "@type": "xsd:string"
+    },
+    "value": {
+      "@id": "kognitos:value",
+      "@type": "@id"
+    },
+    "v1OpaqueValue": "kognitos:v1OpaqueValue",
+    "v1SensitiveValue": "kognitos:v1SensitiveValue",
+    "v1Date": "kognitos:v1Date",
+    "v1Time": "kognitos:v1Time",
+    "bdkV1ListValue": "kognitos:bdkV1ListValue",
+    "v1Dictionary": "kognitos:v1Dictionary",
+    "entries": {
+      "@id": "kognitos:entries",
+      "@container": "@list"
+    },
+    "v1DictionaryEntry": "kognitos:v1DictionaryEntry",
+    "v1HashableValue": "kognitos:v1HashableValue",
+    "typeDate": "kognitos:typeDate",
+    "v1List": "kognitos:v1List",
+    "items": {
+      "@id": "kognitos:items",
+      "@container": "@list"
+    },
+    "v1Set": "kognitos:v1Set",
+    "v1AutomationStage": "kognitos:v1AutomationStage",
+    "v1PatchedNodeExecuted": "kognitos:v1PatchedNodeExecuted",
+    "patch_location": {
+      "@id": "kognitos:patch_location",
+      "@type": "@id"
+    },
+    "node_location": {
+      "@id": "kognitos:node_location",
+      "@type": "@id"
+    },
+    "inputs": {
+      "@id": "kognitos:inputs"
+    },
+    "error": {
+      "@id": "kognitos:error",
+      "@container": "@list"
+    },
+    "node_id": {
+      "@id": "kognitos:node_id",
+      "@type": "xsd:string"
+    },
+    "book_function_call": {
+      "@id": "kognitos:book_function_call",
+      "@type": "@id"
+    },
+    "node_kind": {
+      "@id": "kognitos:node_kind",
+      "@type": "xsd:string"
+    },
+    "v1BookFunctionCall": "kognitos:v1BookFunctionCall",
+    "book_function": {
+      "@id": "kognitos:book_function",
+      "@type": "@id"
+    },
+    "output": {
+      "@id": "kognitos:output",
+      "@type": "@id"
+    },
+    "v1BookFunction": "kognitos:v1BookFunction",
+    "connection_spy_identifier": {
+      "@id": "kognitos:connection_spy_identifier",
+      "@type": "xsd:string"
+    },
+    "book_name": {
+      "@id": "kognitos:book_name",
+      "@type": "xsd:string"
+    },
+    "function_name": {
+      "@id": "kognitos:function_name",
+      "@type": "xsd:string"
+    },
+    "code_location": {
+      "@id": "kognitos:code_location",
+      "@type": "@id"
+    },
+    "commonV1Location": "kognitos:commonV1Location",
+    "start_byte": {
+      "@id": "kognitos:start_byte",
+      "@type": "xsd:string"
+    },
+    "end_byte": {
+      "@id": "kognitos:end_byte",
+      "@type": "xsd:string"
+    },
+    "v1ExecutionError": "kognitos:v1ExecutionError",
+    "context": {
+      "@id": "kognitos:context",
+      "@type": "@id"
+    },
+    "extra": {
+      "@id": "kognitos:extra"
+    },
+    "code": {
+      "@id": "kognitos:code",
+      "@type": "xsd:string"
+    },
+    "v1Context": "kognitos:v1Context",
+    "v1NodeExecuted": "kognitos:v1NodeExecuted",
+    "v1NodeStarted": "kognitos:v1NodeStarted",
+    "v1PatchedNodeStarted": "kognitos:v1PatchedNodeStarted",
+    "v1ExecutionFailed": "kognitos:v1ExecutionFailed",
+    "v1NodePatched": "kognitos:v1NodePatched",
+    "code_patch": {
+      "@id": "kognitos:code_patch",
+      "@type": "xsd:string"
+    },
+    "inputs_patch": {
+      "@id": "kognitos:inputs_patch"
+    },
+    "connections": {
+      "@id": "kognitos:connections"
+    },
+    "v1BookConnection": "kognitos:v1BookConnection",
+    "connection_id": {
+      "@id": "kognitos:connection_id",
+      "@type": "xsd:string"
+    },
+    "endpoint": {
+      "@id": "kognitos:endpoint",
+      "@type": "xsd:string"
+    },
+    "v1ExecutionStopped": "kognitos:v1ExecutionStopped",
+    "user_stopped": {
+      "@id": "kognitos:user_stopped",
+      "@type": "@id"
+    },
+    "waiting_on_book": {
+      "@id": "kognitos:waiting_on_book",
+      "@type": "@id"
+    },
+    "waiting_on_timer": {
+      "@id": "kognitos:waiting_on_timer",
+      "@type": "@id"
+    },
+    "program_stopped": {
+      "@id": "kognitos:program_stopped",
+      "@type": "@id"
+    },
+    "v1ProgramStopped": "kognitos:v1ProgramStopped",
+    "reason": {
+      "@id": "kognitos:reason",
+      "@type": "xsd:string"
+    },
+    "v1WaitingOnTimer": "kognitos:v1WaitingOnTimer",
+    "v1NodeSkipped": "kognitos:v1NodeSkipped",
+    "v1RunUpdate": "kognitos:v1RunUpdate",
+    "run": {
+      "@id": "kognitos:run",
+      "@type": "@id"
+    },
+    "v1Run": "kognitos:v1Run",
+    "executable_steps": {
+      "@id": "kognitos:executable_steps",
+      "@type": "@id"
+    },
+    "state": {
+      "@id": "kognitos:state",
+      "@type": "@id"
+    },
+    "previous_run": {
+      "@id": "kognitos:previous_run",
+      "@type": "xsd:string"
+    },
+    "stage_version": {
+      "@id": "kognitos:stage_version",
+      "@type": "xsd:string"
+    },
+    "invocation_details": {
+      "@id": "kognitos:invocation_details",
+      "@type": "@id"
+    },
+    "user_inputs": {
+      "@id": "kognitos:user_inputs"
+    },
+    "v1InvocationDetails": "kognitos:v1InvocationDetails",
+    "user_id": {
+      "@id": "kognitos:user_id",
+      "@type": "xsd:string"
+    },
+    "invocation_source": {
+      "@id": "kognitos:invocation_source",
+      "@type": "@id"
+    },
+    "v1InvocationSource": "kognitos:v1InvocationSource",
+    "v1RunState": "kognitos:v1RunState",
+    "pending": {
+      "@id": "kognitos:pending",
+      "@type": "@id"
+    },
+    "executing": {
+      "@id": "kognitos:executing",
+      "@type": "@id"
+    },
+    "stopping": {
+      "@id": "kognitos:stopping",
+      "@type": "@id"
+    },
+    "awaiting_guidance": {
+      "@id": "kognitos:awaiting_guidance",
+      "@type": "@id"
+    },
+    "v1AwaitingGuidanceRunState": "kognitos:v1AwaitingGuidanceRunState",
+    "exception": {
+      "@id": "kognitos:exception",
+      "@type": "xsd:string"
+    },
+    "location": {
+      "@id": "kognitos:location",
+      "@type": "@id"
+    },
+    "v1FailedRunState": "kognitos:v1FailedRunState",
+    "v1StoppedRunState": "kognitos:v1StoppedRunState",
+    "v1StoppingRunState": "kognitos:v1StoppingRunState",
+    "v1CompletedRunState": "kognitos:v1CompletedRunState",
+    "v1ExecutableSteps": "kognitos:v1ExecutableSteps",
+    "executables": {
+      "@id": "kognitos:executables",
+      "@container": "@list"
+    },
+    "v1ExecutableStep": "kognitos:v1ExecutableStep",
+    "book_connections": {
+      "@id": "kognitos:book_connections"
+    },
+    "v1AutomationPhaseType": "kognitos:v1AutomationPhaseType",
+    "v2Expression": "kognitos:v2Expression",
+    "binary_expression": {
+      "@id": "kognitos:binary_expression",
+      "@type": "@id"
+    },
+    "unary_expression": {
+      "@id": "kognitos:unary_expression",
+      "@type": "@id"
+    },
+    "value_expression": {
+      "@id": "kognitos:value_expression",
+      "@type": "@id"
+    },
+    "noun_phrases_expression": {
+      "@id": "kognitos:noun_phrases_expression",
+      "@type": "@id"
+    },
+    "v2UnaryExpression": "kognitos:v2UnaryExpression",
+    "operator": {
+      "@id": "kognitos:operator",
+      "@type": "@id"
+    },
+    "inner": {
+      "@id": "kognitos:inner",
+      "@type": "@id"
+    },
+    "v2UnaryOperator": "kognitos:v2UnaryOperator",
+    "v2BinaryExpression": "kognitos:v2BinaryExpression",
+    "left": {
+      "@id": "kognitos:left",
+      "@type": "@id"
+    },
+    "right": {
+      "@id": "kognitos:right",
+      "@type": "@id"
+    },
+    "v2BinaryOperator": "kognitos:v2BinaryOperator",
+    "bdkV2Value": "kognitos:bdkV2Value",
+    "offloadable_text_value": {
+      "@id": "kognitos:offloadable_text_value",
+      "@type": "@id"
+    },
+    "offloadable_dictionary_value": {
+      "@id": "kognitos:offloadable_dictionary_value",
+      "@type": "@id"
+    },
+    "offloadable_list_value": {
+      "@id": "kognitos:offloadable_list_value",
+      "@type": "@id"
+    },
+    "v2DictionaryValue": "kognitos:v2DictionaryValue",
+    "v2DictionaryValueField": "kognitos:v2DictionaryValueField",
+    "v2NounPhrase": "kognitos:v2NounPhrase",
+    "bdkV2ListValue": "kognitos:bdkV2ListValue",
+    "v2TableValue": "kognitos:v2TableValue",
+    "v2Table": "kognitos:v2Table",
+    "v2Column": "kognitos:v2Column",
+    "v2FileValue": "kognitos:v2FileValue",
+    "v2File": "kognitos:v2File",
+    "v2Date": "kognitos:v2Date",
+    "v2OffloadableTextValue": "kognitos:v2OffloadableTextValue",
+    "v2SensitiveValue": "kognitos:v2SensitiveValue",
+    "v2OpaqueValue": "kognitos:v2OpaqueValue",
+    "v2OffloadableListValue": "kognitos:v2OffloadableListValue",
+    "v2OffloadableDictionaryValue": "kognitos:v2OffloadableDictionaryValue",
+    "v2Time": "kognitos:v2Time",
+    "v2NounPhrases": "kognitos:v2NounPhrases",
+    "noun_phrases": {
+      "@id": "kognitos:noun_phrases",
+      "@container": "@list"
+    },
+    "v2BookConnectionResponse": "kognitos:v2BookConnectionResponse",
+    "book_connection_descriptor": {
+      "@id": "kognitos:book_connection_descriptor",
+      "@type": "@id"
+    },
+    "authorize_url": {
+      "@id": "kognitos:authorize_url",
+      "@type": "@id"
+    },
+    "v2BookConnectionDescriptor": "kognitos:v2BookConnectionDescriptor",
+    "book_version": {
+      "@id": "kognitos:book_version",
+      "@type": "xsd:string"
+    },
+    "connection_name": {
+      "@id": "kognitos:connection_name",
+      "@type": "xsd:string"
+    },
+    "authentication": {
+      "@id": "kognitos:authentication",
+      "@type": "@id"
+    },
+    "config": {
+      "@id": "kognitos:config",
+      "@container": "@list"
+    },
+    "labels": {
+      "@id": "kognitos:labels",
+      "@container": "@list"
+    },
+    "status": {
+      "@id": "kognitos:status",
+      "@type": "@id"
+    },
+    "discovered": {
+      "@id": "kognitos:discovered",
+      "@container": "@list"
+    },
+    "config_map": {
+      "@id": "kognitos:config_map"
+    },
+    "bdkV2Label": "kognitos:bdkV2Label",
+    "v2ConceptValue": "kognitos:v2ConceptValue",
+    "v2Authentication": "kognitos:v2Authentication",
+    "authentication_id": {
+      "@id": "kognitos:authentication_id",
+      "@type": "xsd:string"
+    },
+    "authentication_credentials": {
+      "@id": "kognitos:authentication_credentials",
+      "@container": "@list"
+    },
+    "v2CredentialValue": "kognitos:v2CredentialValue",
+    "v2BookConnectionStatus": "kognitos:v2BookConnectionStatus",
+    "state_category": {
+      "@id": "kognitos:state_category",
+      "@type": "@id"
+    },
+    "last_updated": {
+      "@id": "kognitos:last_updated",
+      "@type": "xsd:string"
+    },
+    "conditions": {
+      "@id": "kognitos:conditions",
+      "@container": "@list"
+    },
+    "v2BookConnectionStateCategory": "kognitos:v2BookConnectionStateCategory",
+    "v2BookConnectionState": "kognitos:v2BookConnectionState",
+    "v2BookConnectionCondition": "kognitos:v2BookConnectionCondition",
+    "type": {
+      "@id": "kognitos:type",
+      "@type": "@id"
+    },
+    "last_transition_time": {
+      "@id": "kognitos:last_transition_time",
+      "@type": "xsd:string"
+    },
+    "reason_code": {
+      "@id": "kognitos:reason_code",
+      "@type": "@id"
+    },
+    "v2BookConnectionConditionStatus": "kognitos:v2BookConnectionConditionStatus",
+    "v2BookConnectionConditionReasonCode": "kognitos:v2BookConnectionConditionReasonCode",
+    "v2BookConnectionConditionType": "kognitos:v2BookConnectionConditionType",
+    "v2BookConnectionOAuthURLResponse": "kognitos:v2BookConnectionOAuthURLResponse",
+    "url": {
+      "@id": "kognitos:url",
+      "@type": "xsd:string"
+    },
+    "v1ListAutomationsResponse": "kognitos:v1ListAutomationsResponse",
+    "automations": {
+      "@id": "kognitos:automations",
+      "@container": "@list"
+    },
+    "v1Automation": "kognitos:v1Automation",
+    "display_name": {
+      "@id": "kognitos:display_name",
+      "@type": "xsd:string"
+    },
+    "english_code": {
+      "@id": "kognitos:english_code",
+      "@type": "xsd:string"
+    },
+    "artifacts": {
+      "@id": "kognitos:artifacts"
+    },
+    "update_user_id": {
+      "@id": "kognitos:update_user_id",
+      "@type": "xsd:string"
+    },
+    "delete_time": {
+      "@id": "kognitos:delete_time",
+      "@type": "xsd:dateTime"
+    },
+    "purge_time": {
+      "@id": "kognitos:purge_time",
+      "@type": "xsd:dateTime"
+    },
+    "input_specs": {
+      "@id": "kognitos:input_specs",
+      "@container": "@list"
+    },
+    "latest_published_version": {
+      "@id": "kognitos:latest_published_version",
+      "@type": "xsd:string"
+    },
+    "author_id": {
+      "@id": "kognitos:author_id",
+      "@type": "xsd:string"
+    },
+    "code_mapping": {
+      "@id": "kognitos:code_mapping",
+      "@type": "@id"
+    },
+    "restore_time": {
+      "@id": "kognitos:restore_time",
+      "@type": "xsd:dateTime"
+    },
+    "restore_version": {
+      "@id": "kognitos:restore_version",
+      "@type": "xsd:string"
+    },
+    "restore_user_id": {
+      "@id": "kognitos:restore_user_id",
+      "@type": "xsd:string"
+    },
+    "publish_time": {
+      "@id": "kognitos:publish_time",
+      "@type": "xsd:dateTime"
+    },
+    "publish_user_id": {
+      "@id": "kognitos:publish_user_id",
+      "@type": "xsd:string"
+    },
+    "activation_state": {
+      "@id": "kognitos:activation_state",
+      "@type": "@id"
+    },
+    "default_inputs": {
+      "@id": "kognitos:default_inputs"
+    },
+    "marked_outputs": {
+      "@id": "kognitos:marked_outputs",
+      "@container": "@list"
+    },
+    "v1AutomationInputSpec": "kognitos:v1AutomationInputSpec",
+    "v1ValueType": "kognitos:v1ValueType",
+    "scalar_type": {
+      "@id": "kognitos:scalar_type",
+      "@type": "@id"
+    },
+    "optional_type": {
+      "@id": "kognitos:optional_type",
+      "@type": "@id"
+    },
+    "list_type": {
+      "@id": "kognitos:list_type",
+      "@type": "@id"
+    },
+    "dictionary_type": {
+      "@id": "kognitos:dictionary_type",
+      "@type": "@id"
+    },
+    "table_type": {
+      "@id": "kognitos:table_type",
+      "@type": "@id"
+    },
+    "opaque_type": {
+      "@id": "kognitos:opaque_type",
+      "@type": "@id"
+    },
+    "any_type": {
+      "@id": "kognitos:any_type",
+      "@type": "@id"
+    },
+    "union_type": {
+      "@id": "kognitos:union_type",
+      "@type": "@id"
+    },
+    "sensitive_type": {
+      "@id": "kognitos:sensitive_type",
+      "@type": "@id"
+    },
+    "enum_type": {
+      "@id": "kognitos:enum_type",
+      "@type": "@id"
+    },
+    "generic_dictionary_type": {
+      "@id": "kognitos:generic_dictionary_type",
+      "@type": "@id"
+    },
+    "v1ValueOpaqueType": "kognitos:v1ValueOpaqueType",
+    "v1ValueListType": "kognitos:v1ValueListType",
+    "v1ValueTableType": "kognitos:v1ValueTableType",
+    "v1ValueTableTypeColumn": "kognitos:v1ValueTableTypeColumn",
+    "v1ValueSensitiveType": "kognitos:v1ValueSensitiveType",
+    "v1ValueDictionaryType": "kognitos:v1ValueDictionaryType",
+    "v1ValueDictionaryTypeField": "kognitos:v1ValueDictionaryTypeField",
+    "v1ValueUnionType": "kognitos:v1ValueUnionType",
+    "inners": {
+      "@id": "kognitos:inners",
+      "@container": "@list"
+    },
+    "v1ValueOptionalType": "kognitos:v1ValueOptionalType",
+    "v1ValueGenericDictionaryType": "kognitos:v1ValueGenericDictionaryType",
+    "key_type": {
+      "@id": "kognitos:key_type",
+      "@type": "@id"
+    },
+    "value_type": {
+      "@id": "kognitos:value_type",
+      "@type": "@id"
+    }
+  },
+  "@type": "schema:Dataset",
+  "schema:name": "Kognitos API JSON-LD context",
+  "schema:description": "A JSON-LD @context for the objects Kognitos's own API contract declares: one class per component schema, one property per declared field, typed from the contract. Derived by script (derive-json-ld.py, 2026-10-09) from openapi/kognitos-openapi.yml.",
+  "dcterms:created": "2026-10-09",
+  "dcterms:source": [
+    "openapi/kognitos-openapi.yml"
+  ]
+}

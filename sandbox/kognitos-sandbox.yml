@@ -1,0 +1,16 @@
+generated: '2026-10-09'
+method: searched
+source: https://docs.kognitos.com/guides/api-reference/api-reference
+description: No separate test-mode keys or test fixtures are published. Draft automations can be run through the API by
+  invoking with stage AUTOMATION_STAGE_DRAFT ("Use AUTOMATION_STAGE_DRAFT to test a draft version"), versus
+  AUTOMATION_STAGE_PUBLISHED for production runs. The FAQ states a free workspace at app.us-1.kognitos.com for
+  building and running automations. The Node SDK has an env option 'prod' (default) | 'dev'.
+docs: https://docs.kognitos.com/guides/api-reference/api-reference
+modes:
+- name: AUTOMATION_STAGE_DRAFT
+  purpose: test a draft version of an automation
+- name: AUTOMATION_STAGE_PUBLISHED
+  purpose: production runs
+free_workspace:
+  url: https://app.us-1.kognitos.com
+  source: https://www.kognitos.com/faq/

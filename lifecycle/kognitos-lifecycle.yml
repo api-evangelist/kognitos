@@ -1,0 +1,18 @@
+generated: '2026-10-09'
+method: searched
+source: https://docs.kognitos.com/legacy/legacy-experience/rest-api/migrating-to-v2
+versioning:
+  scheme: URL path major version
+  current: Kognitos REST API at https://app.us-1.kognitos.com/api/v1 (OpenAPI info.version 1.0.0)
+  note: The current docs (guides/api-reference) document /api/v1 on app.us-1.kognitos.com. A separate legacy-experience REST API at rest-api.app.kognitos.com has its own v1 (deprecated) and v2.
+deprecation:
+  policy: none published
+  deprecated:
+  - api: Legacy REST API v1 (POST /v1/invoke/{share_id}, GET /v1/run/{worker_id}, POST /v1/upload)
+    replacement: Legacy REST API v2 (/v2/runs, /v2/files, /v2/processes, /v2/health)
+    statement: "While an end-of-life date for v1 has not yet been announced, transitioning now ensures you benefit from v2's enhanced capabilities and continued support."
+    source: https://docs.kognitos.com/legacy/legacy-experience/rest-api/migrating-to-v2
+  openapi_deprecated_operations: []
+  sunset_headers: not documented
+status_page: https://status.kognitos.com/
+sla: not published in the docs

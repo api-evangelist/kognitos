@@ -1,0 +1,246 @@
+overlay: 1.0.0
+info:
+  title: Kognitos API — API Evangelist agent-surface overlay
+  version: 1.0.0
+extends: ../openapi/_original/kognitos-openapi.yml
+x-generated: '2026-10-09'
+x-method: generated
+x-source: mcp/kognitos-tool-crosswalk.yml; https://docs.kognitos.com/guides/mcp/mcp
+x-rationale: Annotate operations that back a documented Kognitos MCP tool with x-mcp-tool, and surface the MCP server and llms.txt on info. The
+  original contract is not modified.
+actions:
+- target: $.info
+  description: Point agents at the official hosted MCP server and the docs llms.txt index.
+  update:
+    x-mcp-server:
+      url: https://mcp.us-1.kognitos.com/
+      transport: streamable-http
+      auth: oauth2.1 or Bearer API key
+      docs: https://docs.kognitos.com/guides/mcp/mcp
+    x-llms-txt: https://docs.kognitos.com/llms.txt
+- target: $.components.securitySchemes.BearerAuth
+  description: Link the bearer scheme to the provider's API key docs.
+  update:
+    x-docs: https://docs.kognitos.com/guides/api-reference/api-keys
+- target: $.paths['/api/v1/me/organizations'].get
+  description: Bind to MCP tool kognitos_list_organizations (medium confidence).
+  update:
+    x-mcp-tool:
+      name: kognitos_list_organizations
+      confidence: medium
+- target: $.paths['/api/v1/organizations/{organization_id}/workspaces'].get
+  description: Bind to MCP tool kognitos_list_workspaces (medium confidence).
+  update:
+    x-mcp-tool:
+      name: kognitos_list_workspaces
+      confidence: medium
+- target: $.paths['/api/v1/me/organizations/{organization_id}/workspaces'].get
+  description: Bind to MCP tool kognitos_list_workspaces (medium confidence).
+  update:
+    x-mcp-tool:
+      name: kognitos_list_workspaces
+      confidence: medium
+- target: $.paths['/api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations'].get
+  description: Bind to MCP tool kognitos_automations (high confidence).
+  update:
+    x-mcp-tool:
+      name: kognitos_automations
+      confidence: high
+- target: $.paths['/api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}'].get
+  description: Bind to MCP tool kognitos_automations (high confidence).
+  update:
+    x-mcp-tool:
+      name: kognitos_automations
+      confidence: high
+- target: $.paths['/api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}:query'].get
+  description: Bind to MCP tool kognitos_automations (high confidence).
+  update:
+    x-mcp-tool:
+      name: kognitos_automations
+      confidence: high
+- target: $.paths['/api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}:invoke'].post
+  description: Bind to MCP tool kognitos_invoke_automation (high confidence).
+  update:
+    x-mcp-tool:
+      name: kognitos_invoke_automation
+      confidence: high
+- target: $.paths['/api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}/runs'].get
+  description: Bind to MCP tool kognitos_runs (medium confidence).
+  update:
+    x-mcp-tool:
+      name: kognitos_runs
+      confidence: medium
+- target: $.paths['/api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}/runs/{run_id}'].get
+  description: Bind to MCP tool kognitos_runs (medium confidence).
+  update:
+    x-mcp-tool:
+      name: kognitos_runs
+      confidence: medium
+- target: $.paths['/api/v1/organizations/{organization_id}/workspaces/{workspace_id}/executions/{execution_id}/outputs'].get
+  description: Bind to MCP tool kognitos_runs (medium confidence).
+  update:
+    x-mcp-tool:
+      name: kognitos_runs
+      confidence: medium
+- target: $.paths['/api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}/runs/{run_id}/events'].get
+  description: Bind to MCP tool kognitos_runs (medium confidence).
+  update:
+    x-mcp-tool:
+      name: kognitos_runs
+      confidence: medium
+- target: $.paths['/api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}/runs/{run_id}:pause'].post
+  description: Bind to MCP tool kognitos_control_run (high confidence).
+  update:
+    x-mcp-tool:
+      name: kognitos_control_run
+      confidence: high
+- target: $.paths['/api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}/runs/{run_id}:continue'].post
+  description: Bind to MCP tool kognitos_control_run (high confidence).
+  update:
+    x-mcp-tool:
+      name: kognitos_control_run
+      confidence: high
+- target: $.paths['/api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}/schedule'].get
+  description: Bind to MCP tool kognitos_get_schedule (high confidence).
+  update:
+    x-mcp-tool:
+      name: kognitos_get_schedule
+      confidence: high
+- target: $.paths['/api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}/schedule'].post
+  description: Bind to MCP tool kognitos_manage_schedule (high confidence).
+  update:
+    x-mcp-tool:
+      name: kognitos_manage_schedule
+      confidence: high
+- target: $.paths['/api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}/schedule'].patch
+  description: Bind to MCP tool kognitos_manage_schedule (high confidence).
+  update:
+    x-mcp-tool:
+      name: kognitos_manage_schedule
+      confidence: high
+- target: $.paths['/api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}:enableAutomationSchedule'].post
+  description: Bind to MCP tool kognitos_manage_schedule (high confidence).
+  update:
+    x-mcp-tool:
+      name: kognitos_manage_schedule
+      confidence: high
+- target: $.paths['/api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}:disableAutomationSchedule'].post
+  description: Bind to MCP tool kognitos_manage_schedule (high confidence).
+  update:
+    x-mcp-tool:
+      name: kognitos_manage_schedule
+      confidence: high
+- target: $.paths['/api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}/schedule'].delete
+  description: Bind to MCP tool kognitos_manage_schedule (high confidence).
+  update:
+    x-mcp-tool:
+      name: kognitos_manage_schedule
+      confidence: high
+- target: $.paths['/api/v1/organizations/{organization_id}/workspaces/{workspace_id}/exceptions'].get
+  description: Bind to MCP tool kognitos_inspect_exceptions (medium confidence).
+  update:
+    x-mcp-tool:
+      name: kognitos_inspect_exceptions
+      confidence: medium
+- target: $.paths['/api/v1/organizations/{organization_id}/workspaces/{workspace_id}/exceptions/{exception_id}'].get
+  description: Bind to MCP tool kognitos_inspect_exceptions (medium confidence).
+  update:
+    x-mcp-tool:
+      name: kognitos_inspect_exceptions
+      confidence: medium
+- target: $.paths['/api/v1/organizations/{organization_id}/workspaces/{workspace_id}/exceptions:countByGroup'].get
+  description: Bind to MCP tool kognitos_inspect_exceptions (medium confidence).
+  update:
+    x-mcp-tool:
+      name: kognitos_inspect_exceptions
+      confidence: medium
+- target: $.paths['/api/v1/organizations/{organization_id}/workspaces/{workspace_id}/exceptions:countByAutomation'].get
+  description: Bind to MCP tool kognitos_inspect_exceptions (medium confidence).
+  update:
+    x-mcp-tool:
+      name: kognitos_inspect_exceptions
+      confidence: medium
+- target: $.paths['/api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}/guideEntries'].get
+  description: Bind to MCP tool kognitos_inspect_exceptions (medium confidence).
+  update:
+    x-mcp-tool:
+      name: kognitos_inspect_exceptions
+      confidence: medium
+- target: $.paths['/api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}/guideEntries/{guide_entry_id}'].get
+  description: Bind to MCP tool kognitos_inspect_exceptions (medium confidence).
+  update:
+    x-mcp-tool:
+      name: kognitos_inspect_exceptions
+      confidence: medium
+- target: $.paths['/api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}/runs/{run_id}/agents/{agent_id}/events'].post
+  description: Bind to MCP tool kognitos_reply_to_exception (low confidence).
+  update:
+    x-mcp-tool:
+      name: kognitos_reply_to_exception
+      confidence: low
+- target: $.paths['/api/v1/organizations/{organization_id}/workspaces/{workspace_id}/books:search'].post
+  description: Bind to MCP tool kognitos_books (medium confidence).
+  update:
+    x-mcp-tool:
+      name: kognitos_books
+      confidence: medium
+- target: $.paths['/api/v1/organizations/{organization_id}/workspaces/{workspace_id}/books'].get
+  description: Bind to MCP tool kognitos_books (medium confidence).
+  update:
+    x-mcp-tool:
+      name: kognitos_books
+      confidence: medium
+- target: $.paths['/api/v1/organizations/{organization_id}/workspaces/{workspace_id}/procedures:search'].post
+  description: Bind to MCP tool kognitos_books (medium confidence).
+  update:
+    x-mcp-tool:
+      name: kognitos_books
+      confidence: medium
+- target: $.paths['/api/v1/organizations/{organization_id}/workspaces/{workspace_id}:automationRunAggregates'].get
+  description: Bind to MCP tool kognitos_analytics (low confidence).
+  update:
+    x-mcp-tool:
+      name: kognitos_analytics
+      confidence: low
+- target: $.paths['/api/v1/organizations/{organization_id}/workspaces/{workspace_id}:dailyRunAggregates'].get
+  description: Bind to MCP tool kognitos_analytics (low confidence).
+  update:
+    x-mcp-tool:
+      name: kognitos_analytics
+      confidence: low
+- target: $.paths['/api/v1/organizations/{organization_id}/dashboards:queryInsights'].get
+  description: Bind to MCP tool kognitos_analytics (low confidence).
+  update:
+    x-mcp-tool:
+      name: kognitos_analytics
+      confidence: low
+- target: $.paths['/api/v1/organizations/{organization_id}/workspaces/{workspace_id}/exceptions:countByGroup'].get
+  description: Bind to MCP tool kognitos_analytics (low confidence).
+  update:
+    x-mcp-tool:
+      name: kognitos_analytics
+      confidence: low
+- target: $.paths['/api/v1/organizations/{organization_id}/workspaces/{workspace_id}/files/{file}/metadata'].get
+  description: Bind to MCP tool kognitos_read_file (medium confidence).
+  update:
+    x-mcp-tool:
+      name: kognitos_read_file
+      confidence: medium
+- target: $.paths['/api/v1/organizations/{organization_id}/workspaces/{workspace_id}/files/{file}:download'].get
+  description: Bind to MCP tool kognitos_read_file (medium confidence).
+  update:
+    x-mcp-tool:
+      name: kognitos_read_file
+      confidence: medium
+- target: $.paths['/api/v1/organizations/{organization_id}/workspaces/{workspace_id}/files:upload'].post
+  description: Bind to MCP tool kognitos_upload_file (medium confidence).
+  update:
+    x-mcp-tool:
+      name: kognitos_upload_file
+      confidence: medium
+- target: $.paths['/api/v1/organizations/{organization_id}/workspaces/{workspace_id}/files:generateUploadUrl'].post
+  description: Bind to MCP tool kognitos_upload_file (medium confidence).
+  update:
+    x-mcp-tool:
+      name: kognitos_upload_file
+      confidence: medium

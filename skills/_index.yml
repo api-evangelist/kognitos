@@ -1,0 +1,55 @@
+generated: '2026-10-09'
+method: generated
+source: Packaged Agent Skills generated from openapi/kognitos-openapi.yml; every operationId verified verbatim in the spec.
+  No arazzo/ workflows exist, so flows mirror the documented MCP example prompts.
+skills:
+- file: kognitos-run-an-automation.md
+  name: kognitos-run-an-automation
+  title: Run an automation and collect its outputs
+  api: openapi/kognitos-openapi.yml
+  operations:
+  - CurrentUserOrganizations
+  - ListWorkspaces
+  - ListAutomations
+  - GetAutomation
+  - InvokeAutomation
+  - GetRun
+  - ListRunEvents
+  - GetExecutionOutputs
+- file: kognitos-triage-exceptions.md
+  name: kognitos-triage-exceptions
+  title: Triage automation exceptions
+  api: openapi/kognitos-openapi.yml
+  operations:
+  - ListExceptions
+  - CountExceptionsByGroup
+  - CountExceptionsByAutomation
+  - ListExceptionGroups
+  - GetException
+  - ListGuideEntries
+  - GetGuideEntry
+  - PauseRun
+  - ContinueRun
+- file: kognitos-schedule-an-automation.md
+  name: kognitos-schedule-an-automation
+  title: Schedule an automation
+  api: openapi/kognitos-openapi.yml
+  operations:
+  - GetAutomation
+  - GetAutomationSchedule
+  - CreateAutomationSchedule
+  - UpdateAutomationSchedule
+  - EnableAutomationSchedule
+  - DisableAutomationSchedule
+  - DeleteAutomationSchedule
+- file: kognitos-upload-file-input.md
+  name: kognitos-upload-file-input
+  title: Upload a file as an automation input
+  api: openapi/kognitos-openapi.yml
+  operations:
+  - UploadFile
+  - GenerateUploadUrl
+  - GetFileMetadata
+  - InvokeAutomation
+  - GetRun
+  - DownloadFile

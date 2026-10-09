@@ -1,0 +1,1440 @@
+openapi: 3.2.0
+info:
+  title: Kognitos Exceptions API
+  version: 1.0.0
+  contact:
+    name: Kognitos
+    url: https://kognitos.com
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  description: 'Operations tagged Exceptions across 2 of this provider''s published API definitions: kognitos-openapi.yaml, kognitos-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://app.us-1.kognitos.com
+security:
+- BearerAuth: []
+tags:
+- name: Exceptions
+  description: Track exceptions, view analytics, manage agent events, and access troubleshooting guides.
+paths:
+  /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/exceptions/{exception_id}:
+    get:
+      summary: Get Exception
+      operationId: GetException
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1Exception'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: exception_id
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Exceptions
+    servers:
+    - url: https://app.us-1.kognitos.com
+  /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/exceptions:
+    get:
+      summary: List Exceptions
+      operationId: ListExceptions
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1ListExceptionsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: page_size
+        description: 'The maximum number of exceptions to return. The service may return fewer than this value.
+
+          If unspecified, at most 50 exceptions will be returned.
+
+          The maximum value is 1000; values above 1000 will be coerced to 1000.
+
+          Note: These limits are enforced by server-side validation.'
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: page_token
+        description: 'The page token, received from a previous `ListExceptions` call.
+
+          Provide this to retrieve the subsequent page.
+
+          When paginating, all other parameters provided to `ListExceptions` must match
+
+          the call that provided the page token.'
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: skip
+        description: The number of exceptions to skip before returning results.
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: filter
+        description: "The filter to apply to the list of exceptions.\nFollows Google AIP-160 filtering standard (https://google.aip.dev/160).\n\nSupported Fields:\n- state: Exception state (PENDING, RESOLVED, ARCHIVED)\n- automation: Automation ID (exact match only)\n- create_time: Exception creation timestamp (ISO 8601 format)\n- group: Exception group (exact match only)\n  - Use group = \"value\" to match a specific group\n  - Use group = \"\" to match exceptions with no group assigned (ungrouped)\n- run: Run ID (exact match only)\n  - Use run = \"run1_id\" to match a specific run\n  - Use run = \"run1_id OR run2_id\" to match multiple runs\n\nSupported Operators:\n- Comparison: =, !=, <, <=, >, >=\n- Logical: AND, OR, NOT\n- Grouping: ( )\n\nState Values:\n- PENDING or EXCEPTION_STATE_PENDING\n- RESOLVED or EXCEPTION_STATE_RESOLVED\n- ARCHIVED or EXCEPTION_STATE_ARCHIVED\n\nTimestamp Format:\n- ISO 8601 with Z suffix: \"2025-01-01T00:00:00Z\"\n- ISO 8601 with offset: \"2025-01-01T00:00:00+00:00\"\n\nExample Filters:\n- \"state = PENDING\" - List only pending exceptions\n- \"state != RESOLVED\" - List all non-resolved exceptions\n- \"automation = my-automation-id\" - List exceptions for a specific automation\n- \"state = PENDING AND automation = my-automation-id\" - Pending exceptions for an automation\n- \"state = PENDING OR state = ARCHIVED\" - Pending or archived exceptions\n- \"NOT state = RESOLVED\" - All non-resolved exceptions\n- \"create_time > \\\"2025-01-01T00:00:00Z\\\"\" - Exceptions created after Jan 1, 2025\n- \"create_time >= \\\"2025-01-01T00:00:00Z\\\" AND create_time < \\\"2025-02-01T00:00:00Z\\\"\" - January 2025 exceptions\n- \"(state = PENDING OR state = ARCHIVED) AND create_time > \\\"2025-01-01T00:00:00Z\\\"\" - Recent unresolved exceptions\n- \"group = \\\"missing_values\\\"\" - List exceptions in exactly the missing_values group\n- \"group = \\\"missing_values\\\" OR group = \\\"user_system_error\\\"\" - List exceptions in multiple groups\n- \"group = \\\"\\\"\" - List ungrouped exceptions (no group assigned)\n- \"state = PENDING AND group = \\\"\\\"\" - List pending ungrouped exceptions\n- \"group != \\\"\\\"\" - List all exceptions that have a group assigned (any group)\n- \"run = run1_id OR run = run2_id\" - List exceptions for multiple runs\n- \"run = run1_id\" - List exceptions for a specific run"
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - Exceptions
+    servers:
+    - url: https://app.us-1.kognitos.com
+  ? /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}/runs/{run_id}/agents/{agent_id}/events
+  : post:
+      summary: Create Event
+      operationId: CreateEvent
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1Event'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: automation_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: run_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: agent_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/v1Event'
+        description: 'The event to create.
+
+          IMPORTANT: Only user_message can be set when creating an event. The API will reject
+
+          requests that attempt to create events with agent_message, tool_call, thinking, or
+
+          system_message set. These event types are automatically created by the system.'
+        required: true
+      tags:
+      - Exceptions
+    get:
+      summary: List Events
+      operationId: ListEvents
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1ListEventsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: automation_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: run_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: agent_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: page_size
+        description: 'The maximum number of events to return. The service may return fewer than this value.
+
+          If unspecified, at most 50 events will be returned.
+
+          The maximum value is 1000; values above 1000 will be coerced to 1000.
+
+          Note: These limits are enforced by server-side validation.'
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: page_token
+        description: 'The page token, received from a previous `ListEvents` call.
+
+          Provide this to retrieve the subsequent page.
+
+          When paginating, all other parameters provided to `ListEvents` must match
+
+          the call that provided the page token.'
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: filter
+        description: 'The filter to apply to the list of events.
+
+          Follows Google AIP-160 filtering standard (https://google.aip.dev/160).
+
+
+          Supported Fields:
+
+          - exception: Exception Id
+
+
+          Supported Operators:
+
+          - Comparison: =, !=
+
+          - Logical: AND, OR, NOT
+
+          - Grouping: ( )
+
+
+          Example Filters:
+
+          - "exception = \"exc-123\"" - Events for a specific exception
+
+          - "exception = \"exc-123\" OR exception = \"exc-456\"" - Events for multiple exceptions'
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - Exceptions
+    servers:
+    - url: https://app.us-1.kognitos.com
+  ? /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}/runs/{run_id}/agents/{agent_id}/events/{event_id}
+  : get:
+      summary: Get Event
+      operationId: GetEvent
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1Event'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: automation_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: run_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: agent_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: event_id
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Exceptions
+    servers:
+    - url: https://app.us-1.kognitos.com
+  ? /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}/runs/{run_id}/agents/{agent_id}/events:stream
+  : get:
+      summary: Stream Events
+      operationId: StreamEvents
+      responses:
+        '200':
+          description: NDJSON stream of StreamEventsResponse objects (one JSON object per line)
+          content:
+            application/x-ndjson:
+              schema:
+                type: string
+                format: binary
+                title: NDJSON stream of StreamEventsResponse objects
+        default:
+          description: An unexpected error response.
+          content:
+            application/x-ndjson:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: automation_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: run_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: agent_id
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Exceptions
+    servers:
+    - url: https://app.us-1.kognitos.com
+  ? /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}/runs/{run_id}/agents/{agent_id}/events:cancelGeneration
+  : post:
+      summary: Cancel Generation
+      operationId: CancelGeneration
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1CancelGenerationResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: automation_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: run_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: agent_id
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Exceptions
+    servers:
+    - url: https://app.us-1.kognitos.com
+  /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/exceptionGroups:
+    get:
+      summary: List Exception Groups
+      operationId: ListExceptionGroups
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1ListExceptionGroupsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: page_size
+        description: 'The maximum number of groups to return.
+
+          Note: Since groups are static and typically small in number,
+
+          pagination is not strictly necessary but included for AIP compliance.'
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: page_token
+        description: The page token from a previous ListExceptionGroups call.
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - Exceptions
+    servers:
+    - url: https://app.us-1.kognitos.com
+  /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/exceptions:countByGroup:
+    get:
+      summary: Count Exceptions By Group
+      operationId: CountExceptionsByGroup
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1CountExceptionsByGroupResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: filter
+        description: 'Optional filter to apply before counting (same syntax as ListExceptions).
+
+          Use this to count within a specific state, automation, time range, etc.
+
+          Example: "state = PENDING" to count only pending exceptions by group.'
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: page_size
+        description: 'The maximum number of groups to return.
+
+          If unspecified, at most 50 groups will be returned.
+
+          The maximum value is 1000; values above 1000 will be coerced to 1000.'
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: page_token
+        description: The page token from a previous CountExceptionsByGroup call.
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - Exceptions
+    servers:
+    - url: https://app.us-1.kognitos.com
+  /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/exceptions:countByAutomation:
+    get:
+      summary: Count Exceptions By Automation
+      operationId: CountExceptionsByAutomation
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1CountExceptionsByAutomationResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: filter
+        description: 'Optional filter to apply before counting (same syntax as ListExceptions).
+
+          Use this to count within a specific state, group, time range, etc.
+
+          Example: "state = PENDING" to count only pending exceptions by automation.
+
+          Example: "group = \"missing_values\"" to count exceptions in missing_values group by automation.'
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: page_size
+        description: 'The maximum number of automations to return.
+
+          If unspecified, at most 50 automations will be returned.
+
+          The maximum value is 1000; values above 1000 will be coerced to 1000.'
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: page_token
+        description: The page token from a previous CountExceptionsByAutomation call.
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - Exceptions
+    servers:
+    - url: https://app.us-1.kognitos.com
+  ? /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}/guideEntries/{guide_entry_id}
+  : get:
+      summary: Get Guide Entry
+      operationId: GetGuideEntry
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1GuideEntry'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: automation_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: guide_entry_id
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Exceptions
+    servers:
+    - url: https://app.us-1.kognitos.com
+  /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}/guideEntries:
+    get:
+      summary: List Guide Entries
+      operationId: ListGuideEntries
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1ListGuideEntriesResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: automation_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: page_size
+        description: 'The maximum number of guide entries to return. The service may return fewer than this value.
+
+          If unspecified, at most 50 guide entries will be returned.
+
+          The maximum value is 1000; values above 1000 will be coerced to 1000.
+
+          Note: These limits are enforced by server-side validation.'
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: page_token
+        description: 'The page token, received from a previous `ListGuideEntries` call.
+
+          Provide this to retrieve the subsequent page.
+
+          When paginating, all other parameters provided to `ListGuideEntries` must match
+
+          the call that provided the page token.'
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: show_deleted
+        description: 'If true, soft-deleted guide entries will be included in the results.
+
+          Deleted entries have delete_time set.
+
+          Defaults to false (deleted entries are filtered out).'
+        in: query
+        required: false
+        schema:
+          type: boolean
+      - name: filter
+        description: 'The filter to apply to the list of guide entries.
+
+          Follows Google AIP-160 filtering standard (https://google.aip.dev/160).
+
+
+          Supported Fields:
+
+          - title: Guide entry title (partial match only)
+
+          - resolution_steps: Resolution steps content (partial match only)
+
+          - resolution_code: Resolution code content (partial match only)
+
+          - resolution_notes: Resolution notes content (partial match only)
+
+          - automation: Automation ID (exact match only)
+
+          - create_time: Guide entry creation timestamp (ISO 8601 format)
+
+          - update_time: Guide entry update timestamp (ISO 8601 format)
+
+          - content: (DEPRECATED) Guide entry content - use resolution_steps, resolution_code, or resolution_notes instead
+
+
+          Supported Operators:
+
+          - Comparison: =, !=, <, <=, >, >=
+
+          - Logical: AND, OR, NOT
+
+          - Grouping: ( )
+
+          - Partial Match: contains
+
+
+          Example Filters:
+
+          - "title contains ''My Guide Entry''" - List guide entries with title containing "My Guide Entry"
+
+          - "resolution_steps contains ''restart''" - List guide entries with resolution steps containing "restart"
+
+          - "resolution_code contains ''retry''" - List guide entries with resolution code containing "retry"
+
+          - "automation = my-automation-id" - List guide entries for a specific automation. Use "-" as the automation_id to list guide entries across all automations in the workspace.
+
+          - "automation = my-automation-id or automation = another-automation-id" - List guide entries for specific automations.
+
+          - "create_time > \"2025-01-01T00:00:00Z\"" - Guide entries created after Jan 1, 2025
+
+          - "update_time >= \"2025-01-01T00:00:00Z\" AND update_time < \"2025-02-01T00:00:00Z\"" - January 2025 guide entries
+
+          - "(title contains ''My Guide Entry'' OR resolution_steps contains ''error'') AND create_time > \"2025-01-01T00:00:00Z\"" - Recent guide entries with specific title or resolution steps'
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - Exceptions
+    servers:
+    - url: https://app.us-1.kognitos.com
+components:
+  schemas:
+    v1CancelGenerationResponse:
+      type: object
+      description: 'Response for canceling ongoing event generation.
+
+        Empty response. Reserved for future extensibility.'
+    v1InputContent:
+      type: object
+      properties:
+        text:
+          type: string
+          description: Text content.
+        file:
+          $ref: '#/components/schemas/v1FileInputContent'
+      description: InputContent represents a single input item that can be text or binary.
+    v1AutomationStage:
+      type: string
+      enum:
+      - AUTOMATION_STAGE_UNSPECIFIED
+      - AUTOMATION_STAGE_DRAFT
+      - AUTOMATION_STAGE_PUBLISHED
+      default: AUTOMATION_STAGE_UNSPECIFIED
+      description: "AutomationStage represents the publication stage of an automation.\nThis enum is shared across services that manage or execute automations.\n\n - AUTOMATION_STAGE_UNSPECIFIED: Automation stage is not specified.\n - AUTOMATION_STAGE_DRAFT: Automation is in draft stage and can be modified.\n - AUTOMATION_STAGE_PUBLISHED: Automation is published and immutable, ready for execution."
+    rpcStatus:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/protobufAny'
+    v1Exception:
+      type: object
+      properties:
+        name:
+          type: string
+          title: 'The full resource name of the exception.
+
+            Format: organizations/{organization_id}/workspaces/{workspace_id}/exceptions/{exception_id}'
+        run:
+          type: string
+          title: 'The run in which the exception occurred. The run must belong
+
+            to the same workspace as the exception.
+
+            Format: organizations/{organization}/workspaces/{workspace}/automations/{automation}/runs/{run}'
+        location:
+          $ref: '#/components/schemas/commonV1Location'
+        message:
+          type: string
+          description: The exception message generated by the interpreter.
+        create_time:
+          type: string
+          format: date-time
+          description: The timestamp of when the exception was created.
+          readOnly: true
+        update_time:
+          type: string
+          format: date-time
+          description: The timestamp of when the exception was last updated.
+          readOnly: true
+        state:
+          $ref: '#/components/schemas/v1ExceptionState'
+        automation:
+          type: string
+          title: 'The automation that the exception belongs to. The automation of an exception
+
+            is the automation that the run belongs to.
+
+            Format: organizations/{organization}/workspaces/{workspace}/automations/{automation}'
+          readOnly: true
+        description:
+          type: string
+          description: 'A human-friendly description of the exception. Generated by the exception service.
+
+            Recently created exceptions may not yet have a description.'
+          readOnly: true
+        group:
+          type: string
+          description: 'Groups are used to categorize exceptions
+
+            Currently support static groups: "missing_values", "user_system_error", "internal_error"
+
+            Format: organizations/{organization_id}/workspaces/{workspace_id}/exceptionGroups/missing_values
+
+            Format: organizations/{organization_id}/workspaces/{workspace_id}/exceptionGroups/user_system_error
+
+            Format: organizations/{organization_id}/workspaces/{workspace_id}/exceptionGroups/internal_error
+
+            In future, we may support dynamic groups.
+
+            Empty string means the exception is not grouped.'
+        resolution_guide_entry:
+          type: string
+          title: 'The guide entry that was used to automatically resolve this exception.
+
+            Set when the exception service successfully applies
+
+            a guide entry to resolve the exception i.e exception.state should be RESOLVED if this field is set.
+
+            Format: organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}/guideEntries/{guide_entry_id}'
+          readOnly: true
+        stage:
+          $ref: '#/components/schemas/v1AutomationStage'
+        execution_id:
+          type: string
+          title: 'The execution ID within the run where this exception occurred.
+
+            Used to differentiate exceptions at the same location with the same message.
+
+            Example: "exec_123abc" or a UUID'
+        extra:
+          type: object
+          additionalProperties:
+            type: string
+          description: Extra information about the exception.
+        assignee:
+          type: string
+          title: 'The user assigned to resolve this exception.
+
+            Format: users/{user}'
+        resolver:
+          type: string
+          description: 'The entity that resolved this exception.
+
+            Can be either a user (for manual resolutions) or an agent (for automatic resolutions).
+
+            Format: users/{user} or agents/{agent}
+
+            Note: No resource_reference is specified to avoid service dependencies and to support
+
+            multiple resource types in a single field.'
+      description: 'An exception that occurred during an automation run.
+
+        Exceptions are raised by the interpreter and are analogous to Python exceptions.
+
+        However, the Kognitos platform provides various mechanisms to resolve an
+
+        exception and then resume the run.
+
+        Automation runs are important business processes for our users, so the expectation
+
+        is that every exception needs to be resolved even if the resolution involves manual steps
+
+        or abandoning the automation run.'
+      required:
+      - run
+      - location
+      - message
+    protobufAny:
+      type: object
+      properties:
+        '@type':
+          type: string
+      additionalProperties: {}
+    v1ListEventsResponse:
+      type: object
+      properties:
+        events:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1Event'
+          description: The events in the conversation thread, ordered by creation time (newest first).
+        next_page_token:
+          type: string
+          description: 'A token to retrieve the next page of results.
+
+            Pass this value in the `page_token` field in the subsequent call to `ListEvents`
+
+            to continue listing results. Will be empty when there are no more results.'
+        total_size:
+          type: integer
+          format: int32
+          description: 'The total number of events in the conversation thread across all pages.
+
+            This count is not affected by page_size or page_token parameters.'
+      description: A response to a list events request.
+    v1UserMessage:
+      type: object
+      properties:
+        user:
+          type: string
+          title: 'The user who authored the message.
+
+            Format: users/{user}'
+        content:
+          type: string
+          description: Simple text content.
+        content_list:
+          $ref: '#/components/schemas/v1InputContentList'
+      description: A message from a user.
+    v1CountExceptionsByGroupResponse:
+      type: object
+      properties:
+        group_counts:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1ExceptionGroupCount'
+          description: Exception counts by group, including metadata for each group.
+        next_page_token:
+          type: string
+          description: 'Token to retrieve the next page of results.
+
+            Empty when there are no more results.'
+        total_size:
+          type: integer
+          format: int32
+          description: 'Total number of groups with exceptions (across all pages).
+
+            Respects the filter from the request.'
+        total_exception_count:
+          type: integer
+          format: int32
+          description: 'Total count of all exceptions across all groups.
+
+            Respects the filter from the request.
+
+            This is the sum of all counts in group_counts (across all pages).
+
+            Useful for displaying summary statistics like "110 total exceptions across 3 groups".'
+      description: Response containing exception counts by group.
+    v1InputContentList:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1InputContent'
+          description: The list of input content items.
+      description: A list of input content items (can contain text and/or binary content).
+      required:
+      - items
+    v1CountExceptionsByAutomationResponse:
+      type: object
+      properties:
+        automation_counts:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1ExceptionAutomationCount'
+          description: Exception counts by automation.
+        next_page_token:
+          type: string
+          description: 'Token to retrieve the next page of results.
+
+            Empty when there are no more results.'
+        total_size:
+          type: integer
+          format: int32
+          description: 'Total number of automations with exceptions (across all pages).
+
+            Respects the filter from the request.'
+        total_exception_count:
+          type: integer
+          format: int32
+          description: 'Total count of all exceptions across all automations.
+
+            Respects the filter from the request.
+
+            This is the sum of all counts in automation_counts (across all pages).
+
+            Useful for displaying summary statistics like "500 total exceptions across 25 automations".'
+      description: Response containing exception counts by automation.
+    v1AgentMessage:
+      type: object
+      properties:
+        content:
+          type: string
+          description: The content of the message. CommonMark(GFM) formatted.
+          readOnly: true
+      description: A message from the AI agent.
+    v1ExceptionState:
+      type: string
+      enum:
+      - EXCEPTION_STATE_UNSPECIFIED
+      - EXCEPTION_STATE_PENDING
+      - EXCEPTION_STATE_RESOLVED
+      - EXCEPTION_STATE_ARCHIVED
+      default: EXCEPTION_STATE_UNSPECIFIED
+      description: "The state of an exception.\n\n - EXCEPTION_STATE_UNSPECIFIED: The state is not specified.\n - EXCEPTION_STATE_PENDING: The exception is pending resolution.\nThis is the initial state when an exception is created.\nTransitions:\nOn creation --> PENDING\nPENDING --> RESOLVED: Exception successfully resolved (run can continue)\nPENDING --> ARCHIVED: Exception archived without resolution (run abandoned)\n - EXCEPTION_STATE_RESOLVED: The exception has been resolved.\nRESOLVED is a terminal state. Resolved exceptions are retained for historical records\nTransitions:\nPENDING --> RESOLVED: Exception resolved (run can continue)\n - EXCEPTION_STATE_ARCHIVED: The exception has been archived.\nArchived exceptions are retained for historical records and audit purposes.\nTransitions:\nPENDING --> ARCHIVED: Exception archived without resolution (run abandoned)\nARCHIVED --> PENDING: Exception unarchived (run can continue)"
+    v1FileContent:
+      type: object
+      properties:
+        mime_type:
+          type: string
+          description: The MIME type of the file.
+        content:
+          type: string
+          format: byte
+          title: The raw binary content of the file
+        filename:
+          type: string
+          title: The name of the file, including extension if applicable
+      description: FileContent represents a file with its name and binary content.
+      required:
+      - mime_type
+      - content
+    v1ExceptionGroup:
+      type: object
+      properties:
+        name:
+          type: string
+          description: 'The static types (e.g., "missing_values", "user_system_error", "internal_error").
+
+            group name is fully qualified
+
+            Format: organizations/{organization_id}/workspaces/{workspace_id}/exceptionGroups/missing_values
+
+            Format: organizations/{organization_id}/workspaces/{workspace_id}/exceptionGroups/user_system_error
+
+            Format: organizations/{organization_id}/workspaces/{workspace_id}/exceptionGroups/internal_error
+
+            This is maintained by the system until we promote these to full resources.
+
+            This is the value used in the Exception.group field.'
+        title:
+          type: string
+          description: Human-readable display name for UI.
+        description:
+          type: string
+          description: Description of what this group represents.
+        suggested_action:
+          type: string
+          description: Suggested action to resolve exceptions in this group.
+        default_assignee:
+          type: string
+          title: 'Default assignee for new exceptions in this group.
+
+            When set, new exceptions in this group will be automatically assigned to this user.
+
+            Empty string means no default assignee is set.
+
+            Format: users/{user}'
+      description: 'Groups are not full resources and cannot be created or modified via the API (for now)
+
+        In future, we may promote these to full resources.'
+    v1SystemMessage:
+      type: object
+      properties:
+        content:
+          type: string
+          description: The content of the system message. CommonMark(GFM) formatted.
+          readOnly: true
+      description: A system-generated message.
+    v1GuideEntryState:
+      type: string
+      enum:
+      - STATE_UNSPECIFIED
+      - STATE_PENDING_APPROVAL
+      - STATE_APPROVED
+      - STATE_REJECTED
+      - STATE_ARCHIVED
+      default: STATE_UNSPECIFIED
+      description: "The state of a guide entry.\n\n - STATE_UNSPECIFIED: The state is not specified.\n - STATE_PENDING_APPROVAL: The guide entry is pending approval.\n - STATE_APPROVED: The guide entry is approved.\n - STATE_REJECTED: The guide entry is rejected.\n - STATE_ARCHIVED: The guide entry is archived."
+    v1ExceptionGroupCount:
+      type: object
+      properties:
+        group:
+          $ref: '#/components/schemas/v1ExceptionGroup'
+        count:
+          type: integer
+          format: int32
+          description: Number of exceptions in this group.
+      description: Exception count for a specific group, including group metadata.
+    v1ListExceptionsResponse:
+      type: object
+      properties:
+        exceptions:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1Exception'
+          description: The exceptions.
+        next_page_token:
+          type: string
+          description: 'A token to retrieve the next page of results.
+
+            Pass this value in the `page_token` field in the subsequent call to `ListExceptions`
+
+            to continue listing results. Will be empty when there are no more results.'
+        total_size:
+          type: integer
+          format: int32
+          description: 'The total number of exceptions that match the given filter across all pages.
+
+            This count is not affected by page_size or page_token parameters.'
+      description: A response to a list exceptions request.
+    v1Event:
+      type: object
+      properties:
+        name:
+          type: string
+          title: 'The full resource name of the event.
+
+            Format: organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}/runs/{run_id}/agents/{agent_id}/events/{event_id}'
+        state:
+          $ref: '#/components/schemas/v1EventState'
+        create_time:
+          type: string
+          format: date-time
+          description: The timestamp when the event was created.
+          readOnly: true
+        update_time:
+          type: string
+          format: date-time
+          description: The timestamp when the event was last updated.
+          readOnly: true
+        user_message:
+          $ref: '#/components/schemas/v1UserMessage'
+        agent_message:
+          $ref: '#/components/schemas/v1AgentMessage'
+        tool_call_request:
+          $ref: '#/components/schemas/v1ToolCallRequest'
+        tool_call_result:
+          $ref: '#/components/schemas/v1ToolCallResult'
+        thinking:
+          $ref: '#/components/schemas/v1Thinking'
+        system_message:
+          $ref: '#/components/schemas/v1SystemMessage'
+        completion_response:
+          $ref: '#/components/schemas/v1CompletionResponse'
+        exception:
+          type: string
+          title: 'An optional exception resource name that the event belongs to.
+
+            Format: organizations/{organization_id}/workspaces/{workspace_id}/exceptions/{exception_id}'
+      description: 'An event in a run conversation thread about an exception.
+
+        Events form a timeline of interactions between users, AI agents, and the system.'
+    commonV1Location:
+      type: object
+      properties:
+        start_byte:
+          type: string
+          format: int64
+          title: Starting Byte of the span, It will be zero-based
+        end_byte:
+          type: string
+          format: int64
+          title: Ending Byte(exclusive) of the span, It will be zero-based
+      description: 'Location represents a generic span within some underlying content.
+
+        It specifies the starting byte offset and the ending byte offset (exclusive) of the span.
+
+        This can be used for pointing to regions in files, buffers, logs, messages,
+
+        or any other byte-addressable resource.'
+    v1Thinking:
+      type: object
+      properties:
+        content:
+          type: string
+          description: The thinking content. CommonMark(GFM) formatted.
+          readOnly: true
+      description: Thinking or reasoning by the AI agent.
+    v1ToolCallRequest:
+      type: object
+      properties:
+        tool_call_id:
+          type: string
+          description: The unique identifier for the tool call. Used to match the tool call request with the tool call result.
+          readOnly: true
+        display_name:
+          type: string
+          description: The display name of the tool being called.
+          readOnly: true
+        input:
+          type: string
+          description: 'The input arguments passed to the tool. Contains arbitrary data in a tool-specific format
+
+            that the agent generates for the tool call.
+
+            Note: Clients should not parse this field. The length of this field may change during
+
+            STATE_STREAMING as the agent constructs the tool call arguments.'
+          readOnly: true
+      description: A tool call request made by the AI agent.
+    v1CompletionResponse:
+      type: object
+      properties:
+        content:
+          type: string
+          description: Final content if successful.
+        error:
+          type: string
+          description: Error description if the request failed.
+      description: Terminal completion for the agent workflow.
+    v1EventState:
+      type: string
+      enum:
+      - STATE_UNSPECIFIED
+      - STATE_STREAMING
+      - STATE_COMPLETE
+      default: STATE_UNSPECIFIED
+      description: "The state of an event.\n\n - STATE_UNSPECIFIED: The state is not specified. This value is not used.\n - STATE_STREAMING: The event fields are being generated by the AI agent. event_data fields may have partial values.\n - STATE_COMPLETE: The event fields are done being generated."
+    v1ListExceptionGroupsResponse:
+      type: object
+      properties:
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1ExceptionGroup'
+          description: Available exception groups and their metadata.
+        next_page_token:
+          type: string
+          description: 'Token to retrieve the next page of results.
+
+            Empty when there are no more results.'
+      description: Response containing available exception groups.
+    v1ListGuideEntriesResponse:
+      type: object
+      properties:
+        guide_entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1GuideEntry'
+          title: The guide entries
+        next_page_token:
+          type: string
+          description: 'A token to retrieve the next page of results.
+
+            Pass this value in the `page_token` field in the subsequent call to `ListGuideEntries`
+
+            to continue listing results. Will be empty when there are no more results.'
+        total_size:
+          type: integer
+          format: int32
+          description: 'The total number of guide entries across all pages.
+
+            This count respects the show_deleted parameter but is not affected by page_size or page_token.'
+      title: Response to a list guide entries request
+    v1FileInputContent:
+      type: object
+      properties:
+        remote:
+          type: string
+          title: Reference to a remote file via URL or file path
+        inline:
+          $ref: '#/components/schemas/v1FileContent'
+      description: FileInputContent represents a file that can be either stored inline or referenced remotely.
+    v1GuideEntry:
+      type: object
+      properties:
+        name:
+          type: string
+          title: 'Resource name
+
+            Format: organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}/guideEntries/{guide_entry_id}'
+        content:
+          type: string
+          description: 'Markdown-formatted entry content
+
+            Deprecated: Use resolution_steps and resolution_code instead.'
+        source_exception:
+          type: string
+          title: Exception that led to this entry's creation
+        source_run:
+          type: string
+          title: Run where this entry was first created
+        create_time:
+          type: string
+          format: date-time
+          title: Creation timestamp
+          readOnly: true
+        update_time:
+          type: string
+          format: date-time
+          title: Last update timestamp
+          readOnly: true
+        delete_time:
+          type: string
+          format: date-time
+          description: 'The time when this guide entry was soft-deleted.
+
+            If not set, the entry has not been deleted.
+
+            Soft-deleted entries are not physically removed but marked as deleted.
+
+            Always set the state to STATE_ARCHIVED whenever the entry is soft-deleted.'
+          readOnly: true
+        title:
+          type: string
+          description: 'Title of the guide entry
+
+            Marked as optional for backwards compatibility.
+
+            Can be set when creating or updating the guide entry.'
+        automation:
+          type: string
+          title: 'The automation that the guide entry belongs to.
+
+            Format: organizations/{organization}/workspaces/{workspace}/automations/{automation}'
+          readOnly: true
+        root_cause:
+          type: string
+          description: 'Root cause analysis explaining why the exception occurred.
+
+            This provides technical context about what caused the issue.
+
+            Marked as optional for backwards compatibility.'
+        state:
+          $ref: '#/components/schemas/v1GuideEntryState'
+        version:
+          type: string
+          title: 'Semantic version of this specific version of the guide entry (format: major.minor).
+
+            Incremented each time the guide entry is updated.
+
+            Examples: "0.1", "1.0", "1.1", "2.0"'
+          readOnly: true
+        resolution_steps:
+          type: string
+          description: "Human-readable explanation of the resolution action and steps.\nGitHub Flavored Markdown (GFM) formatted.\n\nResolution Field Guidelines:\n- At least one of resolution_steps, resolution_code, or resolution_notes should be present\n  for the guide entry to be useful. Entries with none of these fields are considered incomplete.\n- These fields are complementary and can be used together:\n  - resolution_steps: The primary resolution instructions\n  - resolution_code: Supporting code examples\n  - resolution_notes: Additional context or caveats"
+        resolution_code:
+          type: string
+          description: 'Example code illustrating how this type of exception was resolved.
+
+            Serves as a reference when handling similar exceptions in future runs.
+
+            May require adaptation based on specific context and should not be applied verbatim.'
+        resolution_notes:
+          type: string
+          description: 'Additional notes, caveats, or context about the resolution.
+
+            GitHub Flavored Markdown (GFM) formatted.
+
+            Use for edge cases, warnings, or supplementary information.'
+      title: A troubleshooting guide entry for an automation
+    v1ToolCallResult:
+      type: object
+      properties:
+        tool_call_id:
+          type: string
+          description: The unique identifier for the tool call. Used to match the tool call request with the tool call result.
+          readOnly: true
+        result:
+          type: string
+          description: 'The result of the tool call.
+
+            Note: Clients should not parse this field. The length of this field may change during
+
+            STATE_STREAMING as the agent constructs the tool call result.'
+          readOnly: true
+      description: A tool call result returned by the tool.
+    v1ExceptionAutomationCount:
+      type: object
+      properties:
+        automation:
+          type: string
+          title: 'The automation resource name.
+
+            Format: organizations/{organization}/workspaces/{workspace}/automations/{automation}'
+        count:
+          type: integer
+          format: int32
+          description: Number of exceptions for this automation.
+      description: Exception count for a specific automation.
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: Personal Access Token.
+x-refined-from:
+- kognitos-openapi.yaml
+- kognitos-openapi.yml

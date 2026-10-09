@@ -1,0 +1,89 @@
+generated: '2026-10-09'
+method: searched
+source:
+- https://www.kognitos.com/privacy/
+- https://www.kognitos.com/terms/
+notes: >-
+  Read from Kognitos' own Privacy Policy and Terms (both HTTP 200 on 2026-10-09). The Trust Center at
+  https://trust.kognitos.com/ (Drata-hosted, HTTP 200) returned a JavaScript shell with no readable text,
+  so nothing is quoted from it; the sub-processor list it is said to hold was not read.
+signals:
+  data_subject_request:
+    url: https://www.kognitos.com/privacy/
+    section: 'How do I exercise my data subject rights (access, deletion, portability)?'
+    channel: privacy@kognitos.com
+    rights_named: [access, deletion, portability]
+    evidence:
+    - source: https://www.kognitos.com/privacy/
+      http_status: 200
+      fetched: '2026-10-09'
+      quote: "EU/UK, California, and other in-scope individuals can submit data subject requests to privacy@kognitos.com or via the contact form. We respond within the timelines required by GDPR, CCPA/CPRA, and other applicable laws."
+    note: A named DSR channel (email or contact form); no own SLA is stated beyond statutory timelines.
+  subprocessors:
+    url: https://www.kognitos.com/privacy/
+    section: 'Is Kognitos GDPR and HIPAA compliant?'
+    evidence:
+    - source: https://www.kognitos.com/privacy/
+      http_status: 200
+      fetched: '2026-10-09'
+      quote: "Detailed compliance evidence, certifications, and sub-processor lists are available on the Kognitos Trust portal at trust.kognitos.com."
+    note: >-
+      States a sub-processor list exists on the Drata trust portal; the portal rendered no text to our fetch,
+      so the list itself was not verified.
+  training_data_summary:
+    url: https://www.kognitos.com/privacy/
+    evidence:
+    - source: https://www.kognitos.com/privacy/
+      http_status: 200
+      fetched: '2026-10-09'
+      quote: "We do not sell personal data and we do not use customer data to train foundation models."
+    - source: https://www.kognitos.com/terms/
+      http_status: 200
+      fetched: '2026-10-09'
+      quote: "Kognitos does not claim ownership of customer outputs and does not use Customer Data to train foundation models."
+    note: >-
+      A training-data use commitment (customer data excluded from foundation-model training), not a
+      summary of the data any model was trained on.
+  ai_transparency:
+    url: https://www.kognitos.com/terms/
+    section: '1.12 Third Party Services'
+    evidence:
+    - source: https://www.kognitos.com/terms/
+      http_status: 200
+      fetched: '2026-10-09'
+      quote: "Third Party Services may include, by way of example, generative artificial intelligence services, large language model services, and related services."
+    - source: https://www.kognitos.com/terms/
+      http_status: 200
+      fetched: '2026-10-09'
+      quote: "To the extent Customer makes use of a Third Party Service, Customer consents to and authorizes the transfer of Customer Data from the Service to the Third Party Service."
+    note: >-
+      Discloses that integrations may route Customer Data to third-party generative AI / LLM services, whose
+      output is governed by those providers' terms. It does not name the providers.
+  data_retention:
+    url: https://www.kognitos.com/privacy/
+    section: Data Retention and Disposal
+    evidence:
+    - source: https://www.kognitos.com/privacy/
+      http_status: 200
+      fetched: '2026-10-09'
+      quote: "We will retain your personal data only as long as necessary to fulfill the purposes for which it was collected, including to provide our services, satisfy any legal, regulatory, tax, accounting or reporting requirements and to enforce our agreements."
+    - source: https://www.kognitos.com/privacy/
+      http_status: 200
+      fetched: '2026-10-09'
+      quote: "By default, execution logs and the audit trail are retained for the contracted term plus the period required by SOX, HIPAA, and other applicable regulations. Customers can configure retention windows for their tenant."
+    - source: https://www.kognitos.com/terms/
+      http_status: 200
+      fetched: '2026-10-09'
+      quote: "Customer acknowledges and agrees that Customer Data may be irretrievably deleted after fifteen (15) days following a termination or expiration of this Agreement."
+    note: >-
+      Purpose-bound retention for personal data, tenant-configurable retention windows, and a 15-day
+      post-termination window after which Customer Data may be deleted (no export/exit assistance is described).
+  age_assurance:
+    url: https://www.kognitos.com/privacy/
+    section: Children's Personal Data
+    evidence:
+    - source: https://www.kognitos.com/privacy/
+      http_status: 200
+      fetched: '2026-10-09'
+      quote: "Our services are not directed to, and we do not intend to, or knowingly, collect or solicit personal data from children under the age of 18."
+    note: A stated minimum age of 18; no age-verification mechanism is described.

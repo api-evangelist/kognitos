@@ -1,0 +1,2971 @@
+openapi: 3.2.0
+info:
+  title: Kognitos Automations API
+  version: 1.0.0
+  contact:
+    name: Kognitos
+    url: https://kognitos.com
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  description: 'Operations tagged Automations across 2 of this provider''s published API definitions: kognitos-openapi.yaml, kognitos-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://app.us-1.kognitos.com
+security:
+- BearerAuth: []
+tags:
+- name: Automations
+  description: Create and configure automations, revisions, schedules, triggers, and connections.
+paths:
+  /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}:
+    get:
+      summary: Get Automation
+      operationId: GetAutomation
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1Automation'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: automation_id
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Automations
+    servers:
+    - url: https://app.us-1.kognitos.com
+  /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}:query:
+    get:
+      summary: Query Automation
+      description: 'This custom method allows explicit selection of which version stage to retrieve:
+
+        - AUTOMATION_STAGE_DRAFT: Returns the latest draft version
+
+        - AUTOMATION_STAGE_PUBLISHED: Returns the latest published version'
+      operationId: QueryAutomation
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1Automation'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: automation_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: stage
+        description: "The publication stage of the automation to retrieve.\nDetermines which version of the automation to return:\n- AUTOMATION_STAGE_DRAFT: Returns the latest draft version\n- AUTOMATION_STAGE_PUBLISHED: Returns the latest published version\n\n - AUTOMATION_STAGE_UNSPECIFIED: Automation stage is not specified.\n - AUTOMATION_STAGE_DRAFT: Automation is in draft stage and can be modified.\n - AUTOMATION_STAGE_PUBLISHED: Automation is published and immutable, ready for execution."
+        in: query
+        required: true
+        schema:
+          type: string
+          enum:
+          - AUTOMATION_STAGE_UNSPECIFIED
+          - AUTOMATION_STAGE_DRAFT
+          - AUTOMATION_STAGE_PUBLISHED
+          default: AUTOMATION_STAGE_UNSPECIFIED
+      tags:
+      - Automations
+    servers:
+    - url: https://app.us-1.kognitos.com
+  /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}/revisions/{revision_id}:
+    get:
+      summary: Get Automation Revision
+      operationId: GetAutomationRevision
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1AutomationRevision'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: automation_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: revision_id
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Automations
+    servers:
+    - url: https://app.us-1.kognitos.com
+  /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}/revisions:
+    get:
+      summary: List Automation Revisions
+      operationId: ListAutomationRevisions
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1ListAutomationRevisionsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: automation_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: page_size
+        description: 'The maximum number of revisions to return in a single response.
+
+          The service may return fewer than this value.
+
+          If unspecified, at most 50 revisions will be returned.
+
+          The maximum value is 1000; values above 1000 will be coerced to 1000.'
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: page_token
+        description: 'A page token received from a previous `ListAutomationRevisions` call.
+
+          Provide this to retrieve the subsequent page of results.'
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: filter
+        description: "Filter expression to restrict results. Per AIP-160, this should be a\nfiltering expression following the Common Expression Language (CEL) syntax.\n\nSupported fields for filtering:\n  - `stage`: The automation revision stage (e.g., DRAFT, PUBLISHED)\n\nExample filters:\n  - `stage = \"DRAFT\"` - Returns only draft revisions\n  - `stage = \"PUBLISHED\"` - Returns only published revisions\n\nIf not specified or passed null, all revisions will be returned for that automation."
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - Automations
+    servers:
+    - url: https://app.us-1.kognitos.com
+  /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations:
+    get:
+      summary: List Automations
+      operationId: ListAutomations
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1ListAutomationsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: page_size
+        description: 'The maximum number of automations to return in a single response.
+
+          The service may return fewer than this value.
+
+          If unspecified, at most 10 automations will be returned.
+
+          The maximum value is 1000; values above 1000 will be coerced to 1000.
+
+          If negative, an INVALID_ARGUMENT error will be returned.'
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: page_token
+        description: 'A page token received from a previous `ListAutomations` call.
+
+          Provide this to retrieve the subsequent page of results.
+
+          When paginating, all other parameters provided to `ListAutomations` must match
+
+          the call that provided the page token.'
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: show_deleted
+        description: Filter to show/hide deleted automations. Deleted automations will be hidden by default.
+        in: query
+        required: false
+        schema:
+          type: boolean
+      - name: filter
+        description: "Filter expression to restrict results. Per AIP-160, this should be a\nfiltering expression following the Common Expression Language (CEL) syntax.\n\nSupported fields for filtering:\n  - `state`: The automation state (e.g., DRAFT, PUBLISHED)\n\nExample filters:\n  - `state = \"PUBLISHED\"`"
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: order_by
+        description: 'Reserved for future use. Comma-separated list of fields to order results by.
+
+          Per AIP-132, this should be a string containing one or more field names,
+
+          each optionally followed by "asc" or "desc" to specify sort direction.
+
+
+          Currently not implemented. Results are always ordered by `update_time desc`
+
+          (most recently updated first).'
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - Automations
+    servers:
+    - url: https://app.us-1.kognitos.com
+  /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}:invoke:
+    post:
+      summary: Invoke Automation
+      operationId: InvokeAutomation
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1InvokeAutomationResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: automation_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InvokeAutomationBody'
+        required: true
+      tags:
+      - Automations
+    servers:
+    - url: https://app.us-1.kognitos.com
+  /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}:listDefaultInputsHistory:
+    get:
+      summary: List Default Inputs History
+      description: 'Results are returned in reverse chronological order (newest first).
+
+        Optionally filter by stage (DRAFT or PUBLISHED).'
+      operationId: ListDefaultInputsHistory
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1ListDefaultInputsHistoryResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: automation_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: page_size
+        description: Maximum number of entries to return. Defaults to 50 if not specified.
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: page_token
+        description: Page token for pagination, from a previous ListDefaultInputsHistoryResponse.
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - Automations
+    servers:
+    - url: https://app.us-1.kognitos.com
+  /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations:countConnectionUsage:
+    post:
+      summary: Count Connection Usage
+      operationId: CountConnectionUsage
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1CountConnectionUsageResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CountConnectionUsageBody'
+        required: true
+      tags:
+      - Automations
+    servers:
+    - url: https://app.us-1.kognitos.com
+  /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations:traceConnectionUsage:
+    post:
+      summary: Trace Connection Usage
+      operationId: TraceConnectionUsage
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1TraceConnectionUsageResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TraceConnectionUsageBody'
+        required: true
+      tags:
+      - Automations
+    servers:
+    - url: https://app.us-1.kognitos.com
+  /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}:extractCodeConnections:
+    get:
+      summary: Extract Automation Code Connections
+      operationId: ExtractAutomationCodeConnections
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1ExtractAutomationCodeConnectionsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: automation_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: filter
+        description: "Filter expression to restrict results. Per AIP-160, this should be a\nfiltering expression following the Common Expression Language (CEL) syntax.\n\nSupported fields for filtering:\n  - `stage`: The automation stage to extract connections from (e.g., DRAFT, PUBLISHED)\n\nExample filters:\n  - `stage = \"DRAFT\"`\n  - `stage = \"PUBLISHED\"`"
+        in: query
+        required: true
+        schema:
+          type: string
+      tags:
+      - Automations
+    servers:
+    - url: https://app.us-1.kognitos.com
+  /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}:upgradeConnections:
+    post:
+      summary: Upgrade Automation Connections
+      description: 'Multiple connections can be upgraded in a single atomic operation. All upgrades succeed
+
+        together or all fail together. The automation version is incremented once for all upgrades.
+
+
+        This operation only works on draft automations. To upgrade connections in a published
+
+        automation, first use ForkPublishedAutomation to create a draft, then call this method.
+
+
+        Per AIP-136, this is a custom method using the :upgradeConnections suffix.'
+      operationId: UpgradeAutomationConnections
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1UpgradeAutomationConnectionsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: automation_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpgradeAutomationConnectionsBody'
+        required: true
+      tags:
+      - Automations
+    servers:
+    - url: https://app.us-1.kognitos.com
+  /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}:switchConnections:
+    post:
+      summary: Switch Automation Connections
+      description: 'Multiple connections can be switched in a single atomic operation. All switches succeed
+
+        together or all fail together. The automation version is incremented once for all switches.
+
+
+        This operation only works on draft automations. To switch connections in a published
+
+        automation, first use ForkPublishedAutomation to create a draft, then call this method.
+
+
+        Per AIP-136, this is a custom method using the :switchConnections suffix.'
+      operationId: SwitchAutomationConnections
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1SwitchAutomationConnectionsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: automation_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SwitchAutomationConnectionsBody'
+        required: true
+      tags:
+      - Automations
+    servers:
+    - url: https://app.us-1.kognitos.com
+  /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}:removeConnections:
+    post:
+      summary: Remove Automation Connections
+      description: 'Multiple connections can be removed in a single atomic operation. All removals succeed
+
+        together or all fail together. The automation version is incremented once for all removals.
+
+
+        This operation only works on draft automations. To remove connections in a published
+
+        automation, first use ForkPublishedAutomation to create a draft, then call this method.
+
+
+        Per AIP-136, this is a custom method using the :removeConnections suffix.'
+      operationId: RemoveAutomationConnections
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1RemoveAutomationConnectionsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: automation_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RemoveAutomationConnectionsBody'
+        required: true
+      tags:
+      - Automations
+    servers:
+    - url: https://app.us-1.kognitos.com
+  /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}:addConnections:
+    post:
+      summary: Add Automation Connections
+      description: 'Multiple connections can be added in a single atomic operation. All additions succeed
+
+        together or all fail together. The automation version is incremented once for all additions.
+
+
+        This operation only works on draft automations. To add connections to a published
+
+        automation, first use ForkPublishedAutomation to create a draft, then call this method.
+
+
+        Per AIP-136, this is a custom method using the :addConnections suffix.'
+      operationId: AddAutomationConnections
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1AddAutomationConnectionsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: automation_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddAutomationConnectionsBody'
+        required: true
+      tags:
+      - Automations
+    servers:
+    - url: https://app.us-1.kognitos.com
+  /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}/visualization:
+    get:
+      summary: Get Automation Visualization
+      operationId: GetAutomationVisualization
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1AutomationVisualization'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: automation_id
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Automations
+    servers:
+    - url: https://app.us-1.kognitos.com
+  /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}/schedule:
+    post:
+      summary: Create Automation Schedule
+      operationId: CreateAutomationSchedule
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1AutomationSchedule'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: automation_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/v1AutomationSchedule'
+        description: The schedule to create.
+        required: true
+      tags:
+      - Automations
+    patch:
+      summary: Update Automation Schedule
+      operationId: UpdateAutomationSchedule
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1AutomationSchedule'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: automation_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                config:
+                  $ref: '#/components/schemas/v1ScheduleConfig'
+                enabled:
+                  type: boolean
+                  description: 'Whether the schedule is currently enabled.
+
+                    Disabled schedules do not trigger automation invocations.'
+                  readOnly: true
+                summary:
+                  type: string
+                  title: 'Human-readable summary of the schedule for display in the UI.
+
+                    Generated by the backend based on the schedule configuration.
+
+                    Examples: "Every weekday at 9:00 AM PT", "Monthly on the 4th Friday at 2:30 PM"'
+                  readOnly: true
+                next_run_times:
+                  type: array
+                  items:
+                    type: string
+                    format: date-time
+                  description: 'List of the next scheduled execution times.
+
+                    Useful for preview and verification. Backend generates these.'
+                  readOnly: true
+                remaining_occurrences:
+                  type: integer
+                  format: int32
+                  description: 'Number of remaining occurrences if the schedule has an end condition.
+
+                    Only populated when config.end.end_type is SCHEDULE_END_TYPE_AFTER_OCCURRENCES.'
+                  readOnly: true
+              title: The schedule to update.
+              required:
+              - config
+        description: The schedule to update.
+        required: true
+      tags:
+      - Automations
+    get:
+      summary: Get Automation Schedule
+      operationId: GetAutomationSchedule
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1AutomationSchedule'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: automation_id
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Automations
+    delete:
+      summary: Delete Automation Schedule
+      operationId: DeleteAutomationSchedule
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: automation_id
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Automations
+    servers:
+    - url: https://app.us-1.kognitos.com
+  /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}:disableAutomationSchedule:
+    post:
+      summary: Disable Automation Schedule
+      operationId: DisableAutomationSchedule
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1DisableAutomationScheduleResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: automation_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DisableAutomationScheduleBody'
+        required: true
+      tags:
+      - Automations
+    servers:
+    - url: https://app.us-1.kognitos.com
+  /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}:enableAutomationSchedule:
+    post:
+      summary: Enable Automation Schedule
+      operationId: EnableAutomationSchedule
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1EnableAutomationScheduleResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: automation_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EnableAutomationScheduleBody'
+        required: true
+      tags:
+      - Automations
+    servers:
+    - url: https://app.us-1.kognitos.com
+  /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations:deleteConnection:
+    delete:
+      summary: Delete Workspace Connection
+      description: 'This API validates that the connection is not in use by any published
+
+        automations before deletion. If only draft automations use the connection,
+
+        deletion proceeds and returns the list of affected automations.
+
+
+        The affected draft automations will have unresolved connection references
+
+        after deletion. They can still be edited but cannot be published until
+
+        new connections are configured.
+
+
+        Errors:
+
+        - FAILED_PRECONDITION: Connection is in use by one or more published automations.
+
+        The error details include DeleteConnectionBlockedError with blocking automations.
+
+        - NOT_FOUND: Connection not found in the workspace.
+
+        - INTERNAL: Failed to communicate with the connection storage service.'
+      operationId: DeleteWorkspaceConnection
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1DeleteWorkspaceConnectionResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: connection_id
+        description: The connection ID to delete.
+        in: query
+        required: true
+        schema:
+          type: string
+      tags:
+      - Automations
+    servers:
+    - url: https://app.us-1.kognitos.com
+  /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}/triggers:
+    post:
+      summary: Create Automation Trigger
+      operationId: CreateAutomationTrigger
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1AutomationTrigger'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: automation_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/v1AutomationTrigger'
+        description: The trigger phase configuration to store.
+        required: true
+      tags:
+      - Automations
+    get:
+      summary: List Automation Triggers
+      operationId: ListAutomationTriggers
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1ListAutomationTriggersResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: automation_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: page_size
+        description: 'The maximum number of triggers to return in a single response.
+
+          The service may return fewer than this value.
+
+          If unspecified, a default page size will be used.'
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: page_token
+        description: 'A page token received from a previous `ListAutomationTriggers` call.
+
+          Provide this to retrieve the subsequent page of results.'
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: filter
+        description: A filter expression to apply to the list of triggers.
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - Automations
+    servers:
+    - url: https://app.us-1.kognitos.com
+components:
+  schemas:
+    v1AutomationRevision:
+      type: object
+      properties:
+        name:
+          type: string
+          description: 'The name of the automation revision.
+
+            Format: organizations/{organization}/workspaces/{workspace}/automations/{automation}/revisions/{revision}
+
+            The revision ID is the semantic version string (e.g., "0.1", "1.0", "2.0").'
+        snapshot:
+          $ref: '#/components/schemas/v1Automation'
+        create_time:
+          type: string
+          format: date-time
+          description: Timestamp when this revision was created.
+          readOnly: true
+        alternate_ids:
+          type: array
+          items:
+            type: string
+          description: 'Other revision IDs that reference the same snapshot (e.g., "latest").
+
+            Per AIP-162, this allows aliases for revisions.'
+          readOnly: true
+      description: 'AutomationRevision represents a historical revision (version) of an automation.
+
+        Revisions are immutable snapshots created each time an automation is updated.
+
+        Per AIP-162, this resource contains the complete state via a snapshot field.'
+    v1AutomationStage:
+      type: string
+      enum:
+      - AUTOMATION_STAGE_UNSPECIFIED
+      - AUTOMATION_STAGE_DRAFT
+      - AUTOMATION_STAGE_PUBLISHED
+      default: AUTOMATION_STAGE_UNSPECIFIED
+      description: "AutomationStage represents the publication stage of an automation.\nThis enum is shared across services that manage or execute automations.\n\n - AUTOMATION_STAGE_UNSPECIFIED: Automation stage is not specified.\n - AUTOMATION_STAGE_DRAFT: Automation is in draft stage and can be modified.\n - AUTOMATION_STAGE_PUBLISHED: Automation is published and immutable, ready for execution."
+    v1ListAutomationTriggersResponse:
+      type: object
+      properties:
+        automation_triggers:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1AutomationTrigger'
+          description: List of triggers that are active for the specified automation.
+        next_page_token:
+          type: string
+          description: 'A token that can be sent as `page_token` to retrieve the next page.
+
+            If this field is omitted, there are no subsequent pages.'
+      description: Response containing the list of active triggers for an automation.
+    AddAutomationConnectionsBody:
+      type: object
+      properties:
+        connections:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1CredentialInfo'
+          description: 'List of connections to add. All additions are performed atomically:
+
+            either all succeed or all fail. The automation version is incremented once
+
+            for all additions.
+
+
+            Each connection must be unique within the list. If duplicate connections appear,
+
+            the request will fail with INVALID_ARGUMENT.'
+      description: AddAutomationConnectionsRequest specifies which connections to add to a draft automation.
+      required:
+      - connections
+    RemoveAutomationConnectionsBody:
+      type: object
+      properties:
+        removals:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1ConnectionRemoval'
+          description: 'List of connections to remove. All removals are performed atomically:
+
+            either all succeed or all fail. The automation version is incremented once
+
+            for all removals.
+
+
+            Each connection (identified by connection_id and connection_alias) must be unique
+
+            within the list. If the same connection appears multiple times, the request will
+
+            fail with INVALID_ARGUMENT.
+
+
+            For each connection, the corresponding entry in automation.connections will be removed
+
+            and code references will be replaced with placeholders (kognitos.connection_name.{book}).'
+      description: RemoveAutomationConnectionsRequest specifies which connections to remove from a draft automation.
+      required:
+      - removals
+    v1OrdinalDayOfWeek:
+      type: object
+      properties:
+        ordinal:
+          $ref: '#/components/schemas/v1Ordinal'
+        day:
+          $ref: '#/components/schemas/v1DayOfWeek'
+      description: 'OrdinalDayOfWeek represents a pattern like "first Monday" or "last Friday".
+
+        Used as a building block for monthly and yearly patterns.'
+      required:
+      - ordinal
+      - day
+    v1VisualizationState:
+      type: string
+      enum:
+      - VISUALIZATION_STATE_UNSPECIFIED
+      - VISUALIZATION_STATE_PENDING
+      - VISUALIZATION_STATE_COMPLETED
+      - VISUALIZATION_STATE_FAILED
+      default: VISUALIZATION_STATE_UNSPECIFIED
+      description: "VisualizationState indicates the current state of visualization generation.\n\n - VISUALIZATION_STATE_UNSPECIFIED: Unspecified state.\n - VISUALIZATION_STATE_PENDING: Visualization generation is in progress.\n - VISUALIZATION_STATE_COMPLETED: Visualization generation completed successfully.\n - VISUALIZATION_STATE_FAILED: Visualization generation failed."
+    v1ConnectionRemoval:
+      type: object
+      properties:
+        connection_id:
+          type: string
+          description: 'The connection ID to remove.
+
+            This connection ID must exist in the automation.'
+        connection_alias:
+          type: string
+          description: 'The alias of the connection to remove.
+
+            This alias must match the connection being removed.'
+      description: ConnectionRemoval specifies a connection to remove from an automation.
+      required:
+      - connection_id
+      - connection_alias
+    v1Month:
+      type: string
+      enum:
+      - MONTH_UNSPECIFIED
+      - MONTH_JANUARY
+      - MONTH_FEBRUARY
+      - MONTH_MARCH
+      - MONTH_APRIL
+      - MONTH_MAY
+      - MONTH_JUNE
+      - MONTH_JULY
+      - MONTH_AUGUST
+      - MONTH_SEPTEMBER
+      - MONTH_OCTOBER
+      - MONTH_NOVEMBER
+      - MONTH_DECEMBER
+      default: MONTH_UNSPECIFIED
+      description: "Month represents months of the year.\n\n - MONTH_UNSPECIFIED: Unspecified month.\n - MONTH_JANUARY: January.\n - MONTH_FEBRUARY: February.\n - MONTH_MARCH: March.\n - MONTH_APRIL: April.\n - MONTH_MAY: May.\n - MONTH_JUNE: June.\n - MONTH_JULY: July.\n - MONTH_AUGUST: August.\n - MONTH_SEPTEMBER: September.\n - MONTH_OCTOBER: October.\n - MONTH_NOVEMBER: November.\n - MONTH_DECEMBER: December."
+    v1ScheduleEndType:
+      type: string
+      enum:
+      - SCHEDULE_END_TYPE_UNSPECIFIED
+      - SCHEDULE_END_TYPE_NEVER
+      - SCHEDULE_END_TYPE_ON_DATE
+      - SCHEDULE_END_TYPE_AFTER_OCCURRENCES
+      default: SCHEDULE_END_TYPE_UNSPECIFIED
+      description: "ScheduleEndType defines how a schedule terminates.\n\n - SCHEDULE_END_TYPE_UNSPECIFIED: Unspecified end type. Defaults to NEVER.\n - SCHEDULE_END_TYPE_NEVER: Schedule runs indefinitely (never ends).\n - SCHEDULE_END_TYPE_ON_DATE: Schedule ends on a specific date.\n - SCHEDULE_END_TYPE_AFTER_OCCURRENCES: Schedule ends after a specific number of occurrences."
+    v1DefaultInputsHistoryEntry:
+      type: object
+      properties:
+        default_inputs:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/commonV1Value'
+          description: The default inputs snapshot at the time of this change.
+          readOnly: true
+        change_time:
+          type: string
+          format: date-time
+          description: When this change was made.
+          readOnly: true
+        change_actor:
+          type: string
+          description: User ID of the person who made this change.
+          readOnly: true
+      description: DefaultInputsHistoryEntry represents a single default input change event.
+    v1Table:
+      type: object
+      properties:
+        columns:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1Column'
+      description: 'A table is a column-oriented structure. All the values inside each column must
+
+        be of equal length.'
+    v1BookConnection:
+      type: object
+      properties:
+        connection_id:
+          type: string
+          description: Unique identifier for this connection resource.
+        endpoint:
+          type: string
+          description: Endpoint for the connection.
+      description: 'BookConnection is a resource representing a connection to a book instance.
+
+        A connection has a unique identifier and an endpoint.'
+    v1CountConnectionUsageResponse:
+      type: object
+      properties:
+        connection_counts:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1ConnectionAutomationCount'
+          description: 'List of connection IDs with their corresponding automation counts.
+
+            The order matches the order of connection_ids in the request.'
+      description: CountConnectionUsageResponse returns automation counts for each requested connection ID.
+    v1List:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/commonV1Value'
+          title: The ordered sequence of values in this list
+      description: "Represents an ordered collection of values (similar to arrays or lists).\n\nThis message can contain any number of Value elements in a specific order.\nLists are mutable and can grow or shrink during runtime. Elements can be\naccessed by their zero-based index position.\n\nExamples:\n - [1, 2, 3] - list of numbers\n - [\"hello\", \"world\"] - list of strings\n - [true, 42, \"mixed\"] - list with mixed types\n - [[1, 2], [3, 4]] - nested lists"
+    v1AutomationVisualization:
+      type: object
+      properties:
+        name:
+          type: string
+          title: 'The resource name of the visualization.
+
+            Format: organizations/{org}/workspaces/{ws}/automations/{automation}/visualization'
+        graph:
+          $ref: '#/components/schemas/v1FlowGraph'
+        automation_version:
+          type: string
+          description: 'The semantic version of the automation this visualization represents.
+
+            Format: "major.0" (e.g., "1.0", "2.0", "3.0") - always a published version.
+
+            This corresponds to the automation''s published version at the time of generation.'
+          readOnly: true
+        state:
+          $ref: '#/components/schemas/v1VisualizationState'
+        error_message:
+          type: string
+          description: 'Error message describing why generation failed.
+
+            Only populated when state is VISUALIZATION_STATE_FAILED.'
+          readOnly: true
+      description: 'AutomationVisualization represents a visual representation of an automation''s execution flow.
+
+        Visualizations are generated for published automation versions and stored as configurations
+
+        for rendering in the UI. This is a singleton resource - each automation has exactly one visualization
+
+        representing its latest published version.'
+    v1ScheduleEnd:
+      type: object
+      properties:
+        end_type:
+          $ref: '#/components/schemas/v1ScheduleEndType'
+        end_date:
+          $ref: '#/components/schemas/typeDate'
+        max_occurrences:
+          type: integer
+          format: int32
+          description: 'Number of occurrences when end_type is SCHEDULE_END_TYPE_AFTER_OCCURRENCES.
+
+            Schedule stops after this many executions.'
+      description: ScheduleEnd defines when the schedule stops running.
+      required:
+      - end_type
+    bdkV1ListValue:
+      type: object
+      properties:
+        values:
+          type: array
+          items:
+            $ref: '#/components/schemas/bdkV1Value'
+          title: All the values inside the list
+      title: A collection of values
+    v1RepeatInterval:
+      type: object
+      properties:
+        unit:
+          $ref: '#/components/schemas/v1FrequencyUnit'
+        interval:
+          type: integer
+          format: int32
+          description: 'The interval value. For example, 2 with FREQUENCY_UNIT_WEEK means "every 2 weeks".
+
+            Must be a positive integer. Defaults to 1 if not specified.'
+      description: RepeatInterval defines how often the schedule repeats.
+      required:
+      - unit
+    v1AutomationSchedule:
+      type: object
+      properties:
+        name:
+          type: string
+          title: 'Resource name of the schedule.
+
+            Format: organizations/{org}/workspaces/{ws}/automations/{automation}/schedule'
+        config:
+          $ref: '#/components/schemas/v1ScheduleConfig'
+        enabled:
+          type: boolean
+          description: 'Whether the schedule is currently enabled.
+
+            Disabled schedules do not trigger automation invocations.'
+          readOnly: true
+        summary:
+          type: string
+          title: 'Human-readable summary of the schedule for display in the UI.
+
+            Generated by the backend based on the schedule configuration.
+
+            Examples: "Every weekday at 9:00 AM PT", "Monthly on the 4th Friday at 2:30 PM"'
+          readOnly: true
+        next_run_times:
+          type: array
+          items:
+            type: string
+            format: date-time
+          description: 'List of the next scheduled execution times.
+
+            Useful for preview and verification. Backend generates these.'
+          readOnly: true
+        remaining_occurrences:
+          type: integer
+          format: int32
+          description: 'Number of remaining occurrences if the schedule has an end condition.
+
+            Only populated when config.end.end_type is SCHEDULE_END_TYPE_AFTER_OCCURRENCES.'
+          readOnly: true
+      description: 'AutomationSchedule represents a schedule for invoking an automation.
+
+        Each automation can have at most one schedule. Kestra is the source of truth.'
+      required:
+      - config
+    v1TraceConnectionUsageResponse:
+      type: object
+      properties:
+        automations:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1AutomationConnectionUsage'
+          description: List of automations that use the specified connection, with their stages.
+      description: TraceConnectionUsageResponse returns automations that use the specified connection.
+    v1FlowNode:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for this node within the graph.
+        label:
+          type: string
+          description: Human-readable label describing this step.
+        type:
+          $ref: '#/components/schemas/v1FlowNodeType'
+      description: FlowNode represents a single step or decision point in the automation flow.
+    v1UpgradeAutomationConnectionsResponse:
+      type: object
+      properties:
+        automation:
+          $ref: '#/components/schemas/v1Automation'
+      description: UpgradeAutomationConnectionsResponse returns the updated automation.
+    v1DayOfWeek:
+      type: string
+      enum:
+      - DAY_OF_WEEK_UNSPECIFIED
+      - DAY_OF_WEEK_MONDAY
+      - DAY_OF_WEEK_TUESDAY
+      - DAY_OF_WEEK_WEDNESDAY
+      - DAY_OF_WEEK_THURSDAY
+      - DAY_OF_WEEK_FRIDAY
+      - DAY_OF_WEEK_SATURDAY
+      - DAY_OF_WEEK_SUNDAY
+      default: DAY_OF_WEEK_UNSPECIFIED
+      description: "DayOfWeek represents days of the week for scheduling.\nValues align with ISO 8601 (Monday = 1, Sunday = 7).\n\n - DAY_OF_WEEK_UNSPECIFIED: Unspecified day.\n - DAY_OF_WEEK_MONDAY: Monday.\n - DAY_OF_WEEK_TUESDAY: Tuesday.\n - DAY_OF_WEEK_WEDNESDAY: Wednesday.\n - DAY_OF_WEEK_THURSDAY: Thursday.\n - DAY_OF_WEEK_FRIDAY: Friday.\n - DAY_OF_WEEK_SATURDAY: Saturday.\n - DAY_OF_WEEK_SUNDAY: Sunday."
+    v1DisableAutomationScheduleResponse:
+      type: object
+      properties:
+        schedule:
+          $ref: '#/components/schemas/v1AutomationSchedule'
+      description: DisableAutomationScheduleResponse contains the disabled schedule.
+    v1ValueType:
+      type: object
+      properties:
+        scalar_type:
+          $ref: '#/components/schemas/v1ValueScalarType'
+        optional_type:
+          $ref: '#/components/schemas/v1ValueOptionalType'
+        list_type:
+          $ref: '#/components/schemas/v1ValueListType'
+        dictionary_type:
+          $ref: '#/components/schemas/v1ValueDictionaryType'
+        table_type:
+          $ref: '#/components/schemas/v1ValueTableType'
+        opaque_type:
+          $ref: '#/components/schemas/v1ValueOpaqueType'
+        any_type:
+          $ref: '#/components/schemas/v1ValueAnyType'
+        union_type:
+          $ref: '#/components/schemas/v1ValueUnionType'
+        sensitive_type:
+          $ref: '#/components/schemas/v1ValueSensitiveType'
+        enum_type:
+          $ref: '#/components/schemas/v1ValueEnumType'
+        generic_dictionary_type:
+          $ref: '#/components/schemas/v1ValueGenericDictionaryType'
+      title: Represents a complete value type definition using a discriminated union
+    SwitchAutomationConnectionsBody:
+      type: object
+      properties:
+        switches:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1ConnectionReplacement'
+          description: 'List of connections to switch. All switches are performed atomically:
+
+            either all succeed or all fail. The automation version is incremented once
+
+            for all switches.
+
+
+            Each old_connection_id must be unique within the list. If the same old_connection_id
+
+            appears multiple times, the request will fail with INVALID_ARGUMENT.'
+      description: SwitchAutomationConnectionsRequest specifies which connections to switch in a draft automation.
+      required:
+      - switches
+    typeDateTime:
+      type: object
+      properties:
+        year:
+          type: integer
+          format: int32
+          description: 'Optional. Year of date. Must be from 1 to 9999, or 0 if specifying a
+
+            datetime without a year.'
+        month:
+          type: integer
+          format: int32
+          description: Required. Month of year. Must be from 1 to 12.
+        day:
+          type: integer
+          format: int32
+          description: 'Required. Day of month. Must be from 1 to 31 and valid for the year and
+
+            month.'
+        hours:
+          type: integer
+          format: int32
+          description: 'Required. Hours of day in 24 hour format. Should be from 0 to 23. An API
+
+            may choose to allow the value "24:00:00" for scenarios like business
+
+            closing time.'
+        minutes:
+          type: integer
+          format: int32
+          description: Required. Minutes of hour of day. Must be from 0 to 59.
+        seconds:
+          type: integer
+          format: int32
+          description: 'Required. Seconds of minutes of the time. Must normally be from 0 to 59. An
+
+            API may allow the value 60 if it allows leap-seconds.'
+        nanos:
+          type: integer
+          format: int32
+          description: 'Required. Fractions of seconds in nanoseconds. Must be from 0 to
+
+            999,999,999.'
+        utc_offset:
+          type: string
+          description: 'UTC offset. Must be whole seconds, between -18 hours and +18 hours.
+
+            For example, a UTC offset of -4:00 would be represented as
+
+            { seconds: -14400 }.'
+        time_zone:
+          $ref: '#/components/schemas/typeTimeZone'
+      description: "Represents civil time (or occasionally physical time).\n\nThis type can represent a civil time in one of a few possible ways:\n\n * When utc_offset is set and time_zone is unset: a civil time on a calendar\n   day with a particular offset from UTC.\n * When time_zone is set and utc_offset is unset: a civil time on a calendar\n   day in a particular time zone.\n * When neither time_zone nor utc_offset is set: a civil time on a calendar\n   day in local time.\n\nThe date is relative to the Proleptic Gregorian Calendar.\n\nIf year is 0, the DateTime is considered not to have a specific year. month\nand day must have valid, non-zero values.\n\nThis type may also be used to represent a physical time if all the date and\ntime fields are set and either case of the `time_offset` oneof is set.\nConsider using `Timestamp` message for physical time instead. If your use\ncase also would like to store the user's timezone, that can be done in\nanother field.\n\nThis type is more flexible than some applications may want. Make sure to\ndocument and validate your application's limitations."
+    v1ExtractAutomationCodeConnectionsResponse:
+      type: object
+      properties:
+        connections:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1CredentialInfo'
+          description: 'List of connections found in the automation''s SPy code.
+
+            Includes both placeholder connections (without connection_id) and concrete connections (with connection_id).'
+          readOnly: true
+      description: ExtractAutomationCodeConnectionsResponse returns connection information from the automation's SPy code.
+    typeTimeOfDay:
+      type: object
+      properties:
+        hours:
+          type: integer
+          format: int32
+          description: 'Hours of day in 24 hour format. Should be from 0 to 23. An API may choose
+
+            to allow the value "24:00:00" for scenarios like business closing time.'
+        minutes:
+          type: integer
+          format: int32
+          description: Minutes of hour of day. Must be from 0 to 59.
+        seconds:
+          type: integer
+          format: int32
+          description: 'Seconds of minutes of the time. Must normally be from 0 to 59. An API may
+
+            allow the value 60 if it allows leap-seconds.'
+        nanos:
+          type: integer
+          format: int32
+          description: Fractions of seconds in nanoseconds. Must be from 0 to 999,999,999.
+      description: 'Represents a time of day. The date and time zone are either not significant
+
+        or are specified elsewhere. An API may choose to allow leap seconds. Related
+
+        types are [google.type.Date][google.type.Date] and
+
+        `google.protobuf.Timestamp`.'
+    v1ValueDictionaryType:
+      type: object
+      properties:
+        is_a:
+          type: string
+          title: Semantic classification of what this dictionary represents
+        fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1ValueDictionaryTypeField'
+          title: The named fields contained in this dictionary
+        description:
+          type: string
+          title: Optional human-readable description of this dictionary type
+      title: Represents a dictionary/object value type with named fields
+    v1DictionaryValue:
+      type: object
+      properties:
+        fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1DictionaryValueField'
+          title: All the fields alongside their values in the dictionary
+        is_a:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1NounPhrase'
+          title: Is a replationships for the dictionary
+      title: Value to be used when the type is dictionary
+    v1FlowNodeType:
+      type: string
+      enum:
+      - FLOW_NODE_TYPE_UNSPECIFIED
+      - FLOW_NODE_TYPE_START
+      - FLOW_NODE_TYPE_END
+      - FLOW_NODE_TYPE_PROCESS
+      - FLOW_NODE_TYPE_DECISION
+      - FLOW_NODE_TYPE_INPUT
+      - FLOW_NODE_TYPE_OUTPUT
+      default: FLOW_NODE_TYPE_UNSPECIFIED
+      description: "FlowNodeType defines the different types of nodes in an automation flow.\n\n - FLOW_NODE_TYPE_UNSPECIFIED: Unspecified node type.\n - FLOW_NODE_TYPE_START: Start node - represents the beginning of the flow.\n - FLOW_NODE_TYPE_END: End node - represents the end of the flow.\n - FLOW_NODE_TYPE_PROCESS: Process node - represents a processing step.\n - FLOW_NODE_TYPE_DECISION: Decision node - represents a branching point (if-else conditions).\n - FLOW_NODE_TYPE_INPUT: Input node - represents an input action.\n - FLOW_NODE_TYPE_OUTPUT: Output node - represents an output action."
+    v1InvokeAutomationResponse:
+      type: object
+      properties:
+        run_id:
+          type: string
+          description: 'Unique identifier of the run created to execute the automation.
+
+            Use this ID to track execution status and retrieve results.'
+      description: InvokeAutomationResponse returns the run ID for tracking the automation execution.
+    v1SwitchAutomationConnectionsResponse:
+      type: object
+      properties:
+        automation:
+          $ref: '#/components/schemas/v1Automation'
+      description: SwitchAutomationConnectionsResponse returns the updated automation.
+    v1AutomationConnectionUsage:
+      type: object
+      properties:
+        automation_id:
+          type: string
+          description: 'The automation ID that uses the connection.
+
+            This is the automation ID portion only (e.g., the {automation} part of the resource name).'
+        stages:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1AutomationStage'
+          description: 'The stages in which this automation uses the connection.
+
+            Can include AUTOMATION_STAGE_DRAFT, AUTOMATION_STAGE_PUBLISHED, or both.'
+      description: 'AutomationConnectionUsage represents an automation that uses a specific connection,
+
+        along with the stages (DRAFT, PUBLISHED, or both) where the connection is used.'
+    v1FrequencyUnit:
+      type: string
+      enum:
+      - FREQUENCY_UNIT_UNSPECIFIED
+      - FREQUENCY_UNIT_MINUTE
+      - FREQUENCY_UNIT_HOUR
+      - FREQUENCY_UNIT_DAY
+      - FREQUENCY_UNIT_WEEK
+      - FREQUENCY_UNIT_MONTH
+      - FREQUENCY_UNIT_YEAR
+      default: FREQUENCY_UNIT_UNSPECIFIED
+      description: "FrequencyUnit defines the unit for schedule repetition.\n\n - FREQUENCY_UNIT_UNSPECIFIED: Unspecified frequency unit.\n - FREQUENCY_UNIT_MINUTE: Schedule repeats every N minutes.\n - FREQUENCY_UNIT_HOUR: Schedule repeats every N hours.\n - FREQUENCY_UNIT_DAY: Schedule repeats every N days.\n - FREQUENCY_UNIT_WEEK: Schedule repeats every N weeks.\n - FREQUENCY_UNIT_MONTH: Schedule repeats every N months.\n - FREQUENCY_UNIT_YEAR: Schedule repeats every N years."
+    v1ListDefaultInputsHistoryResponse:
+      type: object
+      properties:
+        default_inputs_history_entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1DefaultInputsHistoryEntry'
+          description: The history entries, ordered newest first.
+        next_page_token:
+          type: string
+          description: Token for retrieving the next page. Empty if no more results.
+      description: ListDefaultInputsHistoryResponse contains a paginated list of default input history entries.
+    v1Dictionary:
+      type: object
+      properties:
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1DictionaryEntry'
+          title: The key-value pairs stored in this dictionary
+      description: "Represents a key-value mapping (similar to hash maps or dictionaries).\n\nThis message stores associations between keys and values, where keys must be\nhashable types (null, bool, Number, string, Date, TimeOfDay, DateTime, TimeZone). Keys are\nunique within a dictionary - duplicate keys will overwrite previous values.\n\nThe dictionary maintains insertion order for consistent iteration behavior.\n\nExamples:\n - {\"name\": \"John\", \"age\": 30} - string keys with mixed values\n - {1: \"one\", 2: \"two\"} - number keys with string values\n - {\"nested\": {\"inner\": \"value\"}} - nested dictionaries"
+    v1AffectedAutomation:
+      type: object
+      properties:
+        automation_id:
+          type: string
+          description: The automation ID (the {automation} segment of the resource name).
+          readOnly: true
+        display_name:
+          type: string
+          description: The human-readable display name of the automation.
+          readOnly: true
+      description: AffectedAutomation describes a draft automation affected by connection deletion.
+    v1Number:
+      type: object
+      properties:
+        lo:
+          type: integer
+          format: int64
+          description: Low 32 bits of the 96-bit mantissa.
+        mid:
+          type: integer
+          format: int64
+          description: Middle 32 bits of the 96-bit mantissa.
+        hi:
+          type: integer
+          format: int64
+          description: High 32 bits of the 96-bit mantissa.
+        flags:
+          type: integer
+          format: int64
+          description: "Flags word:\n - Bits 16–23: scale (0–28)\n - Bit 31: sign (0 = positive, 1 = negative)\n - Other bits must be zero."
+      description: "A fixed-precision decimal number with up to 28 fractional digits.\n\nThis message represents decimal numbers with exact precision, avoiding\nfloating-point rounding errors. It's particularly useful for financial\ncalculations, measurements, and any scenario where exact decimal\nrepresentation is required.\n\nThe value is calculated as: m / 10^e, where:\n - m is an unsigned 96-bit integer composed of (lo, mid, hi)\n - e is the scale (0–28) stored in flags bits 16–23\n - sign is encoded in flags bit 31 (0 = positive, 1 = negative)\n\nExamples:\n - 123.45 would have m=12345, e=2\n - -0.001 would have m=1, e=3, with sign bit set\n"
+    v1ValueTableTypeColumn:
+      type: object
+      properties:
+        key:
+          type: string
+          title: The name/key of this column
+        value:
+          $ref: '#/components/schemas/v1ValueType'
+        description:
+          type: string
+          title: Optional human-readable description of this column
+      title: Represents a single column within a table value type
+    v1CodeMapping:
+      type: object
+      properties:
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1CodeMappingEntry'
+          description: 'List of mapping entries that associate SPy code regions with English code regions.
+
+            Each entry defines a paired relationship between a span in the SPy code and
+
+            a span in the English code representation.'
+      description: 'CodeMapping represents a bidirectional mapping between SPy (Subset-of-Python) code
+
+        and English code locations within an automation. This mapping enables navigation between
+
+        the two representations, facilitating debugging, traceability, and synchronized editing.
+
+        Each entry in the mapping associates a region in the SPy code with its corresponding
+
+        region in the English code. The mapping relationship is many-to-many and entries may
+
+        overlap.'
+      required:
+      - entries
+    v1PhaseSubType:
+      type: string
+      enum:
+      - PHASE_SUB_TYPE_UNSPECIFIED
+      - PHASE_SUB_TYPE_EMAIL
+      - PHASE_SUB_TYPE_SCHEDULE
+      - PHASE_SUB_TYPE_WEBHOOK
+      - PHASE_SUB_TYPE_API
+      default: PHASE_SUB_TYPE_UNSPECIFIED
+      description: "PhaseSubType defines the sub-type within a phase for an automation trigger.\n\n - PHASE_SUB_TYPE_UNSPECIFIED: Unspecified phase sub-type.\n - PHASE_SUB_TYPE_EMAIL: Email trigger sub-type.\n - PHASE_SUB_TYPE_SCHEDULE: Schedule-based trigger sub-type.\n - PHASE_SUB_TYPE_WEBHOOK: Webhook trigger sub-type.\n - PHASE_SUB_TYPE_API: API trigger sub-type."
+    v1ListAutomationsResponse:
+      type: object
+      properties:
+        automations:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1Automation'
+          description: 'The list of automations for the current page.
+
+            May be empty if no automations match the request criteria.'
+        next_page_token:
+          type: string
+          description: 'A token that can be sent as `page_token` to retrieve the next page.
+
+            If this field is omitted, there are no subsequent pages.'
+      description: ListAutomationsResponse returns a page of automations and pagination information.
+    v1Set:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1HashableValue'
+          title: 'The unique elements stored in this set
+
+            All elements must be hashable types'
+      description: "Represents an unordered collection of unique values.\n\nThis message stores a collection of unique elements, where duplicate values\nare automatically removed. Only hashable types can be stored in sets.\nSets are useful for membership testing, removing duplicates, and mathematical\nset operations like union, intersection, and difference.\n\nThe set does not maintain insertion order - elements may appear in any order\nduring iteration.\n\nExamples:\n - {1, 2, 3} - set of numbers\n - {\"apple\", \"banana\", \"cherry\"} - set of strings\n - {true, false} - set of booleans\n - {1, \"hello\", true} - set with mixed hashable types"
+    v1DictionaryEntry:
+      type: object
+      properties:
+        key:
+          $ref: '#/components/schemas/v1HashableValue'
+        value:
+          $ref: '#/components/schemas/commonV1Value'
+      description: 'Represents a single key-value pair within a Dictionary.
+
+
+        Both key and value can be any Value type, though keys should be
+
+        hashable types for proper dictionary behavior. Non-hashable keys
+
+        (like lists or dictionaries) may cause runtime errors.'
+    v1FlowGraph:
+      type: object
+      properties:
+        nodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1FlowNode'
+          description: List of nodes representing steps in the automation flow.
+        edges:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1FlowEdge'
+          description: List of edges representing connections between nodes.
+      description: 'FlowGraph represents the execution flow of an automation as a directed graph.
+
+        The graph consists of nodes (representing steps) and edges (representing transitions).'
+    v1MonthPattern:
+      type: object
+      properties:
+        month:
+          $ref: '#/components/schemas/v1Month'
+        day_pattern:
+          $ref: '#/components/schemas/v1DayOfMonthPattern'
+      description: 'MonthPattern specifies which month and day to run.
+
+        Used for yearly schedules (e.g., "July 30", "last Friday of December").'
+      required:
+      - month
+      - day_pattern
+    commonV1Location:
+      type: object
+      properties:
+        start_byte:
+          type: string
+          format: int64
+          title: Starting Byte of the span, It will be zero-based
+        end_byte:
+          type: string
+          format: int64
+          title: Ending Byte(exclusive) of the span, It will be zero-based
+      description: 'Location represents a generic span within some underlying content.
+
+        It specifies the starting byte offset and the ending byte offset (exclusive) of the span.
+
+        This can be used for pointing to regions in files, buffers, logs, messages,
+
+        or any other byte-addressable resource.'
+    v1CredentialInfo:
+      type: object
+      properties:
+        book:
+          type: string
+          description: 'The name of the book requiring credentials.
+
+            This field represents the book name.'
+        book_version:
+          type: string
+          description: The version of the book.
+        connection_alias:
+          type: string
+          description: 'The alias of the connection within the automation.
+
+            This field represents the connection alias.'
+        connection_id:
+          type: string
+          description: The unique identifier of the connection.
+        phase_type:
+          $ref: '#/components/schemas/v1PhaseType'
+      description: CredentialInfo describes connection credential information.
+      required:
+      - book
+      - book_version
+    v1DayOfWeekPattern:
+      type: object
+      properties:
+        days:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1DayOfWeek'
+          description: 'Days of the week when the schedule should run.
+
+            At least one day must be specified.'
+      description: 'DayOfWeekPattern specifies which days of the week to run.
+
+        Used for weekly schedules (e.g., "every Monday", "every Mon/Wed/Fri").'
+      required:
+      - days
+    v1ValueDictionaryTypeField:
+      type: object
+      properties:
+        key:
+          type: string
+          title: The name/key of this field
+        value:
+          $ref: '#/components/schemas/v1ValueType'
+        description:
+          type: string
+          title: Optional human-readable description of this field
+      title: Represents a single field within a dictionary value type
+    v1OpaqueValue:
+      type: object
+      properties:
+        content:
+          type: string
+          format: byte
+          title: Content of the opaque value
+        is_a:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1NounPhrase'
+          title: Is a replationships for the opaque
+    v1AddAutomationConnectionsResponse:
+      type: object
+      properties:
+        automation:
+          $ref: '#/components/schemas/v1Automation'
+      description: AddAutomationConnectionsResponse returns the updated automation.
+    v1AutomationInputSpec:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the input parameter.
+        type:
+          $ref: '#/components/schemas/v1ValueType'
+      description: AutomationInputSpec defines the specification for an input parameter of an automation.
+      required:
+      - name
+    v1NounPhrase:
+      type: object
+      properties:
+        modifiers:
+          type: array
+          items:
+            type: string
+          title: Optional adjectives attached to the noun
+        head:
+          type: string
+          title: Noun of the phrase
+    v1ValueSensitiveType:
+      type: object
+      properties:
+        inner:
+          $ref: '#/components/schemas/v1ValueType'
+      title: Represents a value type that contains sensitive information
+    v1Date:
+      type: object
+      properties:
+        year:
+          type: integer
+          format: int32
+          title: Year of the date
+        month:
+          type: integer
+          format: int32
+          title: Month of a year
+        day:
+          type: integer
+          format: int32
+          title: Day of a month
+    v1ValueTableType:
+      type: object
+      properties:
+        is_a:
+          type: string
+          title: Semantic classification of what this table represents
+        columns:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1ValueTableTypeColumn'
+          title: The columns that make up this table
+        description:
+          type: string
+          title: Optional human-readable description of this table type
+      title: Represents a table value type with structured columns
+    v1ValueListType:
+      type: object
+      properties:
+        inner:
+          $ref: '#/components/schemas/v1ValueType'
+      title: Represents a list/array value type containing elements of a specific type
+    v1ValueGenericDictionaryType:
+      type: object
+      properties:
+        key_type:
+          $ref: '#/components/schemas/v1ValueType'
+        value_type:
+          $ref: '#/components/schemas/v1ValueType'
+      title: Represent a generic dictionary that can hold any entry of a particular key and value type
+    v1HashableValue:
+      type: object
+      properties:
+        bool_value:
+          type: boolean
+          title: Boolean true/false value
+        number:
+          $ref: '#/components/schemas/v1Number'
+        text:
+          type: string
+          title: UTF-8 encoded text string
+        date:
+          $ref: '#/components/schemas/typeDate'
+        timeofday:
+          $ref: '#/components/schemas/typeTimeOfDay'
+        datetime:
+          $ref: '#/components/schemas/typeDateTime'
+        duration:
+          type: string
+          title: Signed duration representing a span of time
+      description: 'Represents a hashable value that can be used as a dictionary key.
+
+
+        This message contains only the hashable types from the Value message,
+
+        corresponding to Python''s hashable types. These types can be safely
+
+        used as keys in maps and dictionaries.
+
+
+        Hashable types include: bool, Number, string, Date, TimeOfDay, DateTime
+
+        and Duration.'
+    rpcStatus:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/protobufAny'
+    v1TimeWindow:
+      type: object
+      properties:
+        start_time:
+          type: string
+          format: date-time
+          description: The start time of the window (inclusive).
+        end_time:
+          type: string
+          format: date-time
+          description: The end time of the window (inclusive).
+        time_zone:
+          type: string
+          description: 'The timezone for interpreting the time window.
+
+            Format: IANA timezone identifier (e.g., "America/New_York", "Europe/London").
+
+            Defaults to "UTC" if not specified.'
+      description: Time window for querying insights.
+      required:
+      - start_time
+      - end_time
+    v1FlowEdge:
+      type: object
+      properties:
+        source:
+          type: string
+          description: ID of the source node where the edge originates.
+        target:
+          type: string
+          description: ID of the target node where the edge points.
+        condition:
+          type: string
+          description: Optional condition label for the edge (e.g., "Yes", "No" for decision branches).
+      description: FlowEdge represents a directed connection between two nodes.
+    protobufAny:
+      type: object
+      properties:
+        '@type':
+          type: string
+      additionalProperties: {}
+    typeDate:
+      type: object
+      properties:
+        year:
+          type: integer
+          format: int32
+          description: 'Year of the date. Must be from 1 to 9999, or 0 to specify a date without
+
+            a year.'
+        month:
+          type: integer
+          format: int32
+          description: 'Month of a year. Must be from 1 to 12, or 0 to specify a year without a
+
+            month and day.'
+        day:
+          type: integer
+          format: int32
+          description: 'Day of a month. Must be from 1 to 31 and valid for the year and month, or 0
+
+            to specify a year by itself or a year and month where the day isn''t
+
+            significant.'
+      description: '* A full date, with non-zero year, month, and day values
+
+        * A month and day value, with a zero year, such as an anniversary
+
+        * A year on its own, with zero month and day values
+
+        * A year and month value, with a zero day, such as a credit card expiration
+
+        date
+
+
+        Related types are [google.type.TimeOfDay][google.type.TimeOfDay] and
+
+        `google.protobuf.Timestamp`.'
+      title: 'Represents a whole or partial calendar date, such as a birthday. The time of
+
+        day and time zone are either specified elsewhere or are insignificant. The
+
+        date is relative to the Gregorian Calendar. This can represent one of the
+
+        following:'
+    v1ValueEnumTypeMember:
+      type: object
+      properties:
+        name:
+          type: string
+          title: The programmatic name of this enum member
+        description:
+          type: string
+          title: Optional human-readable description of this enum member
+      title: Represents a single member/option within an enum value type
+    EnableAutomationScheduleBody:
+      type: object
+      description: EnableAutomationScheduleRequest is the request to enable a previously disabled schedule.
+    bdkV1Value:
+      type: object
+      properties:
+        null_value:
+          type: string
+        conceptual_value:
+          $ref: '#/components/schemas/v1NounPhrase'
+        text_value:
+          type: string
+        number_value:
+          type: number
+          format: double
+        boolean_value:
+          type: boolean
+        datetime_value:
+          type: string
+          format: date-time
+        date_value:
+          $ref: '#/components/schemas/v1Date'
+        time_value:
+          $ref: '#/components/schemas/v1Time'
+        file_value:
+          $ref: '#/components/schemas/v1FileValue'
+        dictionary_value:
+          $ref: '#/components/schemas/v1DictionaryValue'
+        list_value:
+          $ref: '#/components/schemas/bdkV1ListValue'
+        opaque_value:
+          $ref: '#/components/schemas/v1OpaqueValue'
+        table_value:
+          $ref: '#/components/schemas/v1TableValue'
+        sensitive_value:
+          $ref: '#/components/schemas/v1SensitiveValue'
+      title: A union of all possible values
+    v1ValueAnyType:
+      type: object
+      title: Represents a value type that can hold any kind of value
+    v1FileValue:
+      type: object
+      properties:
+        remote:
+          type: string
+        inline:
+          $ref: '#/components/schemas/v1File'
+      title: A file value represents a file that can be either inline or remote
+    v1File:
+      type: object
+      properties:
+        file_name:
+          type: string
+          title: The name of the file
+        content:
+          type: string
+          format: byte
+          title: Content of the file as a byte stream
+    v1ScheduleStart:
+      type: object
+      properties:
+        start_date:
+          $ref: '#/components/schemas/typeDate'
+        time:
+          $ref: '#/components/schemas/typeTimeOfDay'
+        time_zone:
+          type: string
+          description: 'Timezone for the schedule. Defaults to "UTC" if not specified.
+
+            Use IANA timezone identifiers (e.g., "America/New_York", "America/Los_Angeles", "Europe/London").'
+      description: ScheduleStart defines when the schedule begins.
+    v1DeleteWorkspaceConnectionResponse:
+      type: object
+      properties:
+        affected_automations:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1AffectedAutomation'
+          description: 'List of draft automations that were affected by the deletion.
+
+            These automations have connection references that are now unresolved.
+
+            Empty if no draft automations were using the connection.'
+          readOnly: true
+      description: DeleteWorkspaceConnectionResponse returns information about affected automations.
+    typeTimeZone:
+      type: object
+      properties:
+        id:
+          type: string
+          description: IANA Time Zone Database time zone, e.g. "America/New_York".
+        version:
+          type: string
+          description: Optional. IANA Time Zone Database version number, e.g. "2019a".
+      description: 'Represents a time zone from the
+
+        [IANA Time Zone Database](https://www.iana.org/time-zones).'
+    TraceConnectionUsageBody:
+      type: object
+      properties:
+        connection_id:
+          type: string
+          description: 'The connection ID to trace usage for.
+
+            Returns all automations that use this connection.'
+      description: TraceConnectionUsageRequest specifies which connection to trace usage for.
+      required:
+      - connection_id
+    v1DictionaryValueField:
+      type: object
+      properties:
+        key:
+          type: string
+        value:
+          $ref: '#/components/schemas/bdkV1Value'
+      title: Each key-value pair inside a dictionary
+    v1Column:
+      type: object
+      properties:
+        values:
+          type: array
+          items:
+            $ref: '#/components/schemas/bdkV1Value'
+        name:
+          type: string
+    UpgradeAutomationConnectionsBody:
+      type: object
+      properties:
+        upgrades:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1ConnectionReplacement'
+          description: 'List of connections to upgrade. All upgrades are performed atomically:
+
+            either all succeed or all fail. The automation version is incremented once
+
+            for all upgrades.
+
+
+            Each old_connection_id must be unique within the list. If the same old_connection_id
+
+            appears multiple times, the request will fail with INVALID_ARGUMENT.'
+      description: UpgradeAutomationConnectionsRequest specifies which connections to upgrade in a draft automation.
+      required:
+      - upgrades
+    v1AutomationActivationState:
+      type: string
+      enum:
+      - AUTOMATION_ACTIVATION_STATE_UNSPECIFIED
+      - AUTOMATION_ACTIVATION_STATE_ACTIVE
+      - AUTOMATION_ACTIVATION_STATE_DEACTIVATED
+      default: AUTOMATION_ACTIVATION_STATE_UNSPECIFIED
+      description: "Activation state of a published automation.\nControls whether the automation can execute published runs.\n\n - AUTOMATION_ACTIVATION_STATE_UNSPECIFIED: Unspecified state. Used when automation has no published version.\nActivation state is only meaningful after publishing.\n - AUTOMATION_ACTIVATION_STATE_ACTIVE: Automation is active and can execute published runs.\n - AUTOMATION_ACTIVATION_STATE_DEACTIVATED: Automation is deactivated and cannot execute published runs.\nEvents will be logged but not executed."
+    v1EnableAutomationScheduleResponse:
+      type: object
+      properties:
+        schedule:
+          $ref: '#/components/schemas/v1AutomationSchedule'
+      description: EnableAutomationScheduleResponse contains the enabled schedule.
+    CountConnectionUsageBody:
+      type: object
+      properties:
+        connection_ids:
+          type: array
+          items:
+            type: string
+          description: 'List of connection IDs to count automation usage for.
+
+            Each connection ID will have a corresponding entry in the response.'
+      description: CountConnectionUsageRequest specifies connection IDs to count automation usage for.
+      required:
+      - connection_ids
+    v1TableValue:
+      type: object
+      properties:
+        remote:
+          type: string
+        inline:
+          $ref: '#/components/schemas/v1Table'
+      title: 'A table that is represented remote as an URL to a file that is Feather-formatted
+
+        or inline via the Table message'
+    v1ValueScalarType:
+      type: string
+      enum:
+      - VALUE_SCALAR_TYPE_UNSPECIFIED
+      - VALUE_SCALAR_TYPE_TEXT
+      - VALUE_SCALAR_TYPE_NUMBER
+      - VALUE_SCALAR_TYPE_BOOLEAN
+      - VALUE_SCALAR_TYPE_DATETIME
+      - VALUE_SCALAR_TYPE_DATE
+      - VALUE_SCALAR_TYPE_TIME
+      - VALUE_SCALAR_TYPE_FILE
+      default: VALUE_SCALAR_TYPE_UNSPECIFIED
+      description: "- VALUE_SCALAR_TYPE_UNSPECIFIED: Unspecified value type\n - VALUE_SCALAR_TYPE_TEXT: A text value type\n - VALUE_SCALAR_TYPE_NUMBER: A number value type\n - VALUE_SCALAR_TYPE_BOOLEAN: A boolean value type\n - VALUE_SCALAR_TYPE_DATETIME: A datetime value type\n - VALUE_SCALAR_TYPE_DATE: A date value type\n - VALUE_SCALAR_TYPE_TIME: A time value type\n - VALUE_SCALAR_TYPE_FILE: A file value type"
+      title: Supported Value Scalar Types
+    v1ListAutomationRevisionsResponse:
+      type: object
+      properties:
+        revisions:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1AutomationRevision'
+          description: 'The list of automation revisions for the current page.
+
+            Revisions are ordered in reverse chronological order (newest first).'
+        next_page_token:
+          type: string
+          description: 'A token that can be sent as `page_token` to retrieve the next page.
+
+            If this field is omitted, there are no subsequent pages.'
+      description: ListAutomationRevisionsResponse returns a page of automation revisions and pagination information.
+    v1DayOfMonthPattern:
+      type: object
+      properties:
+        day_number:
+          type: integer
+          format: int32
+          description: 'Run on a specific day of the month (1-31).
+
+            If the month has fewer days, runs on the last day of that month.'
+        ordinal_day:
+          $ref: '#/components/schemas/v1OrdinalDayOfWeek'
+      description: 'DayOfMonthPattern specifies which day(s) of the month to run.
+
+        Used for monthly schedules.'
+    v1Time:
+      type: object
+      properties:
+        hours:
+          type: integer
+          format: int32
+          title: Hours of day
+        minutes:
+          type: integer
+          format: int32
+          title: Minutes of hour of day
+        seconds:
+          type: integer
+          format: int32
+          title: Seconds of minutes of the time
+        nanos:
+          type: integer
+          format: int32
+          title: Fractions of seconds in nanoseconds
+    v1ValueEnumType:
+      type: object
+      properties:
+        is_a:
+          type: string
+          title: Semantic classification of what this enum represents
+        members:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1ValueEnumTypeMember'
+          title: The available options/members of this enum
+        description:
+          type: string
+          title: Optional human-readable description of this enum type
+      title: Represents an enumeration value type with predefined options
+    v1PhaseType:
+      type: string
+      enum:
+      - PHASE_TYPE_UNSPECIFIED
+      - PHASE_TYPE_PRE
+      - PHASE_TYPE_MAIN
+      - PHASE_TYPE_POST
+      default: PHASE_TYPE_UNSPECIFIED
+      description: "PhaseType defines the type of phase for an automation trigger.\n\n - PHASE_TYPE_UNSPECIFIED: Unspecified phase type.\n - PHASE_TYPE_PRE: Pre-processing phase.\n - PHASE_TYPE_MAIN: Main processing phase.\n - PHASE_TYPE_POST: Post-processing phase."
+    v1ValueUnionType:
+      type: object
+      properties:
+        inners:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1ValueType'
+          title: The possible value types in this union
+      title: Represents a union value type that can be one of several possible types
+    InvokeAutomationBody:
+      type: object
+      properties:
+        inputs:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/commonV1Value'
+          description: 'Input values to pass to the automation execution.
+
+            Keys are input parameter names, values are the corresponding values.'
+        stage:
+          $ref: '#/components/schemas/v1AutomationStage'
+      description: InvokeAutomationRequest contains the automation ID and inputs needed to execute an automation.
+      required:
+      - stage
+    v1Automation:
+      type: object
+      properties:
+        name:
+          type: string
+          title: The automation name (e.g. 'automations/{automation}')
+        display_name:
+          type: string
+          description: 'Human-readable name of the automation for identification and display.
+
+            Must be unique within the user''s namespace.'
+        english_code:
+          type: string
+          description: 'User-facing English description code that explains what the automation does.
+
+            This is a human-readable representation of the automation''s purpose and logic.'
+        code:
+          type: string
+          description: 'SPy (Subset-of Python) executable code that defines the automation logic.
+
+            This code is executed when the automation is invoked with inputs.'
+        artifacts:
+          type: object
+          additionalProperties:
+            type: string
+            format: byte
+          description: 'Additional artifacts associated with the automation (e.g., data files, configurations).
+
+            Keys are artifact names, values are the binary content of the artifacts.
+
+            These artifacts are available to the automation during execution.'
+        create_time:
+          type: string
+          format: date-time
+          description: 'Timestamp when the automation was originally created.
+
+            This value never changes after creation.'
+          readOnly: true
+        version:
+          type: string
+          title: 'Semantic version of this specific version of the automation (format: major.minor).
+
+            Incremented each time the automation is updated or published.
+
+            Examples: "0.1", "1.0", "1.1", "2.0"'
+          readOnly: true
+        connections:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/v1BookConnection'
+          description: 'Book connections required by this automation for execution.
+
+            Maps connection names to their metadata.
+
+            These connections are resolved and made available during automation execution.'
+        update_time:
+          type: string
+          format: date-time
+          description: 'Timestamp when the automation was last updated.
+
+            Updated whenever the automation metadata, code, or dependencies change.'
+          readOnly: true
+        update_user_id:
+          type: string
+          description: The ID of the user who last updated this automation.
+          readOnly: true
+        delete_time:
+          type: string
+          format: date-time
+          description: Timestamp when the automation was deleted.
+          readOnly: true
+        purge_time:
+          type: string
+          format: date-time
+          description: Timestamp when the automation will be purged.
+          readOnly: true
+        input_specs:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1AutomationInputSpec'
+          description: 'List of input specifications that define the parameters this automation accepts.
+
+            These specifications describe the expected inputs when the automation is executed.'
+        description:
+          type: string
+          description: Provides additional context and documentation about the automation's purpose and behavior.
+        latest_published_version:
+          type: string
+          title: 'Semantic version of the latest published version of the automation (format: major.minor).
+
+            It will be null in case of no published version.
+
+            Examples: "0.1", "1.0", "2.0"'
+          readOnly: true
+        author_id:
+          type: string
+          description: The ID of the user who created this automation.
+          readOnly: true
+        code_mapping:
+          $ref: '#/components/schemas/v1CodeMapping'
+        restore_time:
+          type: string
+          format: date-time
+          description: 'Timestamp when the automation was restored from a previous version.
+
+            Only populated if the automation has been restored.'
+          readOnly: true
+        restore_version:
+          type: string
+          description: 'The version string this automation was restored from (e.g., "1.0", "2.1").
+
+            Only populated if the automation has been restored.'
+          readOnly: true
+        restore_user_id:
+          type: string
+          description: 'The ID of the user who restored this automation.
+
+            Only populated if the automation has been restored.'
+          readOnly: true
+        publish_time:
+          type: string
+          format: date-time
+          description: 'Timestamp when the automation was last published.
+
+            Only populated if the automation has been published.'
+          readOnly: true
+        publish_user_id:
+          type: string
+          description: 'The ID of the user who last published this automation.
+
+            Only populated if the automation has been published.'
+          readOnly: true
+        activation_state:
+          $ref: '#/components/schemas/v1AutomationActivationState'
+        default_inputs:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/commonV1Value'
+          description: 'Default input values for this automation.
+
+            Keys are input parameter names (matching AutomationInputSpec.name),
+
+            values are the default values to use when inputs are not explicitly provided.
+
+            These are used to pre-populate inputs for manual runs and fill missing inputs
+
+            for trigger-based invocations.'
+          readOnly: true
+        marked_outputs:
+          type: array
+          items:
+            type: string
+          description: 'List of output keys that have been marked by the user.
+
+            These keys identify specific outputs from the automation execution.'
+      description: 'Automation represents a unit of executable code with associated metadata and dependencies.
+
+        Automations can be in DRAFT or PUBLISHED state, where drafts can be modified and
+
+        published automations are immutable and executable.
+
+        Automation IDs are unique nano ID strings (21 characters, URL-safe: A-Za-z0-9_-).'
+      required:
+      - display_name
+    v1ScheduleConfig:
+      type: object
+      properties:
+        start:
+          $ref: '#/components/schemas/v1ScheduleStart'
+        repeat_interval:
+          $ref: '#/components/schemas/v1RepeatInterval'
+        weekly_pattern:
+          $ref: '#/components/schemas/v1DayOfWeekPattern'
+        monthly_pattern:
+          $ref: '#/components/schemas/v1DayOfMonthPattern'
+        yearly_pattern:
+          $ref: '#/components/schemas/v1MonthPattern'
+        active_window:
+          $ref: '#/components/schemas/v1TimeWindow'
+        end:
+          $ref: '#/components/schemas/v1ScheduleEnd'
+      description: 'ScheduleConfig is the main user-friendly configuration for automation schedules.
+
+        The backend generates the appropriate scheduling logic from this configuration.'
+      required:
+      - start
+    v1CodeMappingEntry:
+      type: object
+      properties:
+        spy_location:
+          $ref: '#/components/schemas/commonV1Location'
+        english_location:
+          $ref: '#/components/schemas/commonV1Location'
+      description: 'CodeMappingEntry represents a single mapping between a region in SPy code and
+
+        its corresponding region in English code. This bidirectional association allows
+
+        navigation from SPy to English and vice versa, enabling synchronized views and
+
+        debugging across both representations of the automation logic.'
+      required:
+      - spy_location
+      - english_location
+    v1RemoveAutomationConnectionsResponse:
+      type: object
+      properties:
+        automation:
+          $ref: '#/components/schemas/v1Automation'
+      description: RemoveAutomationConnectionsResponse returns the updated automation.
+    v1ConnectionAutomationCount:
+      type: object
+      properties:
+        connection_id:
+          type: string
+          description: The connection ID being counted.
+        count:
+          type: integer
+          format: int32
+          description: 'The number of automations that use this connection.
+
+            Includes both DRAFT and PUBLISHED automations by default.'
+      description: ConnectionAutomationCount represents the count of automations using a specific connection.
+    commonV1Value:
+      type: object
+      properties:
+        null_value:
+          type: string
+          title: Represents the absence of a value (None/null/undefined)
+        bool_value:
+          type: boolean
+          title: Boolean true/false value
+        number:
+          $ref: '#/components/schemas/v1Number'
+        text:
+          type: string
+          title: UTF-8 encoded text string
+        date:
+          $ref: '#/components/schemas/typeDate'
+        timeofday:
+          $ref: '#/components/schemas/typeTimeOfDay'
+        datetime:
+          $ref: '#/components/schemas/typeDateTime'
+        time_zone:
+          $ref: '#/components/schemas/typeTimeZone'
+        duration:
+          type: string
+          title: Signed duration representing a span of time
+        list:
+          $ref: '#/components/schemas/v1List'
+        dictionary:
+          $ref: '#/components/schemas/v1Dictionary'
+        file:
+          $ref: '#/components/schemas/v1FileValue'
+        table:
+          $ref: '#/components/schemas/v1TableValue'
+        set:
+          $ref: '#/components/schemas/v1Set'
+      description: 'Represents a runtime value that can be produced by the Jarvis interpreter.
+
+
+        This message provides a type-safe way to serialize and transmit values between
+
+        the Jarvis interpreter and other services via gRPC. It supports all the basic
+
+        data types that can be represented in the Jarvis language runtime.
+
+
+        The oneof structure ensures that exactly one value type is set at a time,
+
+        providing both type safety and efficient serialization.'
+    v1SensitiveValue:
+      type: object
+      properties:
+        value:
+          $ref: '#/components/schemas/bdkV1Value'
+      title: A sensitive value is any value marked as sensitive (to prevent exposure)
+    v1AutomationTrigger:
+      type: object
+      properties:
+        trigger_id:
+          type: string
+          description: 'The external trigger ID created by another service.
+
+            This ID uniquely identifies the trigger in the external system.'
+        automation:
+          type: string
+          title: 'Reference to the automation to be triggered.
+
+            Format: organizations/{organization}/workspaces/{workspace}/automations/{automation}'
+          readOnly: true
+        input_mapping:
+          type: object
+          additionalProperties:
+            type: string
+          description: 'Input mapping for the automation execution.
+
+            Keys are input parameter names, values are the corresponding values to pass.'
+        phase_type:
+          $ref: '#/components/schemas/v1PhaseType'
+        phase_sub_type:
+          $ref: '#/components/schemas/v1PhaseSubType'
+        is_active:
+          type: boolean
+          description: Whether this trigger is currently active.
+      description: 'AutomationTrigger represents phase configuration metadata for an external trigger.
+
+        The trigger itself is created and managed by another service; this message
+
+        stores additional metadata about how the trigger relates to automation phases.'
+      required:
+      - trigger_id
+      - phase_type
+    DisableAutomationScheduleBody:
+      type: object
+      description: DisableAutomationScheduleRequest is the request to disable a schedule (pause without deleting).
+    v1ConnectionReplacement:
+      type: object
+      properties:
+        old_connection_id:
+          type: string
+          description: 'The current connection ID to replace.
+
+            This connection ID must exist in the automation.'
+        new_connection_id:
+          type: string
+          title: 'The new connection ID to use as replacement.
+
+            This connection must:
+
+            - Exist in the workspace
+
+            - Have the same book_name as the old connection
+
+            - Have the same book_version as the old connection'
+        connection_alias:
+          type: string
+          description: 'The alias of the connection to use as replacement.
+
+            This alias must be unique within the automation.'
+      description: ConnectionReplacement specifies replacing one connection ID with another.
+      required:
+      - old_connection_id
+      - new_connection_id
+      - connection_alias
+    v1ValueOptionalType:
+      type: object
+      properties:
+        inner:
+          $ref: '#/components/schemas/v1ValueType'
+      title: Represents a value type that can be optional (nullable)
+    v1ValueOpaqueType:
+      type: object
+      properties:
+        is_a:
+          type: string
+          title: Semantic classification of what this opaque type represents
+        description:
+          type: string
+          title: Optional human-readable description of this opaque type
+      title: Represents an opaque value type with semantic meaning but unknown internal structure
+    v1Ordinal:
+      type: string
+      enum:
+      - ORDINAL_UNSPECIFIED
+      - ORDINAL_FIRST
+      - ORDINAL_SECOND
+      - ORDINAL_THIRD
+      - ORDINAL_FOURTH
+      - ORDINAL_FIFTH
+      - ORDINAL_LAST
+      default: ORDINAL_UNSPECIFIED
+      description: "Ordinal represents the position within a period (e.g., \"first Monday of month\").\n\n - ORDINAL_UNSPECIFIED: Unspecified ordinal.\n - ORDINAL_FIRST: First occurrence (e.g., first Monday).\n - ORDINAL_SECOND: Second occurrence.\n - ORDINAL_THIRD: Third occurrence.\n - ORDINAL_FOURTH: Fourth occurrence.\n - ORDINAL_FIFTH: Fifth occurrence (not all months have a fifth occurrence of each day).\n - ORDINAL_LAST: Last occurrence (e.g., last Friday of month)."
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: Personal Access Token.
+x-refined-from:
+- kognitos-openapi.yaml
+- kognitos-openapi.yml

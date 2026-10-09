@@ -1,0 +1,67 @@
+generated: '2026-10-09'
+method: searched
+source: https://docs.kognitos.com/guides/api-reference/api-reference
+auth:
+  style: Bearer Personal Access Token in Authorization header
+  see: authentication/kognitos-authentication.yml
+base_url: https://app.us-1.kognitos.com/api/v1
+regions:
+  note: The first-party Node SDK selects a region of 'us' | 'eu' | 'uk'; the docs publish only the us-1 base URL.
+  source: https://github.com/kognitos/kognitos-node
+resource_names:
+  style: hierarchical resource names (Google AIP style), e.g. organizations/{org_id}/workspaces/{workspace_id}/automations/{automation_id}/runs/{run_id}
+  custom_methods: colon-suffixed custom verbs, e.g. automations/{automation_id}:invoke, runs/{run_id}:pause
+pagination:
+  style: cursor (page token)
+  request_params: [page_size, page_token]
+  response_fields: [next_page_token]
+  source: https://docs.kognitos.com/guides/api-reference/api-reference
+filtering:
+  param: filter
+  standard: AIP-160 (https://google.aip.dev/160)
+  example: ?filter=display_name="Invoice Processing"
+idempotency:
+  coverage: none
+  note: No Idempotency-Key header or replay protection is documented in the docs or declared in the OpenAPI (0 mentions).
+error_envelope:
+  shape: google.rpc.Status (rpcStatus) - {code, message, details[]}; every operation declares a default response
+  source: openapi/kognitos-openapi.yml
+  sdk_error_classes: [ApiError, AuthenticationError, NotFoundError, RateLimitError, ConnectionError, TimeoutError]
+  sdk_source: https://github.com/kognitos/kognitos-node
+rate_limit_signaling:
+  note: Not documented in the API docs. The first-party Node SDK exposes RateLimitError with a retryAfter value in seconds and retries by default (maxRetries 2, exponential backoff).
+  see: rate-limits/kognitos-rate-limits.yml
+versioning:
+  style: URL path major version (/api/v1)
+  see: lifecycle/kognitos-lifecycle.yml
+reversibility:
+  status: documented
+  note: Reversal paths exist for several write surfaces; the docs state no time window for any of them.
+  surfaces:
+  - write: Run execution
+    reversal: PauseRun / ContinueRun
+    operations: [PauseRun, ContinueRun]
+    window: null
+  - write: Run archiving
+    reversal: Archiving hides a run from the default list but does not delete it ("Archived runs are hidden from the default run list but remain accessible through filtered queries. Archiving does not delete the run or its data.")
+    window: null
+    source: https://docs.kognitos.com/guides/api-reference/api-reference
+  - write: Automation schedule
+    reversal: DisableAutomationSchedule / EnableAutomationSchedule; UpdateAutomationSchedule; DeleteAutomationSchedule has no documented restore
+    operations: [DisableAutomationSchedule, EnableAutomationSchedule, UpdateAutomationSchedule, DeleteAutomationSchedule]
+    window: null
+  - write: Automation connections
+    reversal: AddAutomationConnections / RemoveAutomationConnections
+    operations: [AddAutomationConnections, RemoveAutomationConnections]
+    window: null
+  - write: Agent generation
+    reversal: CancelGeneration
+    operations: [CancelGeneration]
+    window: null
+  - write: Files / API keys
+    reversal: none documented - DeleteFile has no restore; deleting an API key immediately revokes it
+    operations: [DeleteFile]
+    window: null
+dry_run:
+  note: InvokeAutomation accepts stage AUTOMATION_STAGE_DRAFT "to test a draft version" (vs AUTOMATION_STAGE_PUBLISHED for production runs).
+  source: https://docs.kognitos.com/guides/api-reference/api-reference

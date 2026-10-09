@@ -1,0 +1,23 @@
+name: Kognitos Plans and Pricing
+generated: '2026-10-09'
+method: searched
+source: https://www.kognitos.com/faq/
+audience: business-product
+pricing_basis: usage-other
+published: false
+delivery:
+  delivery: managed
+plan_count: 2
+note: No public price list. The FAQ states consumption-based pricing ("Kognitos uses a consumption-based pricing model rather than per-bot or per-user licensing.") and directs buyers to sales for a quote.
+plans:
+- name: Free workspace
+  description: Free workspace at app.us-1.kognitos.com to sign up, build automations in plain English and run them.
+  price_text: free workspace
+  features:
+  - build automations in plain English, and run them on the platform without committing to a paid engagement
+- name: Enterprise
+  description: Consumption-based pricing scaled by volume of automated transactions and agent complexity; quote from sales.
+  price: Contact sales
+  price_text: request pricing via the Kognitos sales team
+  features:
+  - Pricing scales with the volume of automated transactions and complexity of agents rather than the number of seats or robots deployed.

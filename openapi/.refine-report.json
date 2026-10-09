@@ -1,0 +1,37 @@
+{
+  "provider": "kognitos",
+  "sources": [
+    "_original/kognitos-openapi.yaml",
+    "kognitos-openapi.yml"
+  ],
+  "outputs": [
+    "kognitos-analytics-api-openapi.yml",
+    "kognitos-automations-api-openapi.yml",
+    "kognitos-books-api-openapi.yml",
+    "kognitos-exceptions-api-openapi.yml",
+    "kognitos-files-api-openapi.yml",
+    "kognitos-organizations-api-openapi.yml",
+    "kognitos-runs-api-openapi.yml",
+    "kognitos-workspaces-api-openapi.yml"
+  ],
+  "archived": [
+    "archived openapi/kognitos-openapi.yml"
+  ],
+  "errors": [],
+  "warnings": [],
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "kognitos-openapi.yaml: upgraded openapi 3.0.0 -> OpenAPI 3.2.0",
+    "kognitos-openapi.yml: upgraded openapi 3.0.0 -> OpenAPI 3.2.0",
+    "tag 'Analytics' spans 2 source specs (kognitos-openapi.yaml, kognitos-openapi.yml): per-path servers applied",
+    "tag 'Automations' spans 2 source specs (kognitos-openapi.yaml, kognitos-openapi.yml): per-path servers applied",
+    "tag 'Books' spans 2 source specs (kognitos-openapi.yaml, kognitos-openapi.yml): per-path servers applied",
+    "tag 'Exceptions' spans 2 source specs (kognitos-openapi.yaml, kognitos-openapi.yml): per-path servers applied",
+    "tag 'Files' spans 2 source specs (kognitos-openapi.yaml, kognitos-openapi.yml): per-path servers applied",
+    "tag 'Organizations' spans 2 source specs (kognitos-openapi.yaml, kognitos-openapi.yml): per-path servers applied",
+    "tag 'Runs' spans 2 source specs (kognitos-openapi.yaml, kognitos-openapi.yml): per-path servers applied",
+    "tag 'Workspaces' spans 2 source specs (kognitos-openapi.yaml, kognitos-openapi.yml): per-path servers applied",
+    "apis.yml register: written (+8 apis, 9 total)"
+  ],
+  "skipped": []
+}

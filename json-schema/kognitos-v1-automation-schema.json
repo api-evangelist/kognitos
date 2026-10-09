@@ -1,0 +1,991 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/kognitos/main/json-schema/kognitos-v1-automation-schema.json",
+  "title": "v1Automation",
+  "description": "Automation represents a unit of executable code with associated metadata and dependencies.\nAutomations can be in DRAFT or PUBLISHED state, where drafts can be modified and\npublished automations are immutable and executable.\nAutomation IDs are unique nano ID strings (21 characters, URL-safe: A-Za-z0-9_-).",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/kognitos-openapi.yml#/components/schemas/v1Automation",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "title": "The automation name (e.g. 'automations/{automation}')"
+    },
+    "display_name": {
+      "type": "string",
+      "description": "Human-readable name of the automation for identification and display.\nMust be unique within the user's namespace."
+    },
+    "english_code": {
+      "type": "string",
+      "description": "User-facing English description code that explains what the automation does.\nThis is a human-readable representation of the automation's purpose and logic."
+    },
+    "code": {
+      "type": "string",
+      "description": "SPy (Subset-of Python) executable code that defines the automation logic.\nThis code is executed when the automation is invoked with inputs."
+    },
+    "artifacts": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+        "format": "byte"
+      },
+      "description": "Additional artifacts associated with the automation (e.g., data files, configurations).\nKeys are artifact names, values are the binary content of the artifacts.\nThese artifacts are available to the automation during execution."
+    },
+    "create_time": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp when the automation was originally created.\nThis value never changes after creation.",
+      "readOnly": true
+    },
+    "version": {
+      "type": "string",
+      "title": "Semantic version of this specific version of the automation (format: major.minor).\nIncremented each time the automation is updated or published.\nExamples: \"0.1\", \"1.0\", \"1.1\", \"2.0\"",
+      "readOnly": true
+    },
+    "connections": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/$defs/v1BookConnection"
+      },
+      "description": "Book connections required by this automation for execution.\nMaps connection names to their metadata.\nThese connections are resolved and made available during automation execution."
+    },
+    "update_time": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp when the automation was last updated.\nUpdated whenever the automation metadata, code, or dependencies change.",
+      "readOnly": true
+    },
+    "update_user_id": {
+      "type": "string",
+      "description": "The ID of the user who last updated this automation.",
+      "readOnly": true
+    },
+    "delete_time": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp when the automation was deleted.",
+      "readOnly": true
+    },
+    "purge_time": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp when the automation will be purged.",
+      "readOnly": true
+    },
+    "input_specs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/v1AutomationInputSpec"
+      },
+      "description": "List of input specifications that define the parameters this automation accepts.\nThese specifications describe the expected inputs when the automation is executed."
+    },
+    "description": {
+      "type": "string",
+      "description": "Provides additional context and documentation about the automation's purpose and behavior."
+    },
+    "latest_published_version": {
+      "type": "string",
+      "title": "Semantic version of the latest published version of the automation (format: major.minor).\nIt will be null in case of no published version.\nExamples: \"0.1\", \"1.0\", \"2.0\"",
+      "readOnly": true
+    },
+    "author_id": {
+      "type": "string",
+      "description": "The ID of the user who created this automation.",
+      "readOnly": true
+    },
+    "code_mapping": {
+      "$ref": "#/$defs/v1CodeMapping"
+    },
+    "restore_time": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp when the automation was restored from a previous version.\nOnly populated if the automation has been restored.",
+      "readOnly": true
+    },
+    "restore_version": {
+      "type": "string",
+      "description": "The version string this automation was restored from (e.g., \"1.0\", \"2.1\").\nOnly populated if the automation has been restored.",
+      "readOnly": true
+    },
+    "restore_user_id": {
+      "type": "string",
+      "description": "The ID of the user who restored this automation.\nOnly populated if the automation has been restored.",
+      "readOnly": true
+    },
+    "publish_time": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp when the automation was last published.\nOnly populated if the automation has been published.",
+      "readOnly": true
+    },
+    "publish_user_id": {
+      "type": "string",
+      "description": "The ID of the user who last published this automation.\nOnly populated if the automation has been published.",
+      "readOnly": true
+    },
+    "activation_state": {
+      "$ref": "#/$defs/v1AutomationActivationState"
+    },
+    "default_inputs": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/$defs/commonV1Value"
+      },
+      "description": "Default input values for this automation.\nKeys are input parameter names (matching AutomationInputSpec.name),\nvalues are the default values to use when inputs are not explicitly provided.\nThese are used to pre-populate inputs for manual runs and fill missing inputs\nfor trigger-based invocations.",
+      "readOnly": true
+    },
+    "marked_outputs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "List of output keys that have been marked by the user.\nThese keys identify specific outputs from the automation execution."
+    }
+  },
+  "required": [
+    "display_name"
+  ],
+  "$defs": {
+    "bdkV1ListValue": {
+      "type": "object",
+      "properties": {
+        "values": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/bdkV1Value"
+          },
+          "title": "All the values inside the list"
+        }
+      },
+      "title": "A collection of values"
+    },
+    "bdkV1Value": {
+      "type": "object",
+      "properties": {
+        "null_value": {
+          "type": "string"
+        },
+        "conceptual_value": {
+          "$ref": "#/$defs/v1NounPhrase"
+        },
+        "text_value": {
+          "type": "string"
+        },
+        "number_value": {
+          "type": "number",
+          "format": "double"
+        },
+        "boolean_value": {
+          "type": "boolean"
+        },
+        "datetime_value": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "date_value": {
+          "$ref": "#/$defs/v1Date"
+        },
+        "time_value": {
+          "$ref": "#/$defs/v1Time"
+        },
+        "file_value": {
+          "$ref": "#/$defs/v1FileValue"
+        },
+        "dictionary_value": {
+          "$ref": "#/$defs/v1DictionaryValue"
+        },
+        "list_value": {
+          "$ref": "#/$defs/bdkV1ListValue"
+        },
+        "opaque_value": {
+          "$ref": "#/$defs/v1OpaqueValue"
+        },
+        "table_value": {
+          "$ref": "#/$defs/v1TableValue"
+        },
+        "sensitive_value": {
+          "$ref": "#/$defs/v1SensitiveValue"
+        }
+      },
+      "title": "A union of all possible values"
+    },
+    "commonV1Location": {
+      "type": "object",
+      "properties": {
+        "start_byte": {
+          "type": "string",
+          "format": "int64",
+          "title": "Starting Byte of the span, It will be zero-based"
+        },
+        "end_byte": {
+          "type": "string",
+          "format": "int64",
+          "title": "Ending Byte(exclusive) of the span, It will be zero-based"
+        }
+      },
+      "description": "Location represents a generic span within some underlying content.\nIt specifies the starting byte offset and the ending byte offset (exclusive) of the span.\nThis can be used for pointing to regions in files, buffers, logs, messages,\nor any other byte-addressable resource."
+    },
+    "commonV1Value": {
+      "type": "object",
+      "properties": {
+        "null_value": {
+          "type": "string",
+          "title": "Represents the absence of a value (None/null/undefined)"
+        },
+        "bool_value": {
+          "type": "boolean",
+          "title": "Boolean true/false value"
+        },
+        "number": {
+          "$ref": "#/$defs/v1Number"
+        },
+        "text": {
+          "type": "string",
+          "title": "UTF-8 encoded text string"
+        },
+        "date": {
+          "$ref": "#/$defs/typeDate"
+        },
+        "timeofday": {
+          "$ref": "#/$defs/typeTimeOfDay"
+        },
+        "datetime": {
+          "$ref": "#/$defs/typeDateTime"
+        },
+        "time_zone": {
+          "$ref": "#/$defs/typeTimeZone"
+        },
+        "duration": {
+          "type": "string",
+          "title": "Signed duration representing a span of time"
+        },
+        "list": {
+          "$ref": "#/$defs/v1List"
+        },
+        "dictionary": {
+          "$ref": "#/$defs/v1Dictionary"
+        },
+        "file": {
+          "$ref": "#/$defs/v1FileValue"
+        },
+        "table": {
+          "$ref": "#/$defs/v1TableValue"
+        },
+        "set": {
+          "$ref": "#/$defs/v1Set"
+        }
+      },
+      "description": "Represents a runtime value that can be produced by the Jarvis interpreter.\n\nThis message provides a type-safe way to serialize and transmit values between\nthe Jarvis interpreter and other services via gRPC. It supports all the basic\ndata types that can be represented in the Jarvis language runtime.\n\nThe oneof structure ensures that exactly one value type is set at a time,\nproviding both type safety and efficient serialization."
+    },
+    "typeDate": {
+      "type": "object",
+      "properties": {
+        "year": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Year of the date. Must be from 1 to 9999, or 0 to specify a date without\na year."
+        },
+        "month": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Month of a year. Must be from 1 to 12, or 0 to specify a year without a\nmonth and day."
+        },
+        "day": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Day of a month. Must be from 1 to 31 and valid for the year and month, or 0\nto specify a year by itself or a year and month where the day isn't\nsignificant."
+        }
+      },
+      "description": "* A full date, with non-zero year, month, and day values\n* A month and day value, with a zero year, such as an anniversary\n* A year on its own, with zero month and day values\n* A year and month value, with a zero day, such as a credit card expiration\ndate\n\nRelated types are [google.type.TimeOfDay][google.type.TimeOfDay] and\n`google.protobuf.Timestamp`.",
+      "title": "Represents a whole or partial calendar date, such as a birthday. The time of\nday and time zone are either specified elsewhere or are insignificant. The\ndate is relative to the Gregorian Calendar. This can represent one of the\nfollowing:"
+    },
+    "typeDateTime": {
+      "type": "object",
+      "properties": {
+        "year": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Optional. Year of date. Must be from 1 to 9999, or 0 if specifying a\ndatetime without a year."
+        },
+        "month": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Required. Month of year. Must be from 1 to 12."
+        },
+        "day": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Required. Day of month. Must be from 1 to 31 and valid for the year and\nmonth."
+        },
+        "hours": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Required. Hours of day in 24 hour format. Should be from 0 to 23. An API\nmay choose to allow the value \"24:00:00\" for scenarios like business\nclosing time."
+        },
+        "minutes": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Required. Minutes of hour of day. Must be from 0 to 59."
+        },
+        "seconds": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Required. Seconds of minutes of the time. Must normally be from 0 to 59. An\nAPI may allow the value 60 if it allows leap-seconds."
+        },
+        "nanos": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Required. Fractions of seconds in nanoseconds. Must be from 0 to\n999,999,999."
+        },
+        "utc_offset": {
+          "type": "string",
+          "description": "UTC offset. Must be whole seconds, between -18 hours and +18 hours.\nFor example, a UTC offset of -4:00 would be represented as\n{ seconds: -14400 }."
+        },
+        "time_zone": {
+          "$ref": "#/$defs/typeTimeZone"
+        }
+      },
+      "description": "Represents civil time (or occasionally physical time).\n\nThis type can represent a civil time in one of a few possible ways:\n\n * When utc_offset is set and time_zone is unset: a civil time on a calendar\n   day with a particular offset from UTC.\n * When time_zone is set and utc_offset is unset: a civil time on a calendar\n   day in a particular time zone.\n * When neither time_zone nor utc_offset is set: a civil time on a calendar\n   day in local time.\n\nThe date is relative to the Proleptic Gregorian Calendar.\n\nIf year is 0, the DateTime is considered not to have a specific year. month\nand day must have valid, non-zero values.\n\nThis type may also be used to represent a physical time if all the date and\ntime fields are set and either case of the `time_offset` oneof is set.\nConsider using `Timestamp` message for physical time instead. If your use\ncase also would like to store the user's timezone, that can be done in\nanother field.\n\nThis type is more flexible than some applications may want. Make sure to\ndocument and validate your application's limitations."
+    },
+    "typeTimeOfDay": {
+      "type": "object",
+      "properties": {
+        "hours": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Hours of day in 24 hour format. Should be from 0 to 23. An API may choose\nto allow the value \"24:00:00\" for scenarios like business closing time."
+        },
+        "minutes": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Minutes of hour of day. Must be from 0 to 59."
+        },
+        "seconds": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Seconds of minutes of the time. Must normally be from 0 to 59. An API may\nallow the value 60 if it allows leap-seconds."
+        },
+        "nanos": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Fractions of seconds in nanoseconds. Must be from 0 to 999,999,999."
+        }
+      },
+      "description": "Represents a time of day. The date and time zone are either not significant\nor are specified elsewhere. An API may choose to allow leap seconds. Related\ntypes are [google.type.Date][google.type.Date] and\n`google.protobuf.Timestamp`."
+    },
+    "typeTimeZone": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "IANA Time Zone Database time zone, e.g. \"America/New_York\"."
+        },
+        "version": {
+          "type": "string",
+          "description": "Optional. IANA Time Zone Database version number, e.g. \"2019a\"."
+        }
+      },
+      "description": "Represents a time zone from the\n[IANA Time Zone Database](https://www.iana.org/time-zones)."
+    },
+    "v1AutomationActivationState": {
+      "type": "string",
+      "enum": [
+        "AUTOMATION_ACTIVATION_STATE_UNSPECIFIED",
+        "AUTOMATION_ACTIVATION_STATE_ACTIVE",
+        "AUTOMATION_ACTIVATION_STATE_DEACTIVATED"
+      ],
+      "default": "AUTOMATION_ACTIVATION_STATE_UNSPECIFIED",
+      "description": "Activation state of a published automation.\nControls whether the automation can execute published runs.\n\n - AUTOMATION_ACTIVATION_STATE_UNSPECIFIED: Unspecified state. Used when automation has no published version.\nActivation state is only meaningful after publishing.\n - AUTOMATION_ACTIVATION_STATE_ACTIVE: Automation is active and can execute published runs.\n - AUTOMATION_ACTIVATION_STATE_DEACTIVATED: Automation is deactivated and cannot execute published runs.\nEvents will be logged but not executed."
+    },
+    "v1AutomationInputSpec": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The name of the input parameter."
+        },
+        "type": {
+          "$ref": "#/$defs/v1ValueType"
+        }
+      },
+      "description": "AutomationInputSpec defines the specification for an input parameter of an automation.",
+      "required": [
+        "name"
+      ]
+    },
+    "v1BookConnection": {
+      "type": "object",
+      "properties": {
+        "connection_id": {
+          "type": "string",
+          "description": "Unique identifier for this connection resource."
+        },
+        "endpoint": {
+          "type": "string",
+          "description": "Endpoint for the connection."
+        }
+      },
+      "description": "BookConnection is a resource representing a connection to a book instance.\nA connection has a unique identifier and an endpoint."
+    },
+    "v1CodeMapping": {
+      "type": "object",
+      "properties": {
+        "entries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/v1CodeMappingEntry"
+          },
+          "description": "List of mapping entries that associate SPy code regions with English code regions.\nEach entry defines a paired relationship between a span in the SPy code and\na span in the English code representation."
+        }
+      },
+      "description": "CodeMapping represents a bidirectional mapping between SPy (Subset-of-Python) code\nand English code locations within an automation. This mapping enables navigation between\nthe two representations, facilitating debugging, traceability, and synchronized editing.\nEach entry in the mapping associates a region in the SPy code with its corresponding\nregion in the English code. The mapping relationship is many-to-many and entries may\noverlap.",
+      "required": [
+        "entries"
+      ]
+    },
+    "v1CodeMappingEntry": {
+      "type": "object",
+      "properties": {
+        "spy_location": {
+          "$ref": "#/$defs/commonV1Location"
+        },
+        "english_location": {
+          "$ref": "#/$defs/commonV1Location"
+        }
+      },
+      "description": "CodeMappingEntry represents a single mapping between a region in SPy code and\nits corresponding region in English code. This bidirectional association allows\nnavigation from SPy to English and vice versa, enabling synchronized views and\ndebugging across both representations of the automation logic.",
+      "required": [
+        "spy_location",
+        "english_location"
+      ]
+    },
+    "v1Column": {
+      "type": "object",
+      "properties": {
+        "values": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/bdkV1Value"
+          }
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "v1Date": {
+      "type": "object",
+      "properties": {
+        "year": {
+          "type": "integer",
+          "format": "int32",
+          "title": "Year of the date"
+        },
+        "month": {
+          "type": "integer",
+          "format": "int32",
+          "title": "Month of a year"
+        },
+        "day": {
+          "type": "integer",
+          "format": "int32",
+          "title": "Day of a month"
+        }
+      }
+    },
+    "v1Dictionary": {
+      "type": "object",
+      "properties": {
+        "entries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/v1DictionaryEntry"
+          },
+          "title": "The key-value pairs stored in this dictionary"
+        }
+      },
+      "description": "Represents a key-value mapping (similar to hash maps or dictionaries).\n\nThis message stores associations between keys and values, where keys must be\nhashable types (null, bool, Number, string, Date, TimeOfDay, DateTime, TimeZone). Keys are\nunique within a dictionary - duplicate keys will overwrite previous values.\n\nThe dictionary maintains insertion order for consistent iteration behavior.\n\nExamples:\n - {\"name\": \"John\", \"age\": 30} - string keys with mixed values\n - {1: \"one\", 2: \"two\"} - number keys with string values\n - {\"nested\": {\"inner\": \"value\"}} - nested dictionaries"
+    },
+    "v1DictionaryEntry": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "$ref": "#/$defs/v1HashableValue"
+        },
+        "value": {
+          "$ref": "#/$defs/commonV1Value"
+        }
+      },
+      "description": "Represents a single key-value pair within a Dictionary.\n\nBoth key and value can be any Value type, though keys should be\nhashable types for proper dictionary behavior. Non-hashable keys\n(like lists or dictionaries) may cause runtime errors."
+    },
+    "v1DictionaryValue": {
+      "type": "object",
+      "properties": {
+        "fields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/v1DictionaryValueField"
+          },
+          "title": "All the fields alongside their values in the dictionary"
+        },
+        "is_a": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/v1NounPhrase"
+          },
+          "title": "Is a replationships for the dictionary"
+        }
+      },
+      "title": "Value to be used when the type is dictionary"
+    },
+    "v1DictionaryValueField": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "value": {
+          "$ref": "#/$defs/bdkV1Value"
+        }
+      },
+      "title": "Each key-value pair inside a dictionary"
+    },
+    "v1File": {
+      "type": "object",
+      "properties": {
+        "file_name": {
+          "type": "string",
+          "title": "The name of the file"
+        },
+        "content": {
+          "type": "string",
+          "format": "byte",
+          "title": "Content of the file as a byte stream"
+        }
+      }
+    },
+    "v1FileValue": {
+      "type": "object",
+      "properties": {
+        "remote": {
+          "type": "string"
+        },
+        "inline": {
+          "$ref": "#/$defs/v1File"
+        }
+      },
+      "title": "A file value represents a file that can be either inline or remote"
+    },
+    "v1HashableValue": {
+      "type": "object",
+      "properties": {
+        "bool_value": {
+          "type": "boolean",
+          "title": "Boolean true/false value"
+        },
+        "number": {
+          "$ref": "#/$defs/v1Number"
+        },
+        "text": {
+          "type": "string",
+          "title": "UTF-8 encoded text string"
+        },
+        "date": {
+          "$ref": "#/$defs/typeDate"
+        },
+        "timeofday": {
+          "$ref": "#/$defs/typeTimeOfDay"
+        },
+        "datetime": {
+          "$ref": "#/$defs/typeDateTime"
+        },
+        "duration": {
+          "type": "string",
+          "title": "Signed duration representing a span of time"
+        }
+      },
+      "description": "Represents a hashable value that can be used as a dictionary key.\n\nThis message contains only the hashable types from the Value message,\ncorresponding to Python's hashable types. These types can be safely\nused as keys in maps and dictionaries.\n\nHashable types include: bool, Number, string, Date, TimeOfDay, DateTime\nand Duration."
+    },
+    "v1List": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/commonV1Value"
+          },
+          "title": "The ordered sequence of values in this list"
+        }
+      },
+      "description": "Represents an ordered collection of values (similar to arrays or lists).\n\nThis message can contain any number of Value elements in a specific order.\nLists are mutable and can grow or shrink during runtime. Elements can be\naccessed by their zero-based index position.\n\nExamples:\n - [1, 2, 3] - list of numbers\n - [\"hello\", \"world\"] - list of strings\n - [true, 42, \"mixed\"] - list with mixed types\n - [[1, 2], [3, 4]] - nested lists"
+    },
+    "v1NounPhrase": {
+      "type": "object",
+      "properties": {
+        "modifiers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "title": "Optional adjectives attached to the noun"
+        },
+        "head": {
+          "type": "string",
+          "title": "Noun of the phrase"
+        }
+      }
+    },
+    "v1Number": {
+      "type": "object",
+      "properties": {
+        "lo": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Low 32 bits of the 96-bit mantissa."
+        },
+        "mid": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Middle 32 bits of the 96-bit mantissa."
+        },
+        "hi": {
+          "type": "integer",
+          "format": "int64",
+          "description": "High 32 bits of the 96-bit mantissa."
+        },
+        "flags": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Flags word:\n - Bits 16–23: scale (0–28)\n - Bit 31: sign (0 = positive, 1 = negative)\n - Other bits must be zero."
+        }
+      },
+      "description": "A fixed-precision decimal number with up to 28 fractional digits.\n\nThis message represents decimal numbers with exact precision, avoiding\nfloating-point rounding errors. It's particularly useful for financial\ncalculations, measurements, and any scenario where exact decimal\nrepresentation is required.\n\nThe value is calculated as: m / 10^e, where:\n - m is an unsigned 96-bit integer composed of (lo, mid, hi)\n - e is the scale (0–28) stored in flags bits 16–23\n - sign is encoded in flags bit 31 (0 = positive, 1 = negative)\n\nExamples:\n - 123.45 would have m=12345, e=2\n - -0.001 would have m=1, e=3, with sign bit set\n"
+    },
+    "v1OpaqueValue": {
+      "type": "object",
+      "properties": {
+        "content": {
+          "type": "string",
+          "format": "byte",
+          "title": "Content of the opaque value"
+        },
+        "is_a": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/v1NounPhrase"
+          },
+          "title": "Is a replationships for the opaque"
+        }
+      }
+    },
+    "v1SensitiveValue": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "$ref": "#/$defs/bdkV1Value"
+        }
+      },
+      "title": "A sensitive value is any value marked as sensitive (to prevent exposure)"
+    },
+    "v1Set": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/v1HashableValue"
+          },
+          "title": "The unique elements stored in this set\nAll elements must be hashable types"
+        }
+      },
+      "description": "Represents an unordered collection of unique values.\n\nThis message stores a collection of unique elements, where duplicate values\nare automatically removed. Only hashable types can be stored in sets.\nSets are useful for membership testing, removing duplicates, and mathematical\nset operations like union, intersection, and difference.\n\nThe set does not maintain insertion order - elements may appear in any order\nduring iteration.\n\nExamples:\n - {1, 2, 3} - set of numbers\n - {\"apple\", \"banana\", \"cherry\"} - set of strings\n - {true, false} - set of booleans\n - {1, \"hello\", true} - set with mixed hashable types"
+    },
+    "v1Table": {
+      "type": "object",
+      "properties": {
+        "columns": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/v1Column"
+          }
+        }
+      },
+      "description": "A table is a column-oriented structure. All the values inside each column must\nbe of equal length."
+    },
+    "v1TableValue": {
+      "type": "object",
+      "properties": {
+        "remote": {
+          "type": "string"
+        },
+        "inline": {
+          "$ref": "#/$defs/v1Table"
+        }
+      },
+      "title": "A table that is represented remote as an URL to a file that is Feather-formatted\nor inline via the Table message"
+    },
+    "v1Time": {
+      "type": "object",
+      "properties": {
+        "hours": {
+          "type": "integer",
+          "format": "int32",
+          "title": "Hours of day"
+        },
+        "minutes": {
+          "type": "integer",
+          "format": "int32",
+          "title": "Minutes of hour of day"
+        },
+        "seconds": {
+          "type": "integer",
+          "format": "int32",
+          "title": "Seconds of minutes of the time"
+        },
+        "nanos": {
+          "type": "integer",
+          "format": "int32",
+          "title": "Fractions of seconds in nanoseconds"
+        }
+      }
+    },
+    "v1ValueAnyType": {
+      "type": "object",
+      "title": "Represents a value type that can hold any kind of value"
+    },
+    "v1ValueDictionaryType": {
+      "type": "object",
+      "properties": {
+        "is_a": {
+          "type": "string",
+          "title": "Semantic classification of what this dictionary represents"
+        },
+        "fields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/v1ValueDictionaryTypeField"
+          },
+          "title": "The named fields contained in this dictionary"
+        },
+        "description": {
+          "type": "string",
+          "title": "Optional human-readable description of this dictionary type"
+        }
+      },
+      "title": "Represents a dictionary/object value type with named fields"
+    },
+    "v1ValueDictionaryTypeField": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string",
+          "title": "The name/key of this field"
+        },
+        "value": {
+          "$ref": "#/$defs/v1ValueType"
+        },
+        "description": {
+          "type": "string",
+          "title": "Optional human-readable description of this field"
+        }
+      },
+      "title": "Represents a single field within a dictionary value type"
+    },
+    "v1ValueEnumType": {
+      "type": "object",
+      "properties": {
+        "is_a": {
+          "type": "string",
+          "title": "Semantic classification of what this enum represents"
+        },
+        "members": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/v1ValueEnumTypeMember"
+          },
+          "title": "The available options/members of this enum"
+        },
+        "description": {
+          "type": "string",
+          "title": "Optional human-readable description of this enum type"
+        }
+      },
+      "title": "Represents an enumeration value type with predefined options"
+    },
+    "v1ValueEnumTypeMember": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "The programmatic name of this enum member"
+        },
+        "description": {
+          "type": "string",
+          "title": "Optional human-readable description of this enum member"
+        }
+      },
+      "title": "Represents a single member/option within an enum value type"
+    },
+    "v1ValueGenericDictionaryType": {
+      "type": "object",
+      "properties": {
+        "key_type": {
+          "$ref": "#/$defs/v1ValueType"
+        },
+        "value_type": {
+          "$ref": "#/$defs/v1ValueType"
+        }
+      },
+      "title": "Represent a generic dictionary that can hold any entry of a particular key and value type"
+    },
+    "v1ValueListType": {
+      "type": "object",
+      "properties": {
+        "inner": {
+          "$ref": "#/$defs/v1ValueType"
+        }
+      },
+      "title": "Represents a list/array value type containing elements of a specific type"
+    },
+    "v1ValueOpaqueType": {
+      "type": "object",
+      "properties": {
+        "is_a": {
+          "type": "string",
+          "title": "Semantic classification of what this opaque type represents"
+        },
+        "description": {
+          "type": "string",
+          "title": "Optional human-readable description of this opaque type"
+        }
+      },
+      "title": "Represents an opaque value type with semantic meaning but unknown internal structure"
+    },
+    "v1ValueOptionalType": {
+      "type": "object",
+      "properties": {
+        "inner": {
+          "$ref": "#/$defs/v1ValueType"
+        }
+      },
+      "title": "Represents a value type that can be optional (nullable)"
+    },
+    "v1ValueScalarType": {
+      "type": "string",
+      "enum": [
+        "VALUE_SCALAR_TYPE_UNSPECIFIED",
+        "VALUE_SCALAR_TYPE_TEXT",
+        "VALUE_SCALAR_TYPE_NUMBER",
+        "VALUE_SCALAR_TYPE_BOOLEAN",
+        "VALUE_SCALAR_TYPE_DATETIME",
+        "VALUE_SCALAR_TYPE_DATE",
+        "VALUE_SCALAR_TYPE_TIME",
+        "VALUE_SCALAR_TYPE_FILE"
+      ],
+      "default": "VALUE_SCALAR_TYPE_UNSPECIFIED",
+      "description": "- VALUE_SCALAR_TYPE_UNSPECIFIED: Unspecified value type\n - VALUE_SCALAR_TYPE_TEXT: A text value type\n - VALUE_SCALAR_TYPE_NUMBER: A number value type\n - VALUE_SCALAR_TYPE_BOOLEAN: A boolean value type\n - VALUE_SCALAR_TYPE_DATETIME: A datetime value type\n - VALUE_SCALAR_TYPE_DATE: A date value type\n - VALUE_SCALAR_TYPE_TIME: A time value type\n - VALUE_SCALAR_TYPE_FILE: A file value type",
+      "title": "Supported Value Scalar Types"
+    },
+    "v1ValueSensitiveType": {
+      "type": "object",
+      "properties": {
+        "inner": {
+          "$ref": "#/$defs/v1ValueType"
+        }
+      },
+      "title": "Represents a value type that contains sensitive information"
+    },
+    "v1ValueTableType": {
+      "type": "object",
+      "properties": {
+        "is_a": {
+          "type": "string",
+          "title": "Semantic classification of what this table represents"
+        },
+        "columns": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/v1ValueTableTypeColumn"
+          },
+          "title": "The columns that make up this table"
+        },
+        "description": {
+          "type": "string",
+          "title": "Optional human-readable description of this table type"
+        }
+      },
+      "title": "Represents a table value type with structured columns"
+    },
+    "v1ValueTableTypeColumn": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string",
+          "title": "The name/key of this column"
+        },
+        "value": {
+          "$ref": "#/$defs/v1ValueType"
+        },
+        "description": {
+          "type": "string",
+          "title": "Optional human-readable description of this column"
+        }
+      },
+      "title": "Represents a single column within a table value type"
+    },
+    "v1ValueType": {
+      "type": "object",
+      "properties": {
+        "scalar_type": {
+          "$ref": "#/$defs/v1ValueScalarType"
+        },
+        "optional_type": {
+          "$ref": "#/$defs/v1ValueOptionalType"
+        },
+        "list_type": {
+          "$ref": "#/$defs/v1ValueListType"
+        },
+        "dictionary_type": {
+          "$ref": "#/$defs/v1ValueDictionaryType"
+        },
+        "table_type": {
+          "$ref": "#/$defs/v1ValueTableType"
+        },
+        "opaque_type": {
+          "$ref": "#/$defs/v1ValueOpaqueType"
+        },
+        "any_type": {
+          "$ref": "#/$defs/v1ValueAnyType"
+        },
+        "union_type": {
+          "$ref": "#/$defs/v1ValueUnionType"
+        },
+        "sensitive_type": {
+          "$ref": "#/$defs/v1ValueSensitiveType"
+        },
+        "enum_type": {
+          "$ref": "#/$defs/v1ValueEnumType"
+        },
+        "generic_dictionary_type": {
+          "$ref": "#/$defs/v1ValueGenericDictionaryType"
+        }
+      },
+      "title": "Represents a complete value type definition using a discriminated union"
+    },
+    "v1ValueUnionType": {
+      "type": "object",
+      "properties": {
+        "inners": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/v1ValueType"
+          },
+          "title": "The possible value types in this union"
+        }
+      },
+      "title": "Represents a union value type that can be one of several possible types"
+    }
+  }
+}

@@ -1,0 +1,701 @@
+openapi: 3.2.0
+info:
+  title: Kognitos Organizations API
+  version: 1.0.0
+  contact:
+    name: Kognitos
+    url: https://kognitos.com
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  description: 'Operations tagged Organizations across 2 of this provider''s published API definitions: kognitos-openapi.yaml, kognitos-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://app.us-1.kognitos.com
+security:
+- BearerAuth: []
+tags:
+- name: Organizations
+  description: Manage organizations, users, roles, invitations, and preferences.
+paths:
+  /api/v1/organizations/{organization_id}:
+    get:
+      summary: Get Organization
+      operationId: GetOrganization
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1Organization'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Organizations
+    servers:
+    - url: https://app.us-1.kognitos.com
+  /api/v1/me/organizations:
+    get:
+      summary: Current User Organizations
+      operationId: CurrentUserOrganizations
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1CurrentUserOrganizationsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: page_size
+        description: 'The maximum number of organizations to return.
+
+          If unspecified, at most 50 organizations will be returned.
+
+          The maximum value is 1000; values above 1000 will be coerced to 1000.'
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: page_token
+        description: 'A page token, received from a previous `ListCurrentUserOrganizations` call.
+
+          Provide this to retrieve the subsequent page.
+
+          When paginating, all other parameters provided to `ListCurrentUserOrganizations` must match
+
+          the call that provided the page token.'
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: filter
+        description: 'Optional filter string following AIP-160 filtering standards.
+
+          Example: "title=''My Organization''"'
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - Organizations
+    servers:
+    - url: https://app.us-1.kognitos.com
+  /api/v1/organizations/{organization_id}/preferences:
+    get:
+      summary: Get Organization Preferences
+      operationId: GetOrganizationPreferences
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1OrganizationPreferences'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Organizations
+    servers:
+    - url: https://app.us-1.kognitos.com
+  /api/v1/organizations/{organization_id}/invitations/{invitation_id}:
+    get:
+      summary: Get Invitation
+      operationId: GetInvitation
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1Invitation'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: invitation_id
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Organizations
+    servers:
+    - url: https://app.us-1.kognitos.com
+  /api/v1/organizations/{organization_id}/invites:
+    get:
+      summary: List Organization User Invites
+      operationId: ListOrganizationUserInvites
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1ListOrganizationUserInvitesResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: page_size
+        description: 'The maximum number of invitations to return.
+
+          If unspecified, at most 50 invitations will be returned.
+
+          The maximum value is 1000; values above 1000 will be coerced to 1000.'
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: page_token
+        description: 'A page token, received from a previous ListOrganizationUserInvites call.
+
+          Provide this to retrieve the subsequent page.'
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - Organizations
+    servers:
+    - url: https://app.us-1.kognitos.com
+  /api/v1/organizations/{organization_id}/roles:
+    get:
+      summary: List Organization Roles
+      operationId: ListOrganizationRoles
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1ListOrganizationRolesResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: page_size
+        description: 'The maximum number of roles to return.
+
+          If unspecified, at most 50 roles will be returned.
+
+          The maximum value is 1000; values above 1000 will be coerced to 1000.'
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: page_token
+        description: 'A page token, received from a previous ListOrganizationRoles call.
+
+          Provide this to retrieve the subsequent page.'
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - Organizations
+    servers:
+    - url: https://app.us-1.kognitos.com
+  /api/v1/organizations/{organization_id}/users:
+    get:
+      summary: List Organization Users
+      operationId: ListOrganizationUsers
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1ListOrganizationUsersResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: page_size
+        description: 'The maximum number of users to return.
+
+          If unspecified, at most 50 users will be returned.
+
+          The maximum value is 1000; values above 1000 will be coerced to 1000.'
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: page_token
+        description: 'A page token, received from a previous `ListOrganizationUsers` call.
+
+          Provide this to retrieve the subsequent page.
+
+          When paginating, all other parameters provided to `ListOrganizationUsers` must match
+
+          the call that provided the page token.'
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: filter
+        description: 'Optional filter string following AIP-160 filtering standards.
+
+          Supported filter fields:
+
+          - `role`: Filter by role name (case-insensitive). Example: `role="Organization Admin"`
+
+          - `role_scope`: Filter by role scope. Values: "organization" or "workspace". Example: `role_scope=organization`
+
+          - `search`: Search by user display name or email (partial match). Example: `search:"john"`'
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: order_by
+        description: 'Optional comma-separated list of fields to order by, following AIP-132.
+
+          Supported fields: display_name, email, created_time, updated_time
+
+          Example: "display_name,created_time desc"
+
+          Default ordering is by created_time descending if not specified.'
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - Organizations
+    servers:
+    - url: https://app.us-1.kognitos.com
+  /api/v1/organizations/{organization_id}/users/{user_id}:
+    get:
+      summary: Get User Basic Info
+      operationId: GetUserBasicInfo
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1UserBasicInfo'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Organizations
+    servers:
+    - url: https://app.us-1.kognitos.com
+components:
+  schemas:
+    v1UserWithRoles:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/v1UserBasicInfo'
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1RoleBasicInfo'
+          description: 'The user''s assigned roles.
+
+            Each role includes its scope (organization or workspace).'
+      description: 'A user with their assigned roles.
+
+        This type is reusable for both organization and workspace user listing APIs.
+
+        The RoleScope field in each role indicates whether the role is org-level or workspace-level.'
+    v1ListOrganizationRolesResponse:
+      type: object
+      properties:
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1Role'
+          description: The list of roles in the organization.
+        next_page_token:
+          type: string
+          description: 'A token to retrieve the next page of results.
+
+            Pass this value in the page_token field in the subsequent call to
+
+            ListOrganizationRoles to get the next page of results.'
+      description: Response message for ListOrganizationRoles.
+    v1CurrentUserOrganizationsResponse:
+      type: object
+      properties:
+        user_organizations:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1Organization'
+          description: The list of organizations the current user is a member of.
+        next_page_token:
+          type: string
+          description: 'A token to retrieve the next page of results.
+
+            Pass this value in the `page_token` field in the subsequent call to
+
+            `CurrentUserOrganizations` to get the next page of results. If this field is
+
+            empty, it means there are no more results.'
+      description: Response message for listing organizations for the current user.
+    rpcStatus:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/protobufAny'
+    v1RoleScope:
+      type: string
+      enum:
+      - ROLE_SCOPE_UNSPECIFIED
+      - ROLE_SCOPE_ORGANIZATION
+      - ROLE_SCOPE_WORKSPACE
+      default: ROLE_SCOPE_UNSPECIFIED
+      description: "Defines the scope at which a role can be applied.\n\n - ROLE_SCOPE_UNSPECIFIED: Unspecified role scope.\n - ROLE_SCOPE_ORGANIZATION: Role applies at the organization level.\n - ROLE_SCOPE_WORKSPACE: Role applies at the workspace level."
+    v1RoleBasicInfo:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The role name (e.g., "workspace-admin", "org-admin", or custom role name).
+        role_scope:
+          $ref: '#/components/schemas/v1RoleScope'
+      title: 'Lightweight role information following the UserBasicInfo pattern.
+
+        Note: RoleScope is imported from rbac.proto'
+    protobufAny:
+      type: object
+      properties:
+        '@type':
+          type: string
+      additionalProperties: {}
+    v1Invitation:
+      type: object
+      properties:
+        name:
+          type: string
+          title: 'Resource name of the invitation.
+
+            Format: organizations/{organization}/invitations/{invitation}'
+        organization_display_name:
+          type: string
+          description: The organization display name.
+        workspace_id:
+          type: string
+          description: The workspace ID (not set if org-level invite).
+        workspace_display_name:
+          type: string
+          description: The workspace display name (not set if org-level invite).
+        roles:
+          type: array
+          items:
+            type: string
+          description: List of role resource names included in this invitation.
+        is_accepted:
+          type: boolean
+          description: Whether the invitation has been accepted.
+        redirect_organization_id:
+          type: string
+          description: The organization ID to redirect to (set if invitation points to a different org).
+        redirect_workspace_id:
+          type: string
+          description: The workspace ID to redirect to (set if invitation points to a different workspace).
+      description: An Invitation represents a pending invitation to join an organization or workspace.
+    v1DateFormat:
+      type: string
+      enum:
+      - DATE_FORMAT_UNSPECIFIED
+      - DATE_FORMAT_DD_MM_YYYY_SLASH
+      - DATE_FORMAT_MM_DD_YYYY_SLASH
+      - DATE_FORMAT_YYYY_MM_DD_DASH
+      - DATE_FORMAT_DD_MM_YYYY_DASH
+      - DATE_FORMAT_MM_DD_YYYY_DASH
+      - DATE_FORMAT_YYYY_MM_DD_SLASH
+      - DATE_FORMAT_DD_MM_YYYY_DOT
+      - DATE_FORMAT_MM_DD_YYYY_DOT
+      - DATE_FORMAT_YYYY_MM_DD_DOT
+      - DATE_FORMAT_DD_MMM_YYYY
+      - DATE_FORMAT_MMM_DD_YYYY
+      - DATE_FORMAT_DD_MMMM_YYYY
+      - DATE_FORMAT_MMMM_DD_YYYY
+      default: DATE_FORMAT_UNSPECIFIED
+      description: "Supported date formats.\n\n - DATE_FORMAT_UNSPECIFIED: Unspecified date format.\n - DATE_FORMAT_DD_MM_YYYY_SLASH: DD/MM/YYYY format.\n - DATE_FORMAT_MM_DD_YYYY_SLASH: MM/DD/YYYY format.\n - DATE_FORMAT_YYYY_MM_DD_DASH: YYYY-MM-DD format (ISO 8601).\n - DATE_FORMAT_DD_MM_YYYY_DASH: DD-MM-YYYY format.\n - DATE_FORMAT_MM_DD_YYYY_DASH: MM-DD-YYYY format.\n - DATE_FORMAT_YYYY_MM_DD_SLASH: YYYY/MM/DD format.\n - DATE_FORMAT_DD_MM_YYYY_DOT: DD.MM.YYYY format (European style).\n - DATE_FORMAT_MM_DD_YYYY_DOT: MM.DD.YYYY format.\n - DATE_FORMAT_YYYY_MM_DD_DOT: YYYY.MM.DD format.\n - DATE_FORMAT_DD_MMM_YYYY: DD MMM YYYY format (e.g., 15 Jan 2024).\n - DATE_FORMAT_MMM_DD_YYYY: MMM DD, YYYY format (e.g., Jan 15, 2024).\n - DATE_FORMAT_DD_MMMM_YYYY: DD MMMM YYYY format (e.g., 15 January 2024).\n - DATE_FORMAT_MMMM_DD_YYYY: MMMM DD, YYYY format (e.g., January 15, 2024)."
+    v1ListOrganizationUserInvitesResponse:
+      type: object
+      properties:
+        invitations:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1UserInvitation'
+          description: The list of pending user invitations.
+        next_page_token:
+          type: string
+          description: 'A token to retrieve the next page of results.
+
+            Pass this value in the page_token field in the subsequent call to
+
+            ListOrganizationUserInvites to get the next page of results.'
+      description: Response message for ListOrganizationUserInvites.
+    v1Organization:
+      type: object
+      properties:
+        name:
+          type: string
+          description: 'The resource name of the organization.
+
+            Format: organizations/{organization_id}
+
+            This field is assigned by the server at creation and is immutable thereafter.
+
+            Clients may include this field in Get/Update/Delete requests to identify the resource.'
+        title:
+          type: string
+          description: The user-defined display name for the organization.
+        logo_data_uri:
+          type: string
+          title: 'The organization logo as a data URI following RFC 2397.
+
+            Format: data:[<mediatype>][;encoding],<data>
+
+            Example: data:image/png;encoding,<encoded-image-data>'
+        create_time:
+          type: string
+          format: date-time
+          description: The timestamp when the organization was created.
+          readOnly: true
+        update_time:
+          type: string
+          format: date-time
+          description: The timestamp when the organization was last updated.
+          readOnly: true
+        owner_display_name:
+          type: string
+          description: The display name of the organization owner.
+          readOnly: true
+        owner_email:
+          type: string
+          description: The email address of the organization owner.
+          readOnly: true
+      description: An Organization is the top-level resource container.
+      required:
+      - title
+    v1ListOrganizationUsersResponse:
+      type: object
+      properties:
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1UserWithRoles'
+          description: The list of users in the organization with their roles.
+        next_page_token:
+          type: string
+          description: 'A token to retrieve the next page of results.
+
+            Pass this value in the `page_token` field in the subsequent call to
+
+            `ListOrganizationUsers` to get the next page of results. If this field is
+
+            empty, it means there are no more results.'
+      description: Response message for listing users in an organization.
+    v1TimeFormat:
+      type: string
+      enum:
+      - TIME_FORMAT_UNSPECIFIED
+      - TIME_FORMAT_12_HOUR
+      - TIME_FORMAT_24_HOUR
+      default: TIME_FORMAT_UNSPECIFIED
+      description: "Supported time formats.\n\n - TIME_FORMAT_UNSPECIFIED: Unspecified time format.\n - TIME_FORMAT_12_HOUR: 12-hour format (1:00 PM).\n - TIME_FORMAT_24_HOUR: 24-hour format (13:00)."
+    v1DecimalSymbol:
+      type: string
+      enum:
+      - DECIMAL_SYMBOL_UNSPECIFIED
+      - DECIMAL_SYMBOL_PERIOD
+      - DECIMAL_SYMBOL_COMMA
+      default: DECIMAL_SYMBOL_UNSPECIFIED
+      description: "Supported decimal symbols.\n\n - DECIMAL_SYMBOL_UNSPECIFIED: Unspecified decimal symbol.\n - DECIMAL_SYMBOL_PERIOD: Period (.) as decimal separator.\n - DECIMAL_SYMBOL_COMMA: Comma (,) as decimal separator."
+    v1UserInvitation:
+      type: object
+      properties:
+        email:
+          type: string
+          description: The user's email address.
+        invitation_id:
+          type: string
+          description: The invitation ID.
+      description: A UserInvitation represents a pending invitation with user email and invitation ID.
+    v1UserBasicInfo:
+      type: object
+      properties:
+        name:
+          type: string
+          title: 'The unique resource name of the user basic info.
+
+            Format: `organizations/{organization}/users/{user_basic_info}`'
+        display_name:
+          type: string
+          description: The user's display name.
+        email:
+          type: string
+          description: The user's email address.
+      description: 'Contains basic information about a user.
+
+        This is a lightweight representation used when full user details are not needed.'
+    v1OrganizationPreferences:
+      type: object
+      properties:
+        name:
+          type: string
+          title: 'The resource name of the organization preferences.
+
+            Format: `organizations/{organization}/preferences`'
+        support_team_access:
+          type: boolean
+          description: Support team access to workspaces in the organization for debugging issues.
+        general:
+          $ref: '#/components/schemas/v1GeneralPreferences'
+      description: Represents organization-specific settings or preferences.
+    v1Role:
+      type: object
+      properties:
+        name:
+          type: string
+          title: 'Resource name of the role.
+
+            Format: organizations/{organization}/roles/{role} (org-level)
+
+            Format: organizations/{organization}/workspaces/{workspace}/roles/{role} (workspace-level)'
+        title:
+          type: string
+          description: Human-readable title of the role (e.g., "Administrator", "Editor").
+        description:
+          type: string
+          description: Description of what this role grants.
+        permissions:
+          type: array
+          items:
+            type: string
+          title: 'List of permission strings this role grants.
+
+            Format: "action:Resource" (e.g., "create:Automation", "read:Workspace")'
+          readOnly: true
+      description: 'A Role represents a concrete, assignable role that can be assigned to users.
+
+        Roles can be created from RoleTemplates or as standalone custom roles.'
+      required:
+      - title
+    v1GeneralPreferences:
+      type: object
+      properties:
+        time_zone:
+          type: string
+          description: 'The time zone preference.
+
+            Should be an IANA timezone identifier (e.g., "America/New_York", "Europe/London", "UTC").'
+        time_format:
+          $ref: '#/components/schemas/v1TimeFormat'
+        date_format:
+          $ref: '#/components/schemas/v1DateFormat'
+        decimal_symbol:
+          $ref: '#/components/schemas/v1DecimalSymbol'
+        decimal_places:
+          type: integer
+          format: int32
+          description: The number of digits after decimal point.
+        measurement_system:
+          $ref: '#/components/schemas/v1MeasurementSystem'
+      description: 'General preferences for display and formatting.
+
+        Used by both workspace and organization preferences.'
+    v1MeasurementSystem:
+      type: string
+      enum:
+      - MEASUREMENT_SYSTEM_UNSPECIFIED
+      - MEASUREMENT_SYSTEM_METRIC
+      - MEASUREMENT_SYSTEM_IMPERIAL
+      default: MEASUREMENT_SYSTEM_UNSPECIFIED
+      description: "Supported measurement systems.\n\n - MEASUREMENT_SYSTEM_UNSPECIFIED: Unspecified measurement system.\n - MEASUREMENT_SYSTEM_METRIC: Metric system.\n - MEASUREMENT_SYSTEM_IMPERIAL: Imperial system."
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: Personal Access Token.
+x-refined-from:
+- kognitos-openapi.yaml
+- kognitos-openapi.yml

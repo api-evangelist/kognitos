@@ -1,0 +1,1217 @@
+generated: '2026-10-09'
+method: generated
+source: openapi/kognitos-openapi.yml
+description: Recommended x-agentic-access execution contracts, classified heuristically from
+  the OpenAPI. A governance starting point for exposing this API to AI agents — review and bind
+  audience per deployment. See research/curity/agentic-governance/.
+summary:
+  operations: 102
+  by_action_class:
+    connected: 72
+    acting: 30
+  by_consequence:
+    read: 72
+    write: 29
+    safety-critical: 1
+  human_in_the_loop_required: 1
+operations:
+- path: /api/v1/organizations/{organization_id}
+  method: get
+  operationId: GetOrganization
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/me/organizations
+  method: get
+  operationId: CurrentUserOrganizations
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/preferences
+  method: get
+  operationId: GetWorkspacePreferences
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/organizations/{organization_id}/preferences
+  method: get
+  operationId: GetOrganizationPreferences
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/organizations/{organization_id}/invitations/{invitation_id}
+  method: get
+  operationId: GetInvitation
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/organizations/{organization_id}/invites
+  method: get
+  operationId: ListOrganizationUserInvites
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/invites
+  method: get
+  operationId: ListWorkspaceUserInvites
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/organizations/{organization_id}/roles
+  method: get
+  operationId: ListOrganizationRoles
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/roles
+  method: get
+  operationId: ListWorkspaceRoles
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/organizations/{organization_id}/users
+  method: get
+  operationId: ListOrganizationUsers
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/users
+  method: get
+  operationId: ListWorkspaceUsers
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/organizations/{organization_id}/workspaces:countUsers
+  method: post
+  operationId: CountWorkspaceUsers
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/organizations/{organization_id}/users/{user_id}
+  method: get
+  operationId: GetUserBasicInfo
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}
+  method: get
+  operationId: GetWorkspace
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/organizations/{organization_id}/workspaces
+  method: get
+  operationId: ListWorkspaces
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/me/organizations/{organization_id}/workspaces
+  method: get
+  operationId: CurrentUserOrganizationWorkspaces
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}
+  method: get
+  operationId: GetAutomation
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}:query
+  method: get
+  operationId: QueryAutomation
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}/revisions/{revision_id}
+  method: get
+  operationId: GetAutomationRevision
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}/revisions
+  method: get
+  operationId: ListAutomationRevisions
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations
+  method: get
+  operationId: ListAutomations
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}:invoke
+  method: post
+  operationId: InvokeAutomation
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}:listDefaultInputsHistory
+  method: get
+  operationId: ListDefaultInputsHistory
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations:countConnectionUsage
+  method: post
+  operationId: CountConnectionUsage
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations:traceConnectionUsage
+  method: post
+  operationId: TraceConnectionUsage
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}:extractCodeConnections
+  method: get
+  operationId: ExtractAutomationCodeConnections
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}:upgradeConnections
+  method: post
+  operationId: UpgradeAutomationConnections
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}:switchConnections
+  method: post
+  operationId: SwitchAutomationConnections
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}:removeConnections
+  method: post
+  operationId: RemoveAutomationConnections
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}:addConnections
+  method: post
+  operationId: AddAutomationConnections
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}/visualization
+  method: get
+  operationId: GetAutomationVisualization
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}/schedule
+  method: post
+  operationId: CreateAutomationSchedule
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}/schedule
+  method: patch
+  operationId: UpdateAutomationSchedule
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}/schedule
+  method: get
+  operationId: GetAutomationSchedule
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}/schedule
+  method: delete
+  operationId: DeleteAutomationSchedule
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}:disableAutomationSchedule
+  method: post
+  operationId: DisableAutomationSchedule
+  x-agentic-access:
+    action-class: acting
+    consequence: safety-critical
+    subject: required
+    audience: null
+    token:
+      max-ttl: 120
+      exchange: true
+      purpose-required: true
+      proof-of-possession: true
+    escalation:
+      human-in-the-loop: required
+    audit: required
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}:enableAutomationSchedule
+  method: post
+  operationId: EnableAutomationSchedule
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations:deleteConnection
+  method: delete
+  operationId: DeleteWorkspaceConnection
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}/triggers
+  method: post
+  operationId: CreateAutomationTrigger
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}/triggers
+  method: get
+  operationId: ListAutomationTriggers
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/books
+  method: get
+  operationId: ListBooks
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/books/{name}/{version}
+  method: get
+  operationId: GetBook
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/books/{name}/{version}/procedures
+  method: get
+  operationId: ListBookProcedures
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/tags
+  method: get
+  operationId: ListTags
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/books:latest
+  method: get
+  operationId: ListLatestBooks
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/books/{name}/versions
+  method: get
+  operationId: ListBookVersions
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/books/{name}/{version}/concepts
+  method: get
+  operationId: ListBookConcepts
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/books
+  method: get
+  operationId: ListWorkspaceBooks
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/books/{name}/{version}/procedures
+  method: get
+  operationId: ListWorkspaceBookProcedures
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/books/{name}/{version}/concepts
+  method: get
+  operationId: ListWorkspaceBookConcepts
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/connections/{connection_id}/discoverables
+  method: get
+  operationId: ListWorkspaceBookConnectionDiscoverables
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/procedures:search
+  method: post
+  operationId: SearchBookProcedures
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/books:search
+  method: post
+  operationId: SearchBooks
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/concepts:search
+  method: post
+  operationId: SearchBookConcepts
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/procedures:search
+  method: post
+  operationId: SearchWorkspaceBookProcedures
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/connections/{connection_id}/procedures:search
+  method: post
+  operationId: SearchWorkspaceBookConnectionProcedures
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/books:search
+  method: post
+  operationId: SearchWorkspaceBooks
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/concepts:search
+  method: post
+  operationId: SearchWorkspaceBookConcepts
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/books/{book_name}/{book_version}/connections
+  method: post
+  operationId: AddWorkspaceBookConnection
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/books/{book_name}/{book_version}/connections
+  method: get
+  operationId: ListWorkspaceBookConnections
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/books/{book_name}/{book_version}/connections/{connection_id}
+  method: put
+  operationId: UpdateWorkspaceBookConnection
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/connections/{connection_id}
+  method: get
+  operationId: GetWorkspaceBookConnection
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/connections
+  method: get
+  operationId: ListAllWorkspaceBookConnections
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/books/{book_name}/{book_version}/connections/{connection_id}/upgrade
+  method: put
+  operationId: UpgradeWorkspaceBookConnection
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/connections/{connection_id}/authorize
+  method: put
+  operationId: AuthorizeWorkspaceBookConnection
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/connections/{connection_id}/discover
+  method: post
+  operationId: SetDiscovered
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/connections/{connection_id}/procedures
+  method: get
+  operationId: ListWorkspaceBookConnectionProcedures
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/books/{book_name}/{book_version}/connections/{connection_id}/triggers
+  method: post
+  operationId: AddWorkspaceBookConnectionTriggerInstance
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/triggers/{trigger_instance_id}/automations
+  method: post
+  operationId: SetAutomationsForTriggerInstance
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/connections/{connection_id}/triggers/{trigger_instance_id}
+  method: delete
+  operationId: RemoveWorkspaceBookConnectionTriggerInstance
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/triggers
+  method: get
+  operationId: ListWorkspaceTriggerInstances
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/connections/{connection_id}/user-info
+  method: get
+  operationId: GetWorkspaceBookConnectionUserInfo
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}/runs/{run_id}
+  method: get
+  operationId: GetRun
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}/runs
+  method: get
+  operationId: ListRuns
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}/runs/{run_id}:pause
+  method: post
+  operationId: PauseRun
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}/runs/{run_id}:continue
+  method: post
+  operationId: ContinueRun
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}:automationRunAggregates
+  method: get
+  operationId: QueryAutomationRunAggregates
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}:dailyRunAggregates
+  method: get
+  operationId: QueryDailyRunAggregates
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/dashboards:configureAutomationEstimates
+  method: post
+  operationId: ConfigureAutomationEstimates
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v1/organizations/{organization_id}/dashboards:queryInsights
+  method: get
+  operationId: QueryInsights
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/organizations/{organization_id}/dashboards:queryAutomationEstimates
+  method: get
+  operationId: QueryAutomationEstimates
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/executions/{execution_id}/outputs
+  method: get
+  operationId: GetExecutionOutputs
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}/runs/{run_id}/events
+  method: get
+  operationId: ListRunEvents
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/files:upload
+  method: post
+  operationId: UploadFile
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/files/{file}:download
+  method: get
+  operationId: DownloadFile
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/files/{file}/metadata
+  method: get
+  operationId: GetFileMetadata
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/files/{file}
+  method: delete
+  operationId: DeleteFile
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/files:generateUploadUrl
+  method: post
+  operationId: GenerateUploadUrl
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/files/{file}:generateDownloadUrl
+  method: post
+  operationId: GenerateDownloadUrl
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v1/organizations/{organization_id}/metrics:query
+  method: get
+  operationId: QueryMetrics
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/exceptions/{exception_id}
+  method: get
+  operationId: GetException
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/exceptions
+  method: get
+  operationId: ListExceptions
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}/runs/{run_id}/agents/{agent_id}/events
+  method: post
+  operationId: CreateEvent
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}/runs/{run_id}/agents/{agent_id}/events
+  method: get
+  operationId: ListEvents
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}/runs/{run_id}/agents/{agent_id}/events/{event_id}
+  method: get
+  operationId: GetEvent
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}/runs/{run_id}/agents/{agent_id}/events:stream
+  method: get
+  operationId: StreamEvents
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}/runs/{run_id}/agents/{agent_id}/events:cancelGeneration
+  method: post
+  operationId: CancelGeneration
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/exceptionGroups
+  method: get
+  operationId: ListExceptionGroups
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/exceptions:countByGroup
+  method: get
+  operationId: CountExceptionsByGroup
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/exceptions:countByAutomation
+  method: get
+  operationId: CountExceptionsByAutomation
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}/guideEntries/{guide_entry_id}
+  method: get
+  operationId: GetGuideEntry
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}/guideEntries
+  method: get
+  operationId: ListGuideEntries
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none

@@ -1,0 +1,29 @@
+generated: '2026-10-09'
+method: searched
+source: https://docs.kognitos.com/guides/api-reference/api-reference
+standards:
+- id: google-aip-160
+  conforms: true
+  evidence: 'Docs: "Many list endpoints support filtering with the `filter` query parameter, following the AIP-160 standard" (https://docs.kognitos.com/guides/api-reference/api-reference)'
+- id: pagination
+  conforms: true
+  evidence: 'Docs: "List endpoints return paginated results. Use `page_size` and `page_token` to navigate" with next_page_token in the response
+    (https://docs.kognitos.com/guides/api-reference/api-reference)'
+- id: oauth2
+  conforms: true
+  evidence: 'MCP server docs: "OAuth 2.1 (Recommended)" for interactive clients; REST API itself uses bearer PATs (https://docs.kognitos.com/guides/mcp/mcp)'
+- id: soc2
+  conforms: true
+  evidence: SOC 2 listed on the Kognitos trust center (https://trust.kognitos.com/), see security/kognitos-trust-center.yml
+- id: iso27001
+  conforms: true
+  evidence: ISO 27001 listed on the Kognitos trust center (https://trust.kognitos.com/), see security/kognitos-trust-center.yml
+- id: openapi-3.0
+  conforms: true
+  evidence: the document declares 3.0.0
+- id: rfc9457
+  conforms: false
+  evidence: no response declares application/problem+json
+- id: idempotency
+  conforms: false
+  evidence: no idempotency key parameter on mutating operations

@@ -1,0 +1,1262 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/kognitos/main/json-schema/kognitos-v1-list-run-events-response-schema.json",
+  "title": "v1ListRunEventsResponse",
+  "description": "Response message for the ListRunEvents RPC.\n\nContains a page of run events in chronological order, along with pagination\ninformation for retrieving additional events. Events are sorted by their\noccurrence time, providing a complete timeline of the run's execution.\n\nThe response may contain fewer events than requested if:\n- The run has fewer remaining events than the page size\n- This is the final page of results\n- Response size limits are reached",
+  "x-generated": "2026-10-09",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/kognitos-openapi.yml#/components/schemas/v1ListRunEventsResponse",
+  "type": "object",
+  "properties": {
+    "run_events": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/v1RunEvent"
+      },
+      "description": "The list of run events for the requested page.\n\nEvents are returned in chronological order based on when they occurred\nduring the automation run execution. Each event contains either:\n- A run state update from the Jeeves orchestration service\n- An execution journal entry from the Jarvis execution engine"
+    },
+    "next_page_token": {
+      "type": "string",
+      "description": "Pagination token for retrieving the next page of events.\n\nInclude this token as the `page_token` in a subsequent ListRunEvents\nrequest to retrieve the next set of events. The token maintains\ncursor position and ensures consistent pagination even if new\nevents are added to the run.\n\nWhen this field is empty or omitted:\n- This is the final page of results\n- All events for the run have been retrieved\n- No further pagination requests are needed\n\nThe token is opaque. Do not attempt to parse, modify, or reuse tokens\nacross different parent resources or request parameters."
+    }
+  },
+  "$defs": {
+    "bdkV1ListValue": {
+      "type": "object",
+      "properties": {
+        "values": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/bdkV1Value"
+          },
+          "title": "All the values inside the list"
+        }
+      },
+      "title": "A collection of values"
+    },
+    "bdkV1Value": {
+      "type": "object",
+      "properties": {
+        "null_value": {
+          "type": "string"
+        },
+        "conceptual_value": {
+          "$ref": "#/$defs/v1NounPhrase"
+        },
+        "text_value": {
+          "type": "string"
+        },
+        "number_value": {
+          "type": "number",
+          "format": "double"
+        },
+        "boolean_value": {
+          "type": "boolean"
+        },
+        "datetime_value": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "date_value": {
+          "$ref": "#/$defs/v1Date"
+        },
+        "time_value": {
+          "$ref": "#/$defs/v1Time"
+        },
+        "file_value": {
+          "$ref": "#/$defs/v1FileValue"
+        },
+        "dictionary_value": {
+          "$ref": "#/$defs/v1DictionaryValue"
+        },
+        "list_value": {
+          "$ref": "#/$defs/bdkV1ListValue"
+        },
+        "opaque_value": {
+          "$ref": "#/$defs/v1OpaqueValue"
+        },
+        "table_value": {
+          "$ref": "#/$defs/v1TableValue"
+        },
+        "sensitive_value": {
+          "$ref": "#/$defs/v1SensitiveValue"
+        }
+      },
+      "title": "A union of all possible values"
+    },
+    "commonV1Location": {
+      "type": "object",
+      "properties": {
+        "start_byte": {
+          "type": "string",
+          "format": "int64",
+          "title": "Starting Byte of the span, It will be zero-based"
+        },
+        "end_byte": {
+          "type": "string",
+          "format": "int64",
+          "title": "Ending Byte(exclusive) of the span, It will be zero-based"
+        }
+      },
+      "description": "Location represents a generic span within some underlying content.\nIt specifies the starting byte offset and the ending byte offset (exclusive) of the span.\nThis can be used for pointing to regions in files, buffers, logs, messages,\nor any other byte-addressable resource."
+    },
+    "commonV1Value": {
+      "type": "object",
+      "properties": {
+        "null_value": {
+          "type": "string",
+          "title": "Represents the absence of a value (None/null/undefined)"
+        },
+        "bool_value": {
+          "type": "boolean",
+          "title": "Boolean true/false value"
+        },
+        "number": {
+          "$ref": "#/$defs/v1Number"
+        },
+        "text": {
+          "type": "string",
+          "title": "UTF-8 encoded text string"
+        },
+        "date": {
+          "$ref": "#/$defs/typeDate"
+        },
+        "timeofday": {
+          "$ref": "#/$defs/typeTimeOfDay"
+        },
+        "datetime": {
+          "$ref": "#/$defs/typeDateTime"
+        },
+        "time_zone": {
+          "$ref": "#/$defs/typeTimeZone"
+        },
+        "duration": {
+          "type": "string",
+          "title": "Signed duration representing a span of time"
+        },
+        "list": {
+          "$ref": "#/$defs/v1List"
+        },
+        "dictionary": {
+          "$ref": "#/$defs/v1Dictionary"
+        },
+        "file": {
+          "$ref": "#/$defs/v1FileValue"
+        },
+        "table": {
+          "$ref": "#/$defs/v1TableValue"
+        },
+        "set": {
+          "$ref": "#/$defs/v1Set"
+        }
+      },
+      "description": "Represents a runtime value that can be produced by the Jarvis interpreter.\n\nThis message provides a type-safe way to serialize and transmit values between\nthe Jarvis interpreter and other services via gRPC. It supports all the basic\ndata types that can be represented in the Jarvis language runtime.\n\nThe oneof structure ensures that exactly one value type is set at a time,\nproviding both type safety and efficient serialization."
+    },
+    "typeDate": {
+      "type": "object",
+      "properties": {
+        "year": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Year of the date. Must be from 1 to 9999, or 0 to specify a date without\na year."
+        },
+        "month": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Month of a year. Must be from 1 to 12, or 0 to specify a year without a\nmonth and day."
+        },
+        "day": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Day of a month. Must be from 1 to 31 and valid for the year and month, or 0\nto specify a year by itself or a year and month where the day isn't\nsignificant."
+        }
+      },
+      "description": "* A full date, with non-zero year, month, and day values\n* A month and day value, with a zero year, such as an anniversary\n* A year on its own, with zero month and day values\n* A year and month value, with a zero day, such as a credit card expiration\ndate\n\nRelated types are [google.type.TimeOfDay][google.type.TimeOfDay] and\n`google.protobuf.Timestamp`.",
+      "title": "Represents a whole or partial calendar date, such as a birthday. The time of\nday and time zone are either specified elsewhere or are insignificant. The\ndate is relative to the Gregorian Calendar. This can represent one of the\nfollowing:"
+    },
+    "typeDateTime": {
+      "type": "object",
+      "properties": {
+        "year": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Optional. Year of date. Must be from 1 to 9999, or 0 if specifying a\ndatetime without a year."
+        },
+        "month": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Required. Month of year. Must be from 1 to 12."
+        },
+        "day": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Required. Day of month. Must be from 1 to 31 and valid for the year and\nmonth."
+        },
+        "hours": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Required. Hours of day in 24 hour format. Should be from 0 to 23. An API\nmay choose to allow the value \"24:00:00\" for scenarios like business\nclosing time."
+        },
+        "minutes": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Required. Minutes of hour of day. Must be from 0 to 59."
+        },
+        "seconds": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Required. Seconds of minutes of the time. Must normally be from 0 to 59. An\nAPI may allow the value 60 if it allows leap-seconds."
+        },
+        "nanos": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Required. Fractions of seconds in nanoseconds. Must be from 0 to\n999,999,999."
+        },
+        "utc_offset": {
+          "type": "string",
+          "description": "UTC offset. Must be whole seconds, between -18 hours and +18 hours.\nFor example, a UTC offset of -4:00 would be represented as\n{ seconds: -14400 }."
+        },
+        "time_zone": {
+          "$ref": "#/$defs/typeTimeZone"
+        }
+      },
+      "description": "Represents civil time (or occasionally physical time).\n\nThis type can represent a civil time in one of a few possible ways:\n\n * When utc_offset is set and time_zone is unset: a civil time on a calendar\n   day with a particular offset from UTC.\n * When time_zone is set and utc_offset is unset: a civil time on a calendar\n   day in a particular time zone.\n * When neither time_zone nor utc_offset is set: a civil time on a calendar\n   day in local time.\n\nThe date is relative to the Proleptic Gregorian Calendar.\n\nIf year is 0, the DateTime is considered not to have a specific year. month\nand day must have valid, non-zero values.\n\nThis type may also be used to represent a physical time if all the date and\ntime fields are set and either case of the `time_offset` oneof is set.\nConsider using `Timestamp` message for physical time instead. If your use\ncase also would like to store the user's timezone, that can be done in\nanother field.\n\nThis type is more flexible than some applications may want. Make sure to\ndocument and validate your application's limitations."
+    },
+    "typeTimeOfDay": {
+      "type": "object",
+      "properties": {
+        "hours": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Hours of day in 24 hour format. Should be from 0 to 23. An API may choose\nto allow the value \"24:00:00\" for scenarios like business closing time."
+        },
+        "minutes": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Minutes of hour of day. Must be from 0 to 59."
+        },
+        "seconds": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Seconds of minutes of the time. Must normally be from 0 to 59. An API may\nallow the value 60 if it allows leap-seconds."
+        },
+        "nanos": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Fractions of seconds in nanoseconds. Must be from 0 to 999,999,999."
+        }
+      },
+      "description": "Represents a time of day. The date and time zone are either not significant\nor are specified elsewhere. An API may choose to allow leap seconds. Related\ntypes are [google.type.Date][google.type.Date] and\n`google.protobuf.Timestamp`."
+    },
+    "typeTimeZone": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "IANA Time Zone Database time zone, e.g. \"America/New_York\"."
+        },
+        "version": {
+          "type": "string",
+          "description": "Optional. IANA Time Zone Database version number, e.g. \"2019a\"."
+        }
+      },
+      "description": "Represents a time zone from the\n[IANA Time Zone Database](https://www.iana.org/time-zones)."
+    },
+    "v1AutomationPhaseType": {
+      "type": "string",
+      "enum": [
+        "AUTOMATION_PHASE_TYPE_UNSPECIFIED",
+        "AUTOMATION_PHASE_TYPE_PRE",
+        "AUTOMATION_PHASE_TYPE_MAIN",
+        "AUTOMATION_PHASE_TYPE_POST"
+      ],
+      "default": "AUTOMATION_PHASE_TYPE_UNSPECIFIED",
+      "description": "PhaseType defines the type of phase for an automation trigger.\n\n - AUTOMATION_PHASE_TYPE_UNSPECIFIED: Unspecified phase type.\n - AUTOMATION_PHASE_TYPE_PRE: Pre-processing phase.\n - AUTOMATION_PHASE_TYPE_MAIN: Main processing phase.\n - AUTOMATION_PHASE_TYPE_POST: Post-processing phase."
+    },
+    "v1AutomationStage": {
+      "type": "string",
+      "enum": [
+        "AUTOMATION_STAGE_UNSPECIFIED",
+        "AUTOMATION_STAGE_DRAFT",
+        "AUTOMATION_STAGE_PUBLISHED"
+      ],
+      "default": "AUTOMATION_STAGE_UNSPECIFIED",
+      "description": "AutomationStage represents the publication stage of an automation.\nThis enum is shared across services that manage or execute automations.\n\n - AUTOMATION_STAGE_UNSPECIFIED: Automation stage is not specified.\n - AUTOMATION_STAGE_DRAFT: Automation is in draft stage and can be modified.\n - AUTOMATION_STAGE_PUBLISHED: Automation is published and immutable, ready for execution."
+    },
+    "v1AwaitingGuidanceRunState": {
+      "type": "object",
+      "properties": {
+        "exception": {
+          "type": "string",
+          "title": "ID of the exception (from guidance center)",
+          "readOnly": true
+        },
+        "description": {
+          "type": "string",
+          "description": "Description of the exception that occured.",
+          "readOnly": true
+        },
+        "location": {
+          "$ref": "#/$defs/commonV1Location"
+        }
+      },
+      "description": "Run is waiting for external guidance or user input.\nRequires manual intervention or external decision to proceed."
+    },
+    "v1BookConnection": {
+      "type": "object",
+      "properties": {
+        "connection_id": {
+          "type": "string",
+          "description": "Unique identifier for this connection resource."
+        },
+        "endpoint": {
+          "type": "string",
+          "description": "Endpoint for the connection."
+        }
+      },
+      "description": "BookConnection is a resource representing a connection to a book instance.\nA connection has a unique identifier and an endpoint."
+    },
+    "v1BookFunction": {
+      "type": "object",
+      "properties": {
+        "connection_spy_identifier": {
+          "type": "string",
+          "title": "The connection name for the book instance in the spy code"
+        },
+        "book_name": {
+          "type": "string",
+          "title": "The name of the target book containing the function"
+        },
+        "function_name": {
+          "type": "string",
+          "title": "The name of the specific function to invoke within the book"
+        },
+        "code_location": {
+          "$ref": "#/$defs/commonV1Location"
+        }
+      },
+      "description": "BookFunction represents a reference to an external book function."
+    },
+    "v1BookFunctionCall": {
+      "type": "object",
+      "properties": {
+        "book_function": {
+          "$ref": "#/$defs/v1BookFunction"
+        },
+        "inputs": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/commonV1Value"
+          },
+          "title": "The input variables and their values passed to the book function"
+        },
+        "output": {
+          "$ref": "#/$defs/commonV1Value"
+        }
+      },
+      "description": "BookFunctionCall represents a call to an external book function with its inputs and outputs."
+    },
+    "v1Column": {
+      "type": "object",
+      "properties": {
+        "values": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/bdkV1Value"
+          }
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "v1CompletedRunState": {
+      "type": "object",
+      "properties": {
+        "outputs": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/commonV1Value"
+          },
+          "description": "The outputs of the run.",
+          "readOnly": true
+        }
+      },
+      "description": "Run has completed successfully.\nAll code has been executed and results are available."
+    },
+    "v1Context": {
+      "type": "object",
+      "properties": {
+        "code_location": {
+          "$ref": "#/$defs/commonV1Location"
+        },
+        "node_id": {
+          "type": "string",
+          "title": "The id of node"
+        }
+      },
+      "description": "Context provides additional information about the execution environment,\nsuch as stack traces for debugging purposes."
+    },
+    "v1Date": {
+      "type": "object",
+      "properties": {
+        "year": {
+          "type": "integer",
+          "format": "int32",
+          "title": "Year of the date"
+        },
+        "month": {
+          "type": "integer",
+          "format": "int32",
+          "title": "Month of a year"
+        },
+        "day": {
+          "type": "integer",
+          "format": "int32",
+          "title": "Day of a month"
+        }
+      }
+    },
+    "v1Dictionary": {
+      "type": "object",
+      "properties": {
+        "entries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/v1DictionaryEntry"
+          },
+          "title": "The key-value pairs stored in this dictionary"
+        }
+      },
+      "description": "Represents a key-value mapping (similar to hash maps or dictionaries).\n\nThis message stores associations between keys and values, where keys must be\nhashable types (null, bool, Number, string, Date, TimeOfDay, DateTime, TimeZone). Keys are\nunique within a dictionary - duplicate keys will overwrite previous values.\n\nThe dictionary maintains insertion order for consistent iteration behavior.\n\nExamples:\n - {\"name\": \"John\", \"age\": 30} - string keys with mixed values\n - {1: \"one\", 2: \"two\"} - number keys with string values\n - {\"nested\": {\"inner\": \"value\"}} - nested dictionaries"
+    },
+    "v1DictionaryEntry": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "$ref": "#/$defs/v1HashableValue"
+        },
+        "value": {
+          "$ref": "#/$defs/commonV1Value"
+        }
+      },
+      "description": "Represents a single key-value pair within a Dictionary.\n\nBoth key and value can be any Value type, though keys should be\nhashable types for proper dictionary behavior. Non-hashable keys\n(like lists or dictionaries) may cause runtime errors."
+    },
+    "v1DictionaryValue": {
+      "type": "object",
+      "properties": {
+        "fields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/v1DictionaryValueField"
+          },
+          "title": "All the fields alongside their values in the dictionary"
+        },
+        "is_a": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/v1NounPhrase"
+          },
+          "title": "Is a replationships for the dictionary"
+        }
+      },
+      "title": "Value to be used when the type is dictionary"
+    },
+    "v1DictionaryValueField": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "value": {
+          "$ref": "#/$defs/bdkV1Value"
+        }
+      },
+      "title": "Each key-value pair inside a dictionary"
+    },
+    "v1ExecutableStep": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string",
+          "description": "The source code to be executed, written in SPy (Simplified Python) language.\nThis is the main logic that will be interpreted and run by the execution engine."
+        },
+        "book_connections": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/v1BookConnection"
+          },
+          "description": "Book connections required by this executable.\nMaps connection names to their specific ID and endpoints."
+        },
+        "phase_type": {
+          "$ref": "#/$defs/v1AutomationPhaseType"
+        }
+      },
+      "description": "ExecutableStep represents a piece of code that can be executed in the Jeeves platform.\nContains the source code, input parameters, and external dependencies needed for execution.",
+      "required": [
+        "code",
+        "phase_type"
+      ]
+    },
+    "v1ExecutableSteps": {
+      "type": "object",
+      "properties": {
+        "inputs": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/commonV1Value"
+          },
+          "description": "Input parameters for the execution, provided as name-value pairs.\nThese variables will be available to the code during execution."
+        },
+        "executables": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/v1ExecutableStep"
+          },
+          "description": "The source code to be executed, written in SPy (Simplified Python) language."
+        }
+      },
+      "description": "ExecutableSteps represents a sequence of steps of execution of a run. Each step is\na separate computable unit with its own code, book connections and optional inputs.\nThe first step may optionally have an input provided to it when the run is invoked.\nThe output of each step becomes the input of the next step and the output of the\nlast step becomes the output of the run.",
+      "required": [
+        "executables"
+      ]
+    },
+    "v1ExecutingRunState": {
+      "type": "object",
+      "description": "Run is currently being executed.\nCode is actively running and making progress."
+    },
+    "v1ExecutionCompleted": {
+      "type": "object",
+      "properties": {
+        "outputs": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/commonV1Value"
+          },
+          "description": "Map of named output values set by the set_output() builtin function during execution.\nEach entry is a name-value pair where the key is the output name (string) and\nthe value is the output value set by calling set_output(name, value).\nThis map will be empty if no set_output() calls were made during execution."
+        }
+      },
+      "description": "ExecutionCompleted indicates that Jarvis has successfully completed the execution.\nThe final result value is included in this message, representing the return value of\nthe executed code."
+    },
+    "v1ExecutionError": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "title": "Unique identifier for the error"
+        },
+        "description": {
+          "type": "string",
+          "title": "Human-readable description of what went wrong"
+        },
+        "context": {
+          "$ref": "#/$defs/v1Context"
+        },
+        "extra": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Extra information about the error"
+        },
+        "code": {
+          "type": "string",
+          "title": "The code where the error was raised (includes patches)\nIf the error was raised in a patch, the code reflects the patched code\nand the error location is relative to the patched code instead of the original\ncode\nNote: this field does not include previous patches that executed successfully"
+        }
+      },
+      "description": "ExecutionError represents an error that occurred during execution."
+    },
+    "v1ExecutionFailed": {
+      "type": "object",
+      "properties": {
+        "error": {
+          "$ref": "#/$defs/v1ExecutionError"
+        }
+      },
+      "description": "ExecutionFailed indicates that the execution encountered an error and\ncould not complete successfully."
+    },
+    "v1ExecutionJournal": {
+      "type": "object",
+      "properties": {
+        "execution_id": {
+          "type": "string",
+          "title": "Unique identifier for the execution"
+        },
+        "run_id": {
+          "type": "string",
+          "title": "Optional: Run identifier, set if the execution is part of a run"
+        },
+        "event_time": {
+          "type": "string",
+          "format": "date-time",
+          "title": "When this journal entry was generated"
+        },
+        "started": {
+          "$ref": "#/$defs/v1ExecutionStarted"
+        },
+        "completed": {
+          "$ref": "#/$defs/v1ExecutionCompleted"
+        },
+        "stopped": {
+          "$ref": "#/$defs/v1ExecutionStopped"
+        },
+        "failed": {
+          "$ref": "#/$defs/v1ExecutionFailed"
+        },
+        "node_started": {
+          "$ref": "#/$defs/v1NodeStarted"
+        },
+        "node_executed": {
+          "$ref": "#/$defs/v1NodeExecuted"
+        },
+        "node_skipped": {
+          "$ref": "#/$defs/v1NodeSkipped"
+        },
+        "node_patched": {
+          "$ref": "#/$defs/v1NodePatched"
+        },
+        "patched_node_started": {
+          "$ref": "#/$defs/v1PatchedNodeStarted"
+        },
+        "patched_node_executed": {
+          "$ref": "#/$defs/v1PatchedNodeExecuted"
+        },
+        "automation_id": {
+          "type": "string",
+          "title": "Optional: Automation identifier, set if the execution is part of an automation"
+        },
+        "automation_phase_id": {
+          "type": "string",
+          "title": "Optional: Automation phase identifier, set if the execution is part of an automation phase"
+        },
+        "code_hash": {
+          "type": "string",
+          "title": "Optional: MD5 hash of the SPy code being executed"
+        },
+        "stage": {
+          "$ref": "#/$defs/v1AutomationStage"
+        },
+        "workspace_id": {
+          "type": "string",
+          "title": "The workspace id for which the execution is requested"
+        },
+        "organization_id": {
+          "type": "string",
+          "title": "The organization id for which the execution is requested"
+        },
+        "extra_metadata": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/commonV1Value"
+          },
+          "description": "Optional extra metadata to be stored with the execution\nThis will be used to pass the additional information that downstream services might require\nbut there is no need to Jarvis to know about it."
+        }
+      },
+      "title": "Journal event for an execution, capturing status and node-level events"
+    },
+    "v1ExecutionStarted": {
+      "type": "object",
+      "description": "ExecutionStarted indicates that Jarvis has started the execution."
+    },
+    "v1ExecutionStopped": {
+      "type": "object",
+      "properties": {
+        "user_stopped": {
+          "$ref": "#/$defs/v1UserStopped"
+        },
+        "waiting_on_book": {
+          "$ref": "#/$defs/v1WaitingOnBook"
+        },
+        "waiting_on_timer": {
+          "$ref": "#/$defs/v1WaitingOnTimer"
+        },
+        "program_stopped": {
+          "$ref": "#/$defs/v1ProgramStopped"
+        }
+      },
+      "description": "ExecutionStopped indicates that the execution was stopped before completion due to\na specific reason."
+    },
+    "v1FailedRunState": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The unique identifier of the error that caused the run to fail.",
+          "readOnly": true
+        },
+        "description": {
+          "type": "string",
+          "description": "The description of the error.",
+          "readOnly": true
+        },
+        "location": {
+          "$ref": "#/$defs/commonV1Location"
+        }
+      },
+      "description": "Run has failed due to an error.\nExecution stopped due to an unrecoverable error condition."
+    },
+    "v1File": {
+      "type": "object",
+      "properties": {
+        "file_name": {
+          "type": "string",
+          "title": "The name of the file"
+        },
+        "content": {
+          "type": "string",
+          "format": "byte",
+          "title": "Content of the file as a byte stream"
+        }
+      }
+    },
+    "v1FileValue": {
+      "type": "object",
+      "properties": {
+        "remote": {
+          "type": "string"
+        },
+        "inline": {
+          "$ref": "#/$defs/v1File"
+        }
+      },
+      "title": "A file value represents a file that can be either inline or remote"
+    },
+    "v1HashableValue": {
+      "type": "object",
+      "properties": {
+        "bool_value": {
+          "type": "boolean",
+          "title": "Boolean true/false value"
+        },
+        "number": {
+          "$ref": "#/$defs/v1Number"
+        },
+        "text": {
+          "type": "string",
+          "title": "UTF-8 encoded text string"
+        },
+        "date": {
+          "$ref": "#/$defs/typeDate"
+        },
+        "timeofday": {
+          "$ref": "#/$defs/typeTimeOfDay"
+        },
+        "datetime": {
+          "$ref": "#/$defs/typeDateTime"
+        },
+        "duration": {
+          "type": "string",
+          "title": "Signed duration representing a span of time"
+        }
+      },
+      "description": "Represents a hashable value that can be used as a dictionary key.\n\nThis message contains only the hashable types from the Value message,\ncorresponding to Python's hashable types. These types can be safely\nused as keys in maps and dictionaries.\n\nHashable types include: bool, Number, string, Date, TimeOfDay, DateTime\nand Duration."
+    },
+    "v1InvocationDetails": {
+      "type": "object",
+      "properties": {
+        "trigger_id": {
+          "type": "string",
+          "description": "The ID of the trigger that initiated this run, if applicable."
+        },
+        "user_id": {
+          "type": "string",
+          "description": "The ID of the user that initiated this run, if applicable."
+        },
+        "invocation_source": {
+          "$ref": "#/$defs/v1InvocationSource"
+        }
+      },
+      "description": "InvocationDetails contains additional information about the entity that initiated a run."
+    },
+    "v1InvocationSource": {
+      "type": "string",
+      "enum": [
+        "INVOCATION_SOURCE_UNSPECIFIED",
+        "INVOCATION_SOURCE_MANUAL",
+        "INVOCATION_SOURCE_TRIGGER",
+        "INVOCATION_SOURCE_SCHEDULE"
+      ],
+      "default": "INVOCATION_SOURCE_UNSPECIFIED",
+      "description": "InvocationSource identifies the entity responsible for creating a run.\n\n - INVOCATION_SOURCE_UNSPECIFIED: Unspecified invocation source.\n - INVOCATION_SOURCE_MANUAL: Run was manually initiated by a user.\n - INVOCATION_SOURCE_TRIGGER: Run was triggered by an event or trigger.\n - INVOCATION_SOURCE_SCHEDULE: Run was initiated by a schedule."
+    },
+    "v1List": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/commonV1Value"
+          },
+          "title": "The ordered sequence of values in this list"
+        }
+      },
+      "description": "Represents an ordered collection of values (similar to arrays or lists).\n\nThis message can contain any number of Value elements in a specific order.\nLists are mutable and can grow or shrink during runtime. Elements can be\naccessed by their zero-based index position.\n\nExamples:\n - [1, 2, 3] - list of numbers\n - [\"hello\", \"world\"] - list of strings\n - [true, 42, \"mixed\"] - list with mixed types\n - [[1, 2], [3, 4]] - nested lists"
+    },
+    "v1NodeExecuted": {
+      "type": "object",
+      "properties": {
+        "code_location": {
+          "$ref": "#/$defs/commonV1Location"
+        },
+        "inputs": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/commonV1Value"
+          },
+          "description": "The input variables & their values\nA variable is defined as an input if it was fetched\nfrom the memory while executing the node or one of its\nchildren."
+        },
+        "outputs": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/commonV1Value"
+          },
+          "description": "The output variables & their values\nA variable is defined as an output if it was written to\nthe memory while executing the node or one of its\nchildren.\nIf a variable was written multiple times, only the last\nwritten value is considered as the output."
+        },
+        "error": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/v1ExecutionError"
+          },
+          "description": "The list of all the errors that occurred while executing the\nnode or any of its children."
+        },
+        "node_id": {
+          "type": "string",
+          "title": "The id of the node that got executed"
+        },
+        "book_function_call": {
+          "$ref": "#/$defs/v1BookFunctionCall"
+        },
+        "node_kind": {
+          "type": "string",
+          "title": "The kind/type of the node that was executed"
+        }
+      },
+      "title": "Event emitted after Jarvis finishes executing an AST node, with I/O and errors"
+    },
+    "v1NodePatched": {
+      "type": "object",
+      "properties": {
+        "code_location": {
+          "$ref": "#/$defs/commonV1Location"
+        },
+        "code_patch": {
+          "type": "string",
+          "title": "The patch SPy code that was applied"
+        },
+        "inputs_patch": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/commonV1Value"
+          },
+          "title": "The execution inputs that were patched"
+        },
+        "connections": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/v1BookConnection"
+          },
+          "title": "The book connections that were patched\nThe key is the name of the connection used in the SPy code\nThe value contains the connection details"
+        },
+        "node_id": {
+          "type": "string",
+          "title": "The id of the node"
+        },
+        "node_kind": {
+          "type": "string",
+          "title": "The kind/type of the node that was patched"
+        }
+      },
+      "title": "Event emitted when a patch is applied to an AST node"
+    },
+    "v1NodeSkipped": {
+      "type": "object",
+      "properties": {
+        "code_location": {
+          "$ref": "#/$defs/commonV1Location"
+        },
+        "node_id": {
+          "type": "string",
+          "title": "The id of the node that was skipped"
+        },
+        "node_kind": {
+          "type": "string",
+          "title": "The kind/type of the node that was skipped"
+        }
+      },
+      "title": "Event emitted when Jarvis skips executing an AST node"
+    },
+    "v1NodeStarted": {
+      "type": "object",
+      "properties": {
+        "code_location": {
+          "$ref": "#/$defs/commonV1Location"
+        },
+        "node_id": {
+          "type": "string",
+          "title": "The id of the node that was started"
+        },
+        "node_kind": {
+          "type": "string",
+          "title": "The kind/type of the node that was started"
+        }
+      },
+      "title": "Event emitted when Jarvis begins executing an AST node"
+    },
+    "v1NounPhrase": {
+      "type": "object",
+      "properties": {
+        "modifiers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "title": "Optional adjectives attached to the noun"
+        },
+        "head": {
+          "type": "string",
+          "title": "Noun of the phrase"
+        }
+      }
+    },
+    "v1Number": {
+      "type": "object",
+      "properties": {
+        "lo": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Low 32 bits of the 96-bit mantissa."
+        },
+        "mid": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Middle 32 bits of the 96-bit mantissa."
+        },
+        "hi": {
+          "type": "integer",
+          "format": "int64",
+          "description": "High 32 bits of the 96-bit mantissa."
+        },
+        "flags": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Flags word:\n - Bits 16–23: scale (0–28)\n - Bit 31: sign (0 = positive, 1 = negative)\n - Other bits must be zero."
+        }
+      },
+      "description": "A fixed-precision decimal number with up to 28 fractional digits.\n\nThis message represents decimal numbers with exact precision, avoiding\nfloating-point rounding errors. It's particularly useful for financial\ncalculations, measurements, and any scenario where exact decimal\nrepresentation is required.\n\nThe value is calculated as: m / 10^e, where:\n - m is an unsigned 96-bit integer composed of (lo, mid, hi)\n - e is the scale (0–28) stored in flags bits 16–23\n - sign is encoded in flags bit 31 (0 = positive, 1 = negative)\n\nExamples:\n - 123.45 would have m=12345, e=2\n - -0.001 would have m=1, e=3, with sign bit set\n"
+    },
+    "v1OpaqueValue": {
+      "type": "object",
+      "properties": {
+        "content": {
+          "type": "string",
+          "format": "byte",
+          "title": "Content of the opaque value"
+        },
+        "is_a": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/v1NounPhrase"
+          },
+          "title": "Is a replationships for the opaque"
+        }
+      }
+    },
+    "v1PatchedNodeExecuted": {
+      "type": "object",
+      "properties": {
+        "patch_location": {
+          "$ref": "#/$defs/commonV1Location"
+        },
+        "node_location": {
+          "$ref": "#/$defs/commonV1Location"
+        },
+        "inputs": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/commonV1Value"
+          },
+          "description": "The input variables & their values\nA variable is defined as an input if it was fetched\nfrom the memory while executing the node or one of its\nchildren."
+        },
+        "outputs": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/commonV1Value"
+          },
+          "description": "The output variables & their values\nA variable is defined as an output if it was written to\nthe memory while executing the node or one of its\nchildren.\nIf a variable was written multiple times, only the last\nwritten value is considered as the output."
+        },
+        "error": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/v1ExecutionError"
+          },
+          "description": "The list of all the errors that occurred while executing the\nnode or any of its children."
+        },
+        "node_id": {
+          "type": "string",
+          "title": "The id of the patched node for which execution is completed"
+        },
+        "book_function_call": {
+          "$ref": "#/$defs/v1BookFunctionCall"
+        },
+        "node_kind": {
+          "type": "string",
+          "title": "The kind/type of the patched node that was executed"
+        }
+      },
+      "title": "Event emitted after executing a node inside a patch, with I/O and errors"
+    },
+    "v1PatchedNodeStarted": {
+      "type": "object",
+      "properties": {
+        "patch_location": {
+          "$ref": "#/$defs/commonV1Location"
+        },
+        "node_location": {
+          "$ref": "#/$defs/commonV1Location"
+        },
+        "node_id": {
+          "type": "string",
+          "title": "The id of the patched node for which execution is starting"
+        },
+        "node_kind": {
+          "type": "string",
+          "title": "The kind/type of the patched node that is being started"
+        }
+      },
+      "title": "Event emitted when Jarvis starts executing a node inside a patch"
+    },
+    "v1PendingRunState": {
+      "type": "object",
+      "description": "Run has been submitted and is waiting to start execution.\nThe run is queued and will begin when resources become available."
+    },
+    "v1ProgramStopped": {
+      "type": "object",
+      "properties": {
+        "reason": {
+          "type": "string",
+          "description": "The reason the program was stopped."
+        }
+      },
+      "description": "ProgramStopped indicates that the execution was stopped by the program."
+    },
+    "v1Run": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "The name of the run.\nFormat: organizations/{organization}/workspaces/{workspace}/automations/{automation}/runs/{run}"
+        },
+        "executable_steps": {
+          "$ref": "#/$defs/v1ExecutableSteps"
+        },
+        "create_time": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The timestamp when this run was created.\nSet automatically when the run is first submitted to the system.",
+          "readOnly": true
+        },
+        "state": {
+          "$ref": "#/$defs/v1RunState"
+        },
+        "update_time": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The timestamp when this run was updated.\nSet automatically when the run is updated.",
+          "readOnly": true
+        },
+        "previous_run": {
+          "type": "string",
+          "title": "The name of the previous run in the chain, if applicable.\nExecution details of the previous run may be used to avoid re-computation.\nFormat: organizations/{organization}/workspaces/{workspace}/automations/{automation}/runs/{run}"
+        },
+        "stage": {
+          "$ref": "#/$defs/v1AutomationStage"
+        },
+        "stage_version": {
+          "type": "string",
+          "description": "The version of the automation stage at the time this run was created."
+        },
+        "invocation_details": {
+          "$ref": "#/$defs/v1InvocationDetails"
+        },
+        "user_inputs": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/commonV1Value"
+          },
+          "description": "The user inputs provided to the run during pre phase and will be available for the UI to display the user inputs."
+        }
+      },
+      "description": "Run represents a single execution instance of code in the Jeeves platform.\nContains the executable code, metadata, and current execution state.",
+      "required": [
+        "stage",
+        "stage_version"
+      ]
+    },
+    "v1RunEvent": {
+      "type": "object",
+      "properties": {
+        "run_update": {
+          "$ref": "#/$defs/v1RunUpdate"
+        },
+        "execution_journal": {
+          "$ref": "#/$defs/v1ExecutionJournal"
+        }
+      },
+      "description": "A single event that occurred during an automation run execution."
+    },
+    "v1RunState": {
+      "type": "object",
+      "properties": {
+        "pending": {
+          "$ref": "#/$defs/v1PendingRunState"
+        },
+        "executing": {
+          "$ref": "#/$defs/v1ExecutingRunState"
+        },
+        "stopping": {
+          "$ref": "#/$defs/v1StoppingRunState"
+        },
+        "stopped": {
+          "$ref": "#/$defs/v1StoppedRunState"
+        },
+        "awaiting_guidance": {
+          "$ref": "#/$defs/v1AwaitingGuidanceRunState"
+        },
+        "completed": {
+          "$ref": "#/$defs/v1CompletedRunState"
+        },
+        "failed": {
+          "$ref": "#/$defs/v1FailedRunState"
+        },
+        "update_time": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The timestamp when the run transitioned to this state.",
+          "readOnly": true
+        }
+      },
+      "description": "RunState represents the overall lifecycle state of a run.\nTracks the run from initial submission through completion or failure."
+    },
+    "v1RunUpdate": {
+      "type": "object",
+      "properties": {
+        "run": {
+          "$ref": "#/$defs/v1Run"
+        }
+      },
+      "description": "RunUpdate represents a single update to a run's state."
+    },
+    "v1SensitiveValue": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "$ref": "#/$defs/bdkV1Value"
+        }
+      },
+      "title": "A sensitive value is any value marked as sensitive (to prevent exposure)"
+    },
+    "v1Set": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/v1HashableValue"
+          },
+          "title": "The unique elements stored in this set\nAll elements must be hashable types"
+        }
+      },
+      "description": "Represents an unordered collection of unique values.\n\nThis message stores a collection of unique elements, where duplicate values\nare automatically removed. Only hashable types can be stored in sets.\nSets are useful for membership testing, removing duplicates, and mathematical\nset operations like union, intersection, and difference.\n\nThe set does not maintain insertion order - elements may appear in any order\nduring iteration.\n\nExamples:\n - {1, 2, 3} - set of numbers\n - {\"apple\", \"banana\", \"cherry\"} - set of strings\n - {true, false} - set of booleans\n - {1, \"hello\", true} - set with mixed hashable types"
+    },
+    "v1StoppedRunState": {
+      "type": "object",
+      "properties": {
+        "reason": {
+          "type": "string",
+          "description": "The reason provided by the user for stopping the run.",
+          "readOnly": true
+        }
+      },
+      "description": "Run has been stopped and can be resumed later.\nExecution is temporarily stopped but can continue from current state."
+    },
+    "v1StoppingRunState": {
+      "type": "object",
+      "properties": {
+        "reason": {
+          "type": "string",
+          "description": "The reason provided by the user for stopping the run.",
+          "readOnly": true
+        }
+      },
+      "description": "Run is in the process of being stopped.\nExecution is stopping gracefully and will transition to STOPPED state."
+    },
+    "v1Table": {
+      "type": "object",
+      "properties": {
+        "columns": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/v1Column"
+          }
+        }
+      },
+      "description": "A table is a column-oriented structure. All the values inside each column must\nbe of equal length."
+    },
+    "v1TableValue": {
+      "type": "object",
+      "properties": {
+        "remote": {
+          "type": "string"
+        },
+        "inline": {
+          "$ref": "#/$defs/v1Table"
+        }
+      },
+      "title": "A table that is represented remote as an URL to a file that is Feather-formatted\nor inline via the Table message"
+    },
+    "v1Time": {
+      "type": "object",
+      "properties": {
+        "hours": {
+          "type": "integer",
+          "format": "int32",
+          "title": "Hours of day"
+        },
+        "minutes": {
+          "type": "integer",
+          "format": "int32",
+          "title": "Minutes of hour of day"
+        },
+        "seconds": {
+          "type": "integer",
+          "format": "int32",
+          "title": "Seconds of minutes of the time"
+        },
+        "nanos": {
+          "type": "integer",
+          "format": "int32",
+          "title": "Fractions of seconds in nanoseconds"
+        }
+      }
+    },
+    "v1UserStopped": {
+      "type": "object",
+      "description": "UserStopped indicates that the execution was stopped by a user."
+    },
+    "v1WaitingOnBook": {
+      "type": "object",
+      "description": "WaitingOnBook indicates that the execution is stopped because its\nwaiting on an async book procedure to complete. The run manager is expected\nto resume the execution when the book procedure completes."
+    },
+    "v1WaitingOnTimer": {
+      "type": "object",
+      "properties": {
+        "duration": {
+          "type": "string",
+          "description": "The duration of the timer."
+        }
+      },
+      "description": "WaitingOnTimer indicates that the execution is stopped because its\nwaiting for a timer to fire. The run manager is expected to resume the\nexecution when the timer fires."
+    }
+  }
+}

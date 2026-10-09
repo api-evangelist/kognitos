@@ -1,0 +1,409 @@
+openapi: 3.2.0
+info:
+  title: Kognitos Files API
+  version: 1.0.0
+  contact:
+    name: Kognitos
+    url: https://kognitos.com
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  description: 'Operations tagged Files across 2 of this provider''s published API definitions: kognitos-openapi.yaml, kognitos-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://app.us-1.kognitos.com
+security:
+- BearerAuth: []
+tags:
+- name: Files
+  description: Upload, download, and manage files.
+paths:
+  /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/files:upload:
+    post:
+      summary: Upload File
+      description: 'Upload a file scoped to a specific workspace. The file''s lifetime is tied
+
+        to the organization. This is the preferred endpoint for new file uploads.'
+      operationId: UploadFile
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1UploadFileResponse'
+        '201':
+          description: File uploaded successfully
+          headers:
+            Location:
+              description: URL of the created file resource
+              schema:
+                type: string
+          content:
+            application/json:
+              schema: {}
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/apiHttpBody'
+        description: Raw HTTP body containing multipart/form-data
+        required: true
+      tags:
+      - Files
+      x-requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              properties:
+                content:
+                  description: File content
+                  format: binary
+                  type: string
+                filename:
+                  description: Original filename
+                  type: string
+              required:
+              - filename
+              - content
+              type: object
+        description: File upload data
+        required: true
+    servers:
+    - url: https://app.us-1.kognitos.com
+  /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/files/{file}:download:
+    get:
+      summary: Download File
+      operationId: DownloadFile
+      responses:
+        '200':
+          description: File content
+          headers:
+            Content-Disposition:
+              description: Attachment with filename
+              schema:
+                type: string
+            Content-Length:
+              description: File size in bytes
+              schema:
+                type: string
+            Content-Type:
+              description: MIME type of the file
+              schema:
+                type: string
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        default:
+          description: An unexpected error response.
+          content:
+            application/octet-stream:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: file
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Files
+    servers:
+    - url: https://app.us-1.kognitos.com
+  /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/files/{file}/metadata:
+    get:
+      summary: Get File Metadata
+      operationId: GetFileMetadata
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1FileMetadata'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: file
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Files
+    servers:
+    - url: https://app.us-1.kognitos.com
+  /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/files/{file}:
+    delete:
+      summary: Delete File
+      operationId: DeleteFile
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: file
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Files
+    servers:
+    - url: https://app.us-1.kognitos.com
+  /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/files:generateUploadUrl:
+    post:
+      summary: Generate Upload Url
+      operationId: GenerateUploadUrl
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1GenerateUploadUrlResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenerateUploadUrlBody'
+        required: true
+      tags:
+      - Files
+    servers:
+    - url: https://app.us-1.kognitos.com
+  /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/files/{file}:generateDownloadUrl:
+    post:
+      summary: Generate Download Url
+      operationId: GenerateDownloadUrl
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1GenerateDownloadUrlResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: file
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenerateDownloadUrlBody'
+        required: true
+      tags:
+      - Files
+    servers:
+    - url: https://app.us-1.kognitos.com
+components:
+  schemas:
+    protobufAny:
+      type: object
+      properties:
+        '@type':
+          type: string
+      additionalProperties: {}
+    v1UploadFileResponse:
+      type: object
+      properties:
+        metadata:
+          $ref: '#/components/schemas/v1FileMetadata'
+      title: 'Response after uploading a file
+
+        For HTTP/REST: Returns JSON with metadata
+
+        HTTP Status: 201 Created with Location header pointing to the created resource'
+    apiHttpBody:
+      type: object
+      properties:
+        content_type:
+          type: string
+          description: The HTTP Content-Type header value specifying the content type of the body.
+        data:
+          type: string
+          format: byte
+          description: The HTTP request/response body as raw binary.
+        extensions:
+          type: array
+          items:
+            $ref: '#/components/schemas/protobufAny'
+          description: 'Application specific response metadata. Must be set in the first response
+
+            for streaming APIs.'
+      description: "Message that represents an arbitrary HTTP body. It should only be used for\npayload formats that can't be represented as JSON, such as raw binary or\nan HTML page.\n\n\nThis message can be used both in streaming and non-streaming API methods in\nthe request as well as the response.\n\nIt can be used as a top-level request field, which is convenient if one\nwants to extract parameters from either the URL or HTTP template into the\nrequest fields and also want access to the raw HTTP body.\n\nExample:\n\n    message GetResourceRequest {\n      // A unique request id.\n      string request_id = 1;\n\n      // The raw HTTP body is bound to this field.\n      google.api.HttpBody http_body = 2;\n\n    }\n\n    service ResourceService {\n      rpc GetResource(GetResourceRequest)\n        returns (google.api.HttpBody);\n      rpc UpdateResource(google.api.HttpBody)\n        returns (google.protobuf.Empty);\n\n    }\n\nExample with streaming methods:\n\n    service CaldavService {\n      rpc GetCalendar(stream google.api.HttpBody)\n        returns (stream google.api.HttpBody);\n      rpc UpdateCalendar(stream google.api.HttpBody)\n        returns (stream google.api.HttpBody);\n\n    }\n\nUse of this type only changes how the request and response bodies are\nhandled, all other features will continue to work unchanged."
+    GenerateUploadUrlBody:
+      type: object
+      properties:
+        expire_duration:
+          type: string
+          title: Optional expiration duration
+      description: If no expiration duration is provided, the default is 1 hour.
+      title: Request to generate presigned upload URL
+    v1GenerateDownloadUrlResponse:
+      type: object
+      properties:
+        download_uri:
+          type: string
+          title: Presigned download URI
+      title: Response with presigned download URL
+    v1FileMetadata:
+      type: object
+      properties:
+        name:
+          type: string
+          title: The resource name of the file (server-generated)
+          readOnly: true
+        filename:
+          type: string
+          title: Filename of the file (e.g., "document.pdf")
+        mime_type:
+          type: string
+          title: MIME type of the file (server-detected for security)
+          readOnly: true
+        size_bytes:
+          type: string
+          format: int64
+          title: Size of the file in bytes (server-calculated)
+          readOnly: true
+        create_time:
+          type: string
+          format: date-time
+          title: Timestamp when the file was created
+          readOnly: true
+      title: File metadata resource in the Bishop system
+      required:
+      - filename
+    v1GenerateUploadUrlResponse:
+      type: object
+      properties:
+        upload_uri:
+          type: string
+          title: Presigned upload URI
+      title: Response with presigned upload URL
+    rpcStatus:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/protobufAny'
+    GenerateDownloadUrlBody:
+      type: object
+      properties:
+        expire_duration:
+          type: string
+          title: Optional expiration duration
+      description: If no expiration duration is provided, the default is 1 hour.
+      title: Request to generate presigned download URL
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: Personal Access Token.
+x-refined-from:
+- kognitos-openapi.yaml
+- kognitos-openapi.yml

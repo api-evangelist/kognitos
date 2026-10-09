@@ -1,0 +1,5 @@
+generated: '2026-10-09'
+method: none
+source: https://docs.kognitos.com/llms.txt
+entries: []
+note: The docs index has a "Release Notes" section heading with no pages under it, and https://docs.kognitos.com/release-notes.md returns GitBook's "Page Not Found". No dated changelog found.

@@ -1,0 +1,217 @@
+generated: '2026-10-09'
+method: derived
+source: the pre-flight dossier, apis.yml pointers, spec servers, well-known, vendors -- nothing fetched here
+generator: derive-hosts.py
+summary:
+  hosts: 16
+  own: 11
+  other_domain: 0
+  platform: 5
+  roles:
+  - api
+  - docs
+  - identity
+  - other
+  - sandbox
+  - source
+  - status
+  - support
+  - website
+hosts:
+- host: academy.kognitos.com
+  found_by:
+  - docs-index
+  types: []
+  serves:
+  - docs
+  registrable_domain: kognitos.com
+  role: other
+  relation: own
+- host: api.kognitos.com
+  found_by:
+  - contract-discovery
+  types: []
+  serves: []
+  registrable_domain: kognitos.com
+  role: api
+  relation: own
+- host: app.kognitos.com
+  found_by:
+  - probed
+  - site-links
+  - well-known
+  types: []
+  serves: []
+  registrable_domain: kognitos.com
+  role: other
+  relation: own
+- host: app.us-1.kognitos.com
+  found_by:
+  - pointer
+  - apis[]
+  - probed
+  - site-links
+  - contract-discovery
+  - well-known
+  - vendor-detect
+  types:
+  - Login
+  serves:
+  - api
+  - cdn
+  vendor: cloudfront
+  registrable_domain: kognitos.com
+  role: identity
+  relation: own
+- host: docs.kognitos.com
+  found_by:
+  - pointer
+  - apis[]
+  - probed
+  - site-links
+  - docs-index
+  - contract-discovery
+  - well-known
+  - vendor-detect
+  types:
+  - Documentation
+  - APIReference
+  - GettingStarted
+  - LLMsTxt
+  serves:
+  - docs
+  - cdn
+  - documentation
+  vendor: cloudflare
+  registrable_domain: kognitos.com
+  role: docs
+  relation: own
+- host: equityzen.com
+  found_by:
+  - pointer
+  types:
+  - EquityZen
+  serves: []
+  registrable_domain: equityzen.com
+  role: other
+  relation: platform
+- host: github.com
+  found_by:
+  - pointer
+  types:
+  - GitHubOrganization
+  - SpectralRules
+  serves: []
+  registrable_domain: github.com
+  role: source
+  relation: platform
+- host: mcp.us-1.kognitos.com
+  found_by:
+  - apis[]
+  types: []
+  serves:
+  - api
+  registrable_domain: kognitos.com
+  role: other
+  relation: own
+- host: sandbox.kognitos.com
+  found_by:
+  - probed
+  - site-links
+  - well-known
+  types: []
+  serves: []
+  registrable_domain: kognitos.com
+  role: sandbox
+  relation: own
+- host: status.kognitos.com
+  found_by:
+  - pointer
+  - probed
+  - site-links
+  - contract-discovery
+  - well-known
+  - vendor-detect
+  types:
+  - StatusPage
+  serves:
+  - status-page
+  vendor: incident-io
+  registrable_domain: kognitos.com
+  role: status
+  relation: own
+- host: support.kognitos.com
+  found_by:
+  - probed
+  - site-links
+  - well-known
+  types: []
+  serves: []
+  registrable_domain: kognitos.com
+  role: support
+  relation: own
+- host: trust.kognitos.com
+  found_by:
+  - pointer
+  - probed
+  - site-links
+  - docs-index
+  - well-known
+  types:
+  - Compliance
+  - TrustCenter
+  serves:
+  - docs
+  registrable_domain: kognitos.com
+  role: other
+  relation: own
+- host: www.kognitos.com
+  found_by:
+  - pointer
+  - probed
+  - docs-index
+  - contract-discovery
+  - well-known
+  - vendor-detect
+  types:
+  - Newsroom
+  - Website
+  - DeveloperPortal
+  - Blog
+  - Support
+  - TermsOfService
+  - PrivacyPolicy
+  serves:
+  - docs
+  - hosting
+  vendor: vercel
+  registrable_domain: kognitos.com
+  role: website
+  relation: own
+- host: www.linkedin.com
+  found_by:
+  - pointer
+  types:
+  - LinkedIn
+  serves: []
+  registrable_domain: linkedin.com
+  role: other
+  relation: platform
+- host: www.youtube.com
+  found_by:
+  - pointer
+  types:
+  - YouTube
+  serves: []
+  registrable_domain: youtube.com
+  role: other
+  relation: platform
+- host: x.com
+  found_by:
+  - pointer
+  types:
+  - X
+  serves: []
+  registrable_domain: x.com
+  role: other
+  relation: platform

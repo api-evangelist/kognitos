@@ -1,0 +1,257 @@
+generated: '2026-10-09'
+method: derived
+source: https://docs.kognitos.com/guides/mcp/mcp (documented tool table) + openapi/kognitos-openapi.yml
+purpose: Bind each documented Kognitos MCP tool to the public REST operationId(s) that back it, so a tool inherits that operation's
+  parameters and requestBody as its input schema.
+surfaces:
+  openapi: openapi/kognitos-openapi.yml
+  rest_base: https://app.us-1.kognitos.com/api/v1
+  graphql: null
+  mcp: https://mcp.us-1.kognitos.com/
+  mcp_gated: true
+  note: The MCP endpoint answered 401 to an unauthenticated initialize (2026-10-09); tools come from the published docs table,
+    not a live tools/list. Bindings are by name and semantics.
+crosswalk:
+- tool: kognitos_list_organizations
+  category: Organizations
+  rest:
+  - CurrentUserOrganizations
+  binding: tool lists organizations the caller belongs to
+  confidence: medium
+  operations:
+  - GET /api/v1/me/organizations
+- tool: kognitos_list_workspaces
+  category: Workspaces
+  rest:
+  - ListWorkspaces
+  - CurrentUserOrganizationWorkspaces
+  binding: list workspaces in an organization
+  confidence: medium
+  operations:
+  - GET /api/v1/organizations/{organization_id}/workspaces
+  - GET /api/v1/me/organizations/{organization_id}/workspaces
+- tool: kognitos_automations
+  category: Automations
+  rest:
+  - ListAutomations
+  - GetAutomation
+  - QueryAutomation
+  binding: actions list/get/query map one-to-one
+  confidence: high
+  operations:
+  - GET /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations
+  - GET /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}
+  - GET /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}:query
+- tool: kognitos_invoke_automation
+  category: Automations
+  rest:
+  - InvokeAutomation
+  binding: start a run of an automation
+  confidence: high
+  operations:
+  - POST /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}:invoke
+- tool: kognitos_runs
+  category: Runs
+  rest:
+  - ListRuns
+  - GetRun
+  - GetExecutionOutputs
+  - ListRunEvents
+  binding: actions list/get/get_run_outputs/list_events
+  confidence: medium
+  operations:
+  - GET /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}/runs
+  - GET /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}/runs/{run_id}
+  - GET /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/executions/{execution_id}/outputs
+  - GET /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}/runs/{run_id}/events
+- tool: kognitos_control_run
+  category: Runs
+  rest:
+  - PauseRun
+  - ContinueRun
+  binding: actions pause/continue
+  confidence: high
+  operations:
+  - POST /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}/runs/{run_id}:pause
+  - POST /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}/runs/{run_id}:continue
+- tool: kognitos_get_schedule
+  category: Scheduling
+  rest:
+  - GetAutomationSchedule
+  binding: single read
+  confidence: high
+  operations:
+  - GET /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}/schedule
+- tool: kognitos_manage_schedule
+  category: Scheduling
+  rest:
+  - CreateAutomationSchedule
+  - UpdateAutomationSchedule
+  - EnableAutomationSchedule
+  - DisableAutomationSchedule
+  - DeleteAutomationSchedule
+  binding: actions create/update/enable/disable/delete
+  confidence: high
+  operations:
+  - POST /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}/schedule
+  - PATCH /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}/schedule
+  - POST /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}:enableAutomationSchedule
+  - POST /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}:disableAutomationSchedule
+  - DELETE /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}/schedule
+- tool: kognitos_inspect_exceptions
+  category: Exceptions
+  rest:
+  - ListExceptions
+  - GetException
+  - CountExceptionsByGroup
+  - CountExceptionsByAutomation
+  - ListGuideEntries
+  - GetGuideEntry
+  binding: list/get/count/get_guide/list_guides; the list_events action has no clearly matching exception-events REST op
+  confidence: medium
+  operations:
+  - GET /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/exceptions
+  - GET /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/exceptions/{exception_id}
+  - GET /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/exceptions:countByGroup
+  - GET /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/exceptions:countByAutomation
+  - GET /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}/guideEntries
+  - GET /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}/guideEntries/{guide_entry_id}
+- tool: kognitos_reply_to_exception
+  category: Exceptions
+  rest:
+  - CreateEvent
+  binding: 'semantic guess: REST CreateEvent posts an event to a run agent; the docs do not say the tool uses it'
+  confidence: low
+  operations:
+  - POST /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}/runs/{run_id}/agents/{agent_id}/events
+- tool: kognitos_books
+  category: Books
+  rest:
+  - SearchWorkspaceBooks
+  - ListWorkspaceBooks
+  - SearchWorkspaceBookProcedures
+  binding: search/list_workspace_books/search_procedures; org-level SearchBooks/SearchBookProcedures are also candidates
+  confidence: medium
+  operations:
+  - POST /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/books:search
+  - GET /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/books
+  - POST /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/procedures:search
+- tool: kognitos_analytics
+  category: Analytics
+  rest:
+  - QueryAutomationRunAggregates
+  - QueryDailyRunAggregates
+  - QueryInsights
+  - CountExceptionsByGroup
+  binding: run_stats/insights/exception_insights mapped by name only
+  confidence: low
+  operations:
+  - GET /api/v1/organizations/{organization_id}/workspaces/{workspace_id}:automationRunAggregates
+  - GET /api/v1/organizations/{organization_id}/workspaces/{workspace_id}:dailyRunAggregates
+  - GET /api/v1/organizations/{organization_id}/dashboards:queryInsights
+  - GET /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/exceptions:countByGroup
+- tool: kognitos_read_file
+  category: Files
+  rest:
+  - GetFileMetadata
+  - DownloadFile
+  binding: get_metadata/read_file
+  confidence: medium
+  operations:
+  - GET /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/files/{file}/metadata
+  - GET /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/files/{file}:download
+- tool: kognitos_upload_file
+  category: Files
+  rest:
+  - UploadFile
+  - GenerateUploadUrl
+  binding: base64 upload vs pre-signed URL
+  confidence: medium
+  operations:
+  - POST /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/files:upload
+  - POST /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/files:generateUploadUrl
+mcp_only:
+- tool: kognitos_create_automation
+  reason: Creates an automation from a natural-language description; the public OpenAPI has no create-automation operation.
+- tool: kognitos_threads
+  reason: Thread read operations (get/list/list_messages) have no public REST operation.
+- tool: kognitos_manage_thread
+  reason: Thread create/send_message/stop have no public REST operation.
+- tool: kognitos_manage_automation
+  reason: publish/activate/deactivate/delete/discard_draft/rename/fork have no public REST operation.
+- tool: kognitos_manage_exceptions
+  reason: archive/unarchive/assign exceptions have no public REST operation.
+rest_only:
+- AddAutomationConnections
+- AddWorkspaceBookConnection
+- AddWorkspaceBookConnectionTriggerInstance
+- AuthorizeWorkspaceBookConnection
+- CancelGeneration
+- ConfigureAutomationEstimates
+- CountConnectionUsage
+- CountWorkspaceUsers
+- CreateAutomationTrigger
+- DeleteFile
+- DeleteWorkspaceConnection
+- ExtractAutomationCodeConnections
+- GenerateDownloadUrl
+- GetAutomationRevision
+- GetAutomationVisualization
+- GetBook
+- GetEvent
+- GetInvitation
+- GetOrganization
+- GetOrganizationPreferences
+- GetUserBasicInfo
+- GetWorkspace
+- GetWorkspaceBookConnection
+- GetWorkspaceBookConnectionUserInfo
+- GetWorkspacePreferences
+- ListAllWorkspaceBookConnections
+- ListAutomationRevisions
+- ListAutomationTriggers
+- ListBookConcepts
+- ListBookProcedures
+- ListBookVersions
+- ListBooks
+- ListDefaultInputsHistory
+- ListEvents
+- ListExceptionGroups
+- ListLatestBooks
+- ListOrganizationRoles
+- ListOrganizationUserInvites
+- ListOrganizationUsers
+- ListTags
+- ListWorkspaceBookConcepts
+- ListWorkspaceBookConnectionDiscoverables
+- ListWorkspaceBookConnectionProcedures
+- ListWorkspaceBookConnections
+- ListWorkspaceBookProcedures
+- ListWorkspaceRoles
+- ListWorkspaceTriggerInstances
+- ListWorkspaceUserInvites
+- ListWorkspaceUsers
+- QueryAutomationEstimates
+- QueryMetrics
+- RemoveAutomationConnections
+- RemoveWorkspaceBookConnectionTriggerInstance
+- SearchBookConcepts
+- SearchBookProcedures
+- SearchBooks
+- SearchWorkspaceBookConcepts
+- SearchWorkspaceBookConnectionProcedures
+- SetAutomationsForTriggerInstance
+- SetDiscovered
+- StreamEvents
+- SwitchAutomationConnections
+- TraceConnectionUsage
+- UpdateWorkspaceBookConnection
+- UpgradeAutomationConnections
+- UpgradeWorkspaceBookConnection
+coverage:
+  mcp_tools: 19
+  mapped: 14
+  mcp_only: 5
+  rest_operations: 102
+  rest_bound: 36
+  rest_only: 66

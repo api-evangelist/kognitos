@@ -1,0 +1,1 @@
+{"resource":"https://mcp.us-1.kognitos.com/","authorization_servers":["https://auth.app.us-1.kognitos.com/"],"bearer_methods_supported":["header"],"scopes_supported":["mcp:access","offline_access"]}

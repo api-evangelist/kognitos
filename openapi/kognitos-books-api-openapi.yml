@@ -1,0 +1,2950 @@
+openapi: 3.2.0
+info:
+  title: Kognitos Books API
+  version: 1.0.0
+  contact:
+    name: Kognitos
+    url: https://kognitos.com
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  description: 'Operations tagged Books across 2 of this provider''s published API definitions: kognitos-openapi.yaml, kognitos-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://app.us-1.kognitos.com
+security:
+- BearerAuth: []
+tags:
+- name: Books
+  description: Browse and search books, concepts, procedures, connections, and triggers.
+paths:
+  /api/v1/books:
+    get:
+      summary: View Books
+      description: 'This endpoint returns metadata for all books that are currently available
+
+        in the runtime, including their names, versions, descriptions, authentication
+
+        requirements, and capabilities.'
+      operationId: ListBooks
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v2RetrieveBooksResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: page_size
+        description: The maximum number of books to return.
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: page_token
+        description: The token to use to retrieve the next page of books.
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: filter
+        description: 'AIP-160 Filter expression
+
+          https://google.aip.dev/160'
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - Books
+    servers:
+    - url: https://app.us-1.kognitos.com
+  /api/v1/books/{name}/{version}:
+    get:
+      summary: View Book Details
+      description: 'This endpoint provides comprehensive metadata about a particular book,
+
+        including its description, author, icon, authentication mechanisms,
+
+        configuration parameters, and capabilities.'
+      operationId: GetBook
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v2RetrieveBookResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: version
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Books
+    servers:
+    - url: https://app.us-1.kognitos.com
+  /api/v1/books/{name}/{version}/procedures:
+    get:
+      summary: View Book Procedures
+      description: 'This endpoint returns a list of all procedures (functions/operations) that
+
+        can be invoked on the specified book, along with their signatures, input/output
+
+        parameters, and metadata such as descriptions and examples.'
+      operationId: ListBookProcedures
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v2RetrieveBookProceduresResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: version
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Books
+    servers:
+    - url: https://app.us-1.kognitos.com
+  /api/v1/tags:
+    get:
+      summary: View Tags
+      description: 'This endpoint returns a consolidated list of all tags used across all books
+
+        in the library. Tags are used for categorizing and organizing books by
+
+        functionality, domain, or other characteristics.'
+      operationId: ListTags
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v2RetrieveTagsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      tags:
+      - Books
+    servers:
+    - url: https://app.us-1.kognitos.com
+  /api/v1/books:latest:
+    get:
+      summary: View Latest Books
+      description: 'This endpoint returns metadata for all books that are currently available
+
+        in the runtime, including their names, versions, descriptions, authentication
+
+        requirements, and capabilities.'
+      operationId: ListLatestBooks
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v2RetrieveBooksResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: page_size
+        description: The maximum number of books to return.
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: page_token
+        description: The token to use to retrieve the next page of books.
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: filter
+        description: 'AIP-160 Filter expression
+
+          https://google.aip.dev/160'
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - Books
+    servers:
+    - url: https://app.us-1.kognitos.com
+  /api/v1/books/{name}/versions:
+    get:
+      summary: View Book Versions
+      description: 'This endpoint returns a list of all version strings available for the
+
+        specified book name.'
+      operationId: ListBookVersions
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v2RetrieveBookVersionsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Books
+    servers:
+    - url: https://app.us-1.kognitos.com
+  /api/v1/books/{name}/{version}/concepts:
+    get:
+      summary: View Book Concepts
+      description: 'This endpoint returns a list of concept descriptors defined by the
+
+        specified book, which can be referenced by procedures as inputs or outputs.'
+      operationId: ListBookConcepts
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v2RetrieveBookConceptsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: version
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Books
+    servers:
+    - url: https://app.us-1.kognitos.com
+  /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/books:
+    get:
+      summary: View Workspace Books
+      description: 'This endpoint returns metadata for all books that are currently available
+
+        in the runtime for the specified workspace, including their names, versions,
+
+        descriptions, authentication requirements, and capabilities.'
+      operationId: ListWorkspaceBooks
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v2RetrieveBooksResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: page_size
+        description: The maximum number of books to return.
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: page_token
+        description: The token to use to retrieve the next page of books.
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - Books
+    servers:
+    - url: https://app.us-1.kognitos.com
+  /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/books/{name}/{version}/procedures:
+    get:
+      summary: View Workspace Book Procedures
+      description: 'This endpoint returns a list of all procedures (functions/operations) that
+
+        can be invoked on the specified book in the workspace, along with their signatures,
+
+        input/output parameters, and metadata such as descriptions and examples.'
+      operationId: ListWorkspaceBookProcedures
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v2RetrieveBookProceduresResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: version
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Books
+    servers:
+    - url: https://app.us-1.kognitos.com
+  /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/books/{name}/{version}/concepts:
+    get:
+      summary: View Workspace Book Concepts
+      description: 'This endpoint returns a list of concept descriptors defined by the
+
+        specified book in the workspace, which can be referenced by procedures as inputs or outputs.'
+      operationId: ListWorkspaceBookConcepts
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v2RetrieveBookConceptsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: version
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Books
+    servers:
+    - url: https://app.us-1.kognitos.com
+  /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/connections/{connection_id}/discoverables:
+    get:
+      summary: View Connection Discoverables
+      description: 'This endpoint returns a list of entities (like database tables, API endpoints,
+
+        file systems, etc.) that can be discovered from a specific book connection
+
+        and potentially converted into executable procedures.'
+      operationId: ListWorkspaceBookConnectionDiscoverables
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v2RetrieveDiscoverablesResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: connection_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: search
+        description: A search term to filter the discoverables
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: offset
+        description: 'The starting point within the data set from which records will be returned.
+
+          Used for pagination.'
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uint64
+      - name: limit
+        description: 'The maximum number of records to return from the data set.
+
+          Used for pagination.'
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uint64
+      tags:
+      - Books
+    servers:
+    - url: https://app.us-1.kognitos.com
+  /api/v1/procedures:search:
+    post:
+      summary: Search Book Procedures
+      description: 'This endpoint returns ranked procedures that best match the provided query.
+
+        Each result includes the owning book name and version, a full procedure descriptor,
+
+        and a relevance score.'
+      operationId: SearchBookProcedures
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v2SearchBookProceduresResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/v2SearchBookProceduresRequest'
+        required: true
+      tags:
+      - Books
+    servers:
+    - url: https://app.us-1.kognitos.com
+  /api/v1/books:search:
+    post:
+      summary: Search Books
+      description: 'This endpoint returns ranked books that best match the provided query.
+
+        Each result includes a full book descriptor and a relevance score.'
+      operationId: SearchBooks
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v2SearchBooksResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/v2SearchBooksRequest'
+        required: true
+      tags:
+      - Books
+    servers:
+    - url: https://app.us-1.kognitos.com
+  /api/v1/concepts:search:
+    post:
+      summary: Search Book Concepts
+      description: 'This endpoint returns ranked concepts that best match the provided query.
+
+        Each result includes the owning book name, version, a full concept descriptor, and a relevance score.'
+      operationId: SearchBookConcepts
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v2SearchBookConceptsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/v2SearchBookConceptsRequest'
+        required: true
+      tags:
+      - Books
+    servers:
+    - url: https://app.us-1.kognitos.com
+  /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/procedures:search:
+    post:
+      summary: Search Workspace Book Procedures
+      description: 'This endpoint returns ranked procedures that best match the provided query.
+
+        Each result includes the owning book name and version, a full procedure descriptor,
+
+        and a relevance score.'
+      operationId: SearchWorkspaceBookProcedures
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v2SearchWorkspaceBookProceduresResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchWorkspaceBookProceduresBody'
+        required: true
+      tags:
+      - Books
+    servers:
+    - url: https://app.us-1.kognitos.com
+  /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/connections/{connection_id}/procedures:search:
+    post:
+      summary: Search Connection Procedures
+      description: 'This endpoint returns ranked procedures that best match the provided query.
+
+        Each result includes the owning book name and version, a full procedure descriptor,
+
+        and a relevance score.'
+      operationId: SearchWorkspaceBookConnectionProcedures
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v2SearchWorkspaceBookProceduresResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: connection_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchWorkspaceBookConnectionProceduresBody'
+        required: true
+      tags:
+      - Books
+    servers:
+    - url: https://app.us-1.kognitos.com
+  /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/books:search:
+    post:
+      summary: Search Workspace Books
+      description: 'This endpoint returns ranked books that best match the provided query.
+
+        Each result includes a full book descriptor and a relevance score.'
+      operationId: SearchWorkspaceBooks
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v2SearchBooksResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchWorkspaceBooksBody'
+        required: true
+      tags:
+      - Books
+    servers:
+    - url: https://app.us-1.kognitos.com
+  /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/concepts:search:
+    post:
+      summary: Search Workspace Book Concepts
+      description: 'This endpoint returns ranked concepts that best match the provided query.
+
+        Each result includes the owning book name, version, a full concept descriptor, and a relevance score.'
+      operationId: SearchWorkspaceBookConcepts
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v2SearchBookConceptsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchWorkspaceBookConceptsBody'
+        required: true
+      tags:
+      - Books
+    servers:
+    - url: https://app.us-1.kognitos.com
+  /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/books/{book_name}/{book_version}/connections:
+    post:
+      summary: Create Book Connection
+      description: 'This endpoint adds a new book connection, which can be used to invoke
+
+        procedures on the book.'
+      operationId: AddWorkspaceBookConnection
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v2BookConnectionResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: book_name
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: book_version
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddWorkspaceBookConnectionBody'
+        required: true
+      tags:
+      - Books
+    get:
+      summary: View Book Connections
+      description: This endpoint returns a list of all connections of a book version.
+      operationId: ListWorkspaceBookConnections
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v2RetrieveBookConnectionsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: book_name
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: book_version
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: page_size
+        description: The maximum number of connections to return.
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: page_token
+        description: The token to use to retrieve the next page of connections.
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - Books
+    servers:
+    - url: https://app.us-1.kognitos.com
+  ? /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/books/{book_name}/{book_version}/connections/{connection_id}
+  : put:
+      summary: Update Book Connection
+      description: This endpoint updates a book connection in the library.
+      operationId: UpdateWorkspaceBookConnection
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v2BookConnectionResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: book_name
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: book_version
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: connection_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateWorkspaceBookConnectionBody'
+        required: true
+      tags:
+      - Books
+    servers:
+    - url: https://app.us-1.kognitos.com
+  /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/connections/{connection_id}:
+    get:
+      summary: View Connection
+      description: This endpoint returns a specific book connection.
+      operationId: GetWorkspaceBookConnection
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v2RetrieveBookConnectionResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: connection_id
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Books
+    servers:
+    - url: https://app.us-1.kognitos.com
+  /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/connections:
+    get:
+      summary: View All Connections
+      operationId: ListAllWorkspaceBookConnections
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v2RetrieveBooksConnectionsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: page_size
+        description: The maximum number of connections to return.
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: page_token
+        description: The token to use to retrieve the next page of connections.
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: filter
+        description: 'AIP-160 Filtering
+
+          https://google.aip.dev/160'
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - Books
+    servers:
+    - url: https://app.us-1.kognitos.com
+  ? /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/books/{book_name}/{book_version}/connections/{connection_id}/upgrade
+  : put:
+      summary: Upgrade Book Connection
+      description: This endpoint upgrades a book connection to a new version.
+      operationId: UpgradeWorkspaceBookConnection
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v2BookConnectionResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: book_name
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: book_version
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: connection_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpgradeWorkspaceBookConnectionBody'
+        required: true
+      tags:
+      - Books
+    servers:
+    - url: https://app.us-1.kognitos.com
+  /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/connections/{connection_id}/authorize:
+    put:
+      summary: Authorize Connection
+      description: This endpoint generates a new authrization url for an existing book connection.
+      operationId: AuthorizeWorkspaceBookConnection
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v2BookConnectionResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: connection_id
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Books
+    servers:
+    - url: https://app.us-1.kognitos.com
+  /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/connections/{connection_id}/discover:
+    post:
+      summary: Discover Connection Procedures
+      description: 'This endpoint allows books to discover and register new procedures
+
+        at runtime by connecting to external APIs, databases, or services.
+
+        The discovered procedures become available for invocation.
+
+
+        Supports:
+
+        - Specification of what entities to discover
+
+        - Dynamic procedure registration
+
+
+        Note: This will override any existing discoverables, and sending an empty list will remove all discoverables.'
+      operationId: SetDiscovered
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v2DiscoverWorkspaceBookConnectionProceduresResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: connection_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetDiscoveredBody'
+        required: true
+      tags:
+      - Books
+    servers:
+    - url: https://app.us-1.kognitos.com
+  /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/connections/{connection_id}/procedures:
+    get:
+      summary: View Connection Procedures
+      description: 'This endpoint returns a list of all procedures (functions/operations) that
+
+        can be invoked on the specified book connection in the workspace, along with their signatures,
+
+        input/output parameters, and metadata such as descriptions and examples.'
+      operationId: ListWorkspaceBookConnectionProcedures
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v2RetrieveBookProceduresResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: connection_id
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Books
+    servers:
+    - url: https://app.us-1.kognitos.com
+  ? /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/books/{book_name}/{book_version}/connections/{connection_id}/triggers
+  : post:
+      summary: Create Trigger Instance
+      operationId: AddWorkspaceBookConnectionTriggerInstance
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v2AddWorkspaceBookConnectionTriggerInstanceResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: book_name
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: book_version
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: connection_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddWorkspaceBookConnectionTriggerInstanceBody'
+        required: true
+      tags:
+      - Books
+    servers:
+    - url: https://app.us-1.kognitos.com
+  /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/triggers/{trigger_instance_id}/automations:
+    post:
+      summary: Set Trigger Automations
+      operationId: SetAutomationsForTriggerInstance
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v2SetAutomationsForTriggerInstanceResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: trigger_instance_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetAutomationsForTriggerInstanceBody'
+        required: true
+      tags:
+      - Books
+    servers:
+    - url: https://app.us-1.kognitos.com
+  ? /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/connections/{connection_id}/triggers/{trigger_instance_id}
+  : delete:
+      summary: Delete Trigger Instance
+      operationId: RemoveWorkspaceBookConnectionTriggerInstance
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v2RemoveWorkspaceBookConnectionTriggerInstanceResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: connection_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: trigger_instance_id
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Books
+    servers:
+    - url: https://app.us-1.kognitos.com
+  /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/triggers:
+    get:
+      summary: View Trigger Instances
+      operationId: ListWorkspaceTriggerInstances
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v2RetrieveWorkspaceTriggerInstancesResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: filter
+        description: 'AIP-160 Filter expression
+
+          https://google.aip.dev/160'
+        in: query
+        required: false
+        schema:
+          type: string
+      tags:
+      - Books
+    servers:
+    - url: https://app.us-1.kognitos.com
+  /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/connections/{connection_id}/user-info:
+    get:
+      summary: View Connection User Info
+      description: 'This endpoint returns information about the user (email, username and other extra attributes) from
+
+        a book that has already been connected.'
+      operationId: GetWorkspaceBookConnectionUserInfo
+      responses:
+        '200':
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v2RetrieveUserInfoResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      parameters:
+      - name: organization_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: workspace_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: connection_id
+        in: path
+        required: true
+        schema:
+          type: string
+      tags:
+      - Books
+    servers:
+    - url: https://app.us-1.kognitos.com
+components:
+  schemas:
+    v2BookAuthenticationDescriptor:
+      type: object
+      properties:
+        custom:
+          $ref: '#/components/schemas/v2BookCustomAuthenticationDescriptor'
+        oauth:
+          $ref: '#/components/schemas/v2BookOAuthAuthenticationDescriptor'
+    v2NounPhrase:
+      type: object
+      properties:
+        modifiers:
+          type: array
+          items:
+            type: string
+          title: Optional adjectives attached to the noun
+        head:
+          type: string
+          title: Noun of the phrase
+    UpdateWorkspaceBookConnectionBody:
+      type: object
+      properties:
+        connection_name:
+          type: string
+          title: The connection name
+        authentication:
+          $ref: '#/components/schemas/v2Authentication'
+        config_map:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/bdkV2Value'
+          title: Input config
+        labels:
+          type: array
+          items:
+            $ref: '#/components/schemas/bdkV2Label'
+          title: Labels associated with the connection
+        oauth_flow:
+          $ref: '#/components/schemas/v2OAuthFlow'
+      title: The book connection to update
+    v2ConceptSensitiveType:
+      type: object
+      properties:
+        inner:
+          $ref: '#/components/schemas/v2ConceptType'
+    v2BookPollDescriptor:
+      type: object
+      properties:
+        id:
+          type: string
+          title: The identifier of the poll
+        name:
+          type: string
+          title: The name of the poll
+        description:
+          type: string
+          title: Description of the poll
+        configuration:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/v2ConceptDescriptor'
+          title: Configuration parameters for the poll
+        stop_function_name:
+          type: string
+          title: Required stop function name
+        output_concept:
+          $ref: '#/components/schemas/v2ConceptDescriptor'
+    v2TriggerInstanceStateCategory:
+      type: string
+      enum:
+      - TRIGGER_INSTANCE_STATE_CATEGORY_WARNING
+      - TRIGGER_INSTANCE_STATE_CATEGORY_READY
+      - TRIGGER_INSTANCE_STATE_CATEGORY_FAILED
+      default: TRIGGER_INSTANCE_STATE_CATEGORY_WARNING
+      title: The category/level of the connection state
+    v2CredentialValue:
+      type: object
+      properties:
+        id:
+          type: string
+          title: Id of the credential
+        value:
+          $ref: '#/components/schemas/bdkV2Value'
+    v2BookConnectionOAuthURLResponse:
+      type: object
+      properties:
+        url:
+          type: string
+          title: 'The URL to kick off the OAuth flow. It contains:
+
+            - The authorize endpoint
+
+            - The state
+
+            - The scope
+
+            - The redirect uri'
+    v2RetrieveBookResponse:
+      type: object
+      properties:
+        book:
+          $ref: '#/components/schemas/v2BookDescriptor'
+    v2OAuthProvider:
+      type: string
+      enum:
+      - OAuthProviderMicrosoft
+      - OAuthProviderGoogle
+      - OAuthProviderGeneric
+      default: OAuthProviderMicrosoft
+      title: Supported OAuth providers
+    v2BookConnectionResponse:
+      type: object
+      properties:
+        book_connection_descriptor:
+          $ref: '#/components/schemas/v2BookConnectionDescriptor'
+        authorize_url:
+          $ref: '#/components/schemas/v2BookConnectionOAuthURLResponse'
+      title: The response to an add/update book connection request
+    v2BookConnectionConditionStatus:
+      type: string
+      enum:
+      - BOOK_CONNECTION_CONDITION_STATUS_TRUE
+      - BOOK_CONNECTION_CONDITION_STATUS_FALSE
+      - BOOK_CONNECTION_CONDITION_STATUS_UNKNOWN
+      - BOOK_CONNECTION_CONDITION_STATUS_PENDING
+      default: BOOK_CONNECTION_CONDITION_STATUS_TRUE
+      description: "Possible Values:\n - True: All good\n - False: An error occurred\n - Unknown: Condition not applicable/relevant\n - Pending: Underlying process (upon which the condition depends) still ongoing"
+      title: Status values for conditions
+    v2BookCustomAuthenticationDescriptor:
+      type: object
+      properties:
+        id:
+          type: string
+          description: 'Since books can have multiple authentication mechanisms there is
+
+            and ID to differentiate each mechanism.'
+        credentials:
+          type: array
+          items:
+            $ref: '#/components/schemas/v2CredentialDescriptor'
+          title: Credentials required to perform authentication
+        description:
+          type: string
+          title: A description of the authentication
+        name:
+          type: string
+          title: A name for the authentication
+        noun_phrase:
+          $ref: '#/components/schemas/v2NounPhrase'
+        preferred:
+          type: boolean
+          title: If this is a preferred authentication method
+    AddWorkspaceBookConnectionBody:
+      type: object
+      properties:
+        connection_name:
+          type: string
+          title: The connection name
+        authentication:
+          $ref: '#/components/schemas/v2Authentication'
+        config_map:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/bdkV2Value'
+          title: Configuration for the connection
+        labels:
+          type: array
+          items:
+            $ref: '#/components/schemas/bdkV2Label'
+          title: Labels associated with the connection
+        oauth_flow:
+          $ref: '#/components/schemas/v2OAuthFlow'
+      title: The book connection to add
+    v2BookConnectionStatus:
+      type: object
+      properties:
+        state:
+          $ref: '#/components/schemas/v2BookConnectionState'
+        state_category:
+          $ref: '#/components/schemas/v2BookConnectionStateCategory'
+        reason:
+          type: string
+          title: Human-readable message providing additional details about the current state
+        last_updated:
+          type: string
+          title: RFC 3339 timestamp of when the status was last updated
+        conditions:
+          type: array
+          items:
+            $ref: '#/components/schemas/v2BookConnectionCondition'
+          title: List of conditions that apply to the BookConnection
+      title: Status information for a BookConnection
+    v2BookConnectionConditionType:
+      type: string
+      enum:
+      - BOOK_CONNECTION_CONDITION_TYPE_BOOK_VALID
+      - BOOK_CONNECTION_CONDITION_TYPE_AUTHENTICATION_VALID
+      - BOOK_CONNECTION_CONDITION_TYPE_CONFIGURATION_VALID
+      - BOOK_CONNECTION_CONDITION_TYPE_DEPLOYMENT_READY
+      - BOOK_CONNECTION_CONDITION_TYPE_CREDENTIALS_VALID
+      - BOOK_CONNECTION_CONDITION_TYPE_DISCOVER_READY
+      - BOOK_CONNECTION_CONDITION_TYPE_TRIGGER_INSTANCES_READY
+      - BOOK_CONNECTION_CONDITION_TYPE_COMPATIBLE_RUNTIME_VERSION
+      default: BOOK_CONNECTION_CONDITION_TYPE_BOOK_VALID
+      description: "Represents the various condition types that can be associated with a BookConnection.\n\nConditions are categorized into two groups:\n\n1. [Static Conditions] These conditions are determined solely by the BookConnection's data structure\n   and configuration, and they can be validated without external dependencies or runtime state:\n   - BOOK_VALID\n   - AUTHENTICATION_VALID\n   - CONFIGURATION_VALID\n\n2. [Dynamic Conditions] These conditions depend on external factors and runtime state that can change\n   independently of the BookConnection spec. They require active monitoring and periodic re-evaluation:\n   - DEPLOYMENT_READY\n   - CREDENTIALS_VALID\n   - DISCOVER_READY\n   - TRIGGER_INSTANCES_READY\n   - COMPATIBLE_RUNTIME_VERSION\n\n - BOOK_CONNECTION_CONDITION_TYPE_BOOK_VALID: Static\n - BOOK_CONNECTION_CONDITION_TYPE_DEPLOYMENT_READY: Dynamic"
+    v2ConceptDictionaryType:
+      type: object
+      properties:
+        is_a:
+          type: array
+          items:
+            $ref: '#/components/schemas/v2NounPhrase'
+        fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/v2ConceptDictionaryTypeField'
+        description:
+          type: string
+    v2BinaryExpression:
+      type: object
+      properties:
+        operator:
+          $ref: '#/components/schemas/v2BinaryOperator'
+        left:
+          $ref: '#/components/schemas/v2Expression'
+        right:
+          $ref: '#/components/schemas/v2Expression'
+    v2ConceptValue:
+      type: object
+      properties:
+        noun_phrases:
+          $ref: '#/components/schemas/v2NounPhrases'
+        value:
+          $ref: '#/components/schemas/bdkV2Value'
+    v2RemoveWorkspaceBookConnectionTriggerInstanceResponse:
+      type: object
+    v2ConceptListType:
+      type: object
+      properties:
+        inner:
+          $ref: '#/components/schemas/v2ConceptType'
+    v2SearchWorkspaceBookProceduresResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/v2SearchWorkspaceBookProcedureMatch'
+          title: Ranked list of matches for the given query
+      title: Search results for workspace book procedures (static and discovered)
+    v2BookConnectionCondition:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/v2BookConnectionConditionType'
+        status:
+          $ref: '#/components/schemas/v2BookConnectionConditionStatus'
+        last_transition_time:
+          type: string
+          title: RFC 3339 timestamp of when this condition was last updated
+        reason:
+          type: string
+          title: Brief reason explaining the condition
+        reason_code:
+          $ref: '#/components/schemas/v2BookConnectionConditionReasonCode'
+      title: Condition information for BookConnection
+    v2ConceptTableTypeColumn:
+      type: object
+      properties:
+        key:
+          type: string
+        value:
+          $ref: '#/components/schemas/v2ConceptType'
+        description:
+          type: string
+    SearchWorkspaceBookProceduresBody:
+      type: object
+      properties:
+        query:
+          type: string
+          title: Free-text search query to match against procedure metadata and signatures
+        top_k:
+          type: integer
+          format: int64
+          title: Maximum number of results to return
+        max_distance:
+          type: number
+          format: float
+          title: Maximum distance threshold for similarity matching
+      title: Search for procedures across all available books in a workspace
+    v2ConceptSelfType:
+      type: object
+    v2BookConnectionConditionReasonCode:
+      type: string
+      enum:
+      - BOOK_CONNECTION_CONDITION_REASON_CODE_BOOK_LOOKUP_FAILED
+      - BOOK_CONNECTION_CONDITION_REASON_CODE_BOOK_NOT_FOUND
+      - BOOK_CONNECTION_CONDITION_REASON_CODE_BOOK_MISSING_IMAGE
+      - BOOK_CONNECTION_CONDITION_REASON_CODE_BOOK_RUNTIME_VERSION_OUTDATED
+      - BOOK_CONNECTION_CONDITION_REASON_CODE_AUTHENTICATION_ID_NOT_FOUND
+      - BOOK_CONNECTION_CONDITION_REASON_CODE_MISSING_CREDENTIAL
+      - BOOK_CONNECTION_CONDITION_REASON_CODE_WRONG_CREDENTIAL_TYPE
+      - BOOK_CONNECTION_CONDITION_REASON_CODE_SECRET_NOT_FOUND
+      - BOOK_CONNECTION_CONDITION_REASON_CODE_SECRET_MISSING_KEY
+      - BOOK_CONNECTION_CONDITION_REASON_CODE_AUTHENTICATION_REQUIRED_MISSING
+      - BOOK_CONNECTION_CONDITION_REASON_CODE_AUTHENTICATION_TEST_FAILED
+      - BOOK_CONNECTION_CONDITION_REASON_CODE_TOKEN_REFRESH_FAILED
+      - BOOK_CONNECTION_CONDITION_REASON_CODE_CONFIGURATION_UNKNOWN_KEY
+      - BOOK_CONNECTION_CONDITION_REASON_CODE_CONFIGURATION_WRONG_TYPE
+      - BOOK_CONNECTION_CONDITION_REASON_CODE_REPLICA_COUNT_IS_ZERO
+      - BOOK_CONNECTION_CONDITION_REASON_CODE_NEW_DEPLOYMENT_ROLLED_OUT
+      - BOOK_CONNECTION_CONDITION_REASON_CODE_DISCOVER_IN_PROGRESS
+      - BOOK_CONNECTION_CONDITION_REASON_CODE_DISCOVER_FAILED
+      default: BOOK_CONNECTION_CONDITION_REASON_CODE_BOOK_LOOKUP_FAILED
+      description: "- BOOK_CONNECTION_CONDITION_REASON_CODE_BOOK_LOOKUP_FAILED: Book related\n - BOOK_CONNECTION_CONDITION_REASON_CODE_AUTHENTICATION_ID_NOT_FOUND: Authentication related\n - BOOK_CONNECTION_CONDITION_REASON_CODE_CONFIGURATION_UNKNOWN_KEY: Configuration related\n - BOOK_CONNECTION_CONDITION_REASON_CODE_REPLICA_COUNT_IS_ZERO: Connection related\n - BOOK_CONNECTION_CONDITION_REASON_CODE_DISCOVER_IN_PROGRESS: Discover related"
+      title: Machine-readable reason codes for condition transitions
+    v2DiscoverWorkspaceBookConnectionProceduresResponse:
+      type: object
+      title: A response that is sent to reply to a library discovery request
+    v2BookTriggerDescriptor:
+      type: object
+      properties:
+        id:
+          type: string
+          title: The identifier of the trigger
+        name:
+          type: string
+          title: The name of the trigger
+        description:
+          type: string
+          title: Description of the trigger
+        setup_description:
+          type: string
+          title: Setup description for the trigger
+        configuration:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/v2ConceptDescriptor'
+          title: Configuration parameters for the trigger
+        filter_capable:
+          type: boolean
+          title: True if the trigger is capable of filtering events
+        is_manual:
+          type: boolean
+          title: True if the trigger is manually invoked
+        event_type:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/v2ConceptDescriptor'
+          title: Event type schema for the trigger
+        is_shared_endpoint:
+          type: boolean
+          description: True if every trigger instance of this trigger shares the same endpoint when configured.
+    v2ConceptAnyType:
+      type: object
+    v2BookProcedureSignature:
+      type: object
+      properties:
+        english:
+          type: string
+        verbs:
+          type: array
+          items:
+            type: string
+          title: Verb of the signature
+        object:
+          $ref: '#/components/schemas/v2NounPhrases'
+        preposition:
+          type: string
+          title: Preposition
+        target:
+          $ref: '#/components/schemas/v2NounPhrases'
+        outputs:
+          type: array
+          items:
+            $ref: '#/components/schemas/v2NounPhrases'
+          title: Outputs
+        proper_nouns:
+          type: array
+          items:
+            type: string
+          title: All the proper nouns that appear on this signature
+    bdkV2Label:
+      type: object
+      properties:
+        key:
+          type: string
+          title: The key of the key-value pair
+        value:
+          type: string
+          title: The value of the key-value pair
+    v2ConceptDictionaryTypeField:
+      type: object
+      properties:
+        key:
+          type: string
+        value:
+          $ref: '#/components/schemas/v2ConceptType'
+        description:
+          type: string
+    v2SearchBookMatch:
+      type: object
+      properties:
+        book:
+          $ref: '#/components/schemas/v2BookDescriptor'
+        score:
+          type: number
+          format: double
+          title: Relevance score (higher is better)
+      title: A match result for a searched book
+    v2ConceptOpaqueType:
+      type: object
+      properties:
+        is_a:
+          type: array
+          items:
+            $ref: '#/components/schemas/v2NounPhrase'
+        description:
+          type: string
+    v2FileValue:
+      type: object
+      properties:
+        remote:
+          type: string
+        inline:
+          $ref: '#/components/schemas/v2File'
+      title: A file value represents a file that can be either inline or remote
+    v2ConceptScalarType:
+      type: string
+      enum:
+      - ConceptScalarTypeConceptual
+      - ConceptScalarTypeText
+      - ConceptScalarTypeNumber
+      - ConceptScalarTypeBoolean
+      - ConceptScalarTypeDatetime
+      - ConceptScalarTypeDate
+      - ConceptScalarTypeTime
+      - ConceptScalarTypeFile
+      - ConceptScalarTypeUUID
+      default: ConceptScalarTypeConceptual
+      title: Supported concept types
+    v2RetrieveBookConnectionResponse:
+      type: object
+      properties:
+        book_connection:
+          $ref: '#/components/schemas/v2BookConnectionDescriptor'
+    v2TriggerInstanceState:
+      type: string
+      enum:
+      - TRIGGER_INSTANCE_STATE_PENDING
+      - TRIGGER_INSTANCE_STATE_READY
+      - TRIGGER_INSTANCE_STATE_FAILED
+      - TRIGGER_INSTANCE_STATE_UNKNOWN
+      default: TRIGGER_INSTANCE_STATE_PENDING
+      title: Possible phases for a TriggerInstance (Pending, Ready, Failed, Unknown)
+    v2DictionaryValueField:
+      type: object
+      properties:
+        key:
+          type: string
+        value:
+          $ref: '#/components/schemas/bdkV2Value'
+      title: Each key-value pair inside a dictionary
+    v2OffloadableDictionaryValue:
+      type: object
+      properties:
+        remote:
+          type: string
+        inline:
+          $ref: '#/components/schemas/v2DictionaryValue'
+      title: A dictionary value that can be either inline or stored remotely
+    v2AddWorkspaceBookConnectionTriggerInstanceResponse:
+      type: object
+      properties:
+        trigger_instance:
+          $ref: '#/components/schemas/v2TriggerInstance'
+    SetDiscoveredBody:
+      type: object
+      properties:
+        what:
+          type: array
+          items:
+            type: string
+          title: What should be discovered
+    v2RetrieveUserInfoResponse:
+      type: object
+      properties:
+        user_info:
+          $ref: '#/components/schemas/v2UserInfo'
+      title: The response to a retrieve user info request
+    v2OAuthArgumentDescriptor:
+      type: object
+      properties:
+        id:
+          type: string
+          title: Id of the parameter
+        name:
+          type: string
+          title: Name of the parameter
+        description:
+          type: string
+          title: Description of the parameter
+    v2OpaqueValue:
+      type: object
+      properties:
+        content:
+          type: string
+          format: byte
+          title: Content of the opaque value
+        is_a:
+          type: array
+          items:
+            $ref: '#/components/schemas/v2NounPhrase'
+          title: Is a replationships for the opaque
+    v2UserInfo:
+      type: object
+      properties:
+        email:
+          type: string
+          title: The email of the user
+        username:
+          type: string
+          title: The username of the user
+        other_attributes:
+          type: object
+          additionalProperties:
+            type: string
+          title: A map with other extra attributes the user may have
+    v2RetrieveBooksResponse:
+      type: object
+      properties:
+        books:
+          type: array
+          items:
+            $ref: '#/components/schemas/v2BookDescriptor'
+          title: All the books that satisfy the query
+        next_page_token:
+          type: string
+          description: The token to use to retrieve the next page of books.
+    v2SearchBooksRequest:
+      type: object
+      properties:
+        query:
+          type: string
+          title: Free-text search query to match against book name, version, tags, or descriptions
+        top_k:
+          type: integer
+          format: int64
+          title: Maximum number of results to return
+        max_distance:
+          type: number
+          format: float
+          title: Maximum distance threshold for similarity matching
+      title: Search for books across the library
+    v2SearchWorkspaceBookProcedureMatch:
+      type: object
+      properties:
+        book_name:
+          type: string
+          title: Book name owning the procedure
+        book_version:
+          type: string
+          title: Book version owning the procedure
+        procedure:
+          $ref: '#/components/schemas/v2BookProcedureDescriptor'
+        score:
+          type: number
+          format: double
+          title: Relevance score (higher is better)
+        organization_id:
+          type: string
+          title: Organization ID
+        workspace_id:
+          type: string
+          title: Workspace ID
+        connection_id:
+          type: string
+          title: Connection ID
+      title: A match result for a searched procedure (static or discovered)
+    v2RetrieveBookConnectionsResponse:
+      type: object
+      properties:
+        book_connections:
+          type: array
+          items:
+            $ref: '#/components/schemas/v2BookConnectionDescriptor'
+          title: The list of book connections
+        next_page_token:
+          type: string
+          description: The token to use to retrieve the next page of connections.
+    v2BookDescriptor:
+      type: object
+      properties:
+        id:
+          type: string
+          description: '@deprecated, use name and version to uniquely identify a book'
+          title: The identifier of the book (a.k.a integration_id)
+        name:
+          type: string
+          title: The name of the book
+        short_description:
+          type: string
+          title: Short description of the book
+        long_description:
+          type: string
+          title: Short description of the book
+        author:
+          type: string
+          title: Author of the book
+        icon:
+          type: string
+          format: byte
+          title: Icon of the book in an image format that is web-compatible (i.e. JPG, PNG, SVG, WebP)
+        version:
+          type: string
+          title: Version of the book
+        authentications:
+          type: array
+          items:
+            $ref: '#/components/schemas/v2BookAuthenticationDescriptor'
+          title: Authentication mechanism for a book version
+        configurations:
+          type: array
+          items:
+            $ref: '#/components/schemas/v2ConceptDescriptor'
+          title: 'All the parameters available for configuring the behaviour of this book. Note: replaced by config_map'
+        display_name:
+          type: string
+          title: Display name of the book
+        endpoint:
+          type: string
+          title: URI location of the book, such as lambda://microsoft/1.0.4
+        connection_required:
+          type: boolean
+          description: Connection Required. True if all procedures always require a connection.
+        discover_capable:
+          type: boolean
+          title: True if the book is capable of discovering book procedures
+        tags:
+          type: array
+          items:
+            type: string
+          title: Tags associated with the book
+        procedures:
+          type: array
+          items:
+            $ref: '#/components/schemas/v2BookProcedureDescriptor'
+          title: Book procedures
+        noun_phrase:
+          $ref: '#/components/schemas/v2NounPhrase'
+        userinfo_capable:
+          type: boolean
+          title: True if the book is capable of returning oauth user's info
+        triggers:
+          type: array
+          items:
+            $ref: '#/components/schemas/v2BookTriggerDescriptor'
+          title: Book triggers
+        bdk_runtime_version:
+          type: string
+          title: BDK Runtime version
+        environment_information:
+          $ref: '#/components/schemas/bdkV2EnvironmentInformation'
+        config_map:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/v2ConceptDescriptor'
+          title: All the parameters available for configuring the behaviour of this book
+        hidden:
+          type: boolean
+          title: True if the book is hidden
+        polls:
+          type: array
+          items:
+            $ref: '#/components/schemas/v2BookPollDescriptor'
+          title: Book polls
+    v2ConceptUnionType:
+      type: object
+      properties:
+        inners:
+          type: array
+          items:
+            $ref: '#/components/schemas/v2ConceptType'
+    v2CredentialDescriptor:
+      type: object
+      properties:
+        id:
+          type: string
+          title: Id of the credential
+        type:
+          $ref: '#/components/schemas/v2CredentialType'
+        label:
+          type: string
+          title: Label that will be displayed to the user during configuration of the book
+        visible:
+          type: boolean
+          description: True if the value is visible to the book, false otherwise.
+        description:
+          type: string
+          title: Description
+    v2QuestionDescriptor:
+      type: object
+      properties:
+        noun_phrases:
+          $ref: '#/components/schemas/v2NounPhrases'
+        type:
+          $ref: '#/components/schemas/v2ConceptType'
+    SearchWorkspaceBookConceptsBody:
+      type: object
+      properties:
+        query:
+          type: string
+          title: Free-text search query to match against concept names and descriptions
+        top_k:
+          type: integer
+          format: int64
+          title: Maximum number of results to return
+        max_distance:
+          type: number
+          format: float
+          title: Maximum distance threshold for similarity matching
+      title: Search for concepts across all available books in a workspace
+    rpcStatus:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/protobufAny'
+    v2ConceptDescriptor:
+      type: object
+      properties:
+        noun_phrases:
+          $ref: '#/components/schemas/v2NounPhrases'
+        type:
+          $ref: '#/components/schemas/v2ConceptType'
+        description:
+          type: string
+          title: Description
+        default_value:
+          $ref: '#/components/schemas/bdkV2Value'
+    v2Authentication:
+      type: object
+      properties:
+        authentication_id:
+          type: string
+          title: Identifier of the authentication method to be used for testing the connection
+        authentication_credentials:
+          type: array
+          items:
+            $ref: '#/components/schemas/v2CredentialValue'
+          title: Credentials
+    v2TriggerInstance:
+      type: object
+      properties:
+        id:
+          type: string
+          title: The identifier of the trigger instance
+        name:
+          type: string
+          title: The name of the trigger instance
+        reference:
+          type: string
+          title: The reference of the trigger instance
+        book_name:
+          type: string
+          title: The name of the book
+        connection_id:
+          type: string
+          title: The identifier of the book connection
+        trigger_id:
+          type: string
+          title: The name of the trigger
+        configuration:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/bdkV2Value'
+          title: Configuration parameters for the trigger
+        endpoint:
+          type: string
+          title: The endpoint of the trigger instance
+        automation_ids:
+          type: array
+          items:
+            type: string
+          title: Automation IDs
+        workspace_id:
+          type: string
+          title: Workspace ID
+        organization_id:
+          type: string
+          title: Organization ID
+        filter_expression:
+          $ref: '#/components/schemas/v2Expression'
+        status:
+          $ref: '#/components/schemas/v2TriggerInstanceStatus'
+    protobufAny:
+      type: object
+      properties:
+        '@type':
+          type: string
+      additionalProperties: {}
+    v2SearchBookConceptMatch:
+      type: object
+      properties:
+        book_name:
+          type: string
+          title: Book name containing the concept
+        book_version:
+          type: string
+          title: Book version containing the concept
+        concept:
+          $ref: '#/components/schemas/v2ConceptDescriptor'
+        score:
+          type: number
+          format: double
+          title: Relevance score (higher is better)
+      title: A match result for a searched concept
+    AddWorkspaceBookConnectionTriggerInstanceBody:
+      type: object
+      properties:
+        trigger_id:
+          type: string
+          title: The name of the trigger
+        configuration:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/bdkV2Value'
+          title: Configuration parameters for the trigger
+        filter_expression:
+          $ref: '#/components/schemas/v2Expression'
+        name:
+          type: string
+          title: The name of the trigger instance
+    v2Time:
+      type: object
+      properties:
+        hours:
+          type: integer
+          format: int32
+          title: Hours of day
+        minutes:
+          type: integer
+          format: int32
+          title: Minutes of hour of day
+        seconds:
+          type: integer
+          format: int32
+          title: Seconds of minutes of the time
+        nanos:
+          type: integer
+          format: int32
+          title: Fractions of seconds in nanoseconds
+    v2RetrieveTagsResponse:
+      type: object
+      properties:
+        tags:
+          type: array
+          items:
+            type: string
+          title: Tags
+      title: Response to retrieve tags
+    v2OffloadableListValue:
+      type: object
+      properties:
+        remote:
+          type: string
+        inline:
+          $ref: '#/components/schemas/bdkV2ListValue'
+      title: A list value that can be either inline or stored remotely
+    v2TriggerInstanceStatus:
+      type: object
+      properties:
+        state:
+          $ref: '#/components/schemas/v2TriggerInstanceState'
+        state_category:
+          $ref: '#/components/schemas/v2TriggerInstanceStateCategory'
+        reason:
+          type: string
+          title: Human-readable message providing additional details about the current state
+        last_updated:
+          type: string
+          title: RFC 3339 timestamp of when the status was last updated
+      title: Status information for a BookConnection
+    v2BookProcedureDescriptor:
+      type: object
+      properties:
+        id:
+          type: string
+          title: Id of the procedure to use in subsequent calls
+        signature:
+          $ref: '#/components/schemas/v2BookProcedureSignature'
+        inputs:
+          type: array
+          items:
+            $ref: '#/components/schemas/v2ConceptDescriptor'
+          title: All the inputs for the procedure (required and non required)
+        outputs:
+          type: array
+          items:
+            $ref: '#/components/schemas/v2ConceptDescriptor'
+          title: All the outputs for the procedure
+        short_description:
+          type: string
+          title: Short description
+        long_description:
+          type: string
+          title: Longer description
+        filter_capable:
+          type: boolean
+          title: Can this procedure filter its response?
+        page_capable:
+          type: boolean
+          title: Can this procedure page its response?
+        connection_required:
+          $ref: '#/components/schemas/v2ConnectionRequired'
+        is_discovered:
+          type: boolean
+          title: True if the procedure was discovered
+        questions:
+          type: array
+          items:
+            $ref: '#/components/schemas/v2QuestionDescriptor'
+          title: Questions the procedure may ask
+        examples:
+          type: array
+          items:
+            $ref: '#/components/schemas/v2ExampleDescriptor'
+          title: Examples of procedure usage
+        is_async:
+          type: boolean
+          title: Does the procedure return a promise?
+        is_mutation:
+          type: boolean
+          title: True if the procedures performs a mutating action
+        search_hints:
+          type: array
+          items:
+            type: string
+          title: Search hints used for procedure resolution
+    v2Date:
+      type: object
+      properties:
+        year:
+          type: integer
+          format: int32
+          title: Year of the date
+        month:
+          type: integer
+          format: int32
+          title: Month of a year
+        day:
+          type: integer
+          format: int32
+          title: Day of a month
+    SearchWorkspaceBookConnectionProceduresBody:
+      type: object
+      properties:
+        query:
+          type: string
+          title: Free-text search query to match against procedure metadata and signatures
+        top_k:
+          type: integer
+          format: int64
+          title: Maximum number of results to return
+        max_distance:
+          type: number
+          format: float
+          title: Maximum distance threshold for similarity matching
+      title: Search for procedures across all available books in a connection
+    v2SearchBookProceduresResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/v2SearchBookProcedureMatch'
+          title: Ranked list of matches for the given query
+      title: Search results for book procedures
+    v2SearchBookConceptsResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/v2SearchBookConceptMatch'
+          title: Ranked list of concept matches for the given query
+      title: Search results for book concepts
+    v2BookConnectionState:
+      type: string
+      enum:
+      - BOOK_CONNECTION_STATE_PENDING
+      - BOOK_CONNECTION_STATE_READY
+      - BOOK_CONNECTION_STATE_FAILED
+      - BOOK_CONNECTION_STATE_CONDITIONS_NOT_MET
+      - BOOK_CONNECTION_STATE_UNKNOWN
+      default: BOOK_CONNECTION_STATE_PENDING
+      title: Possible phases for a BookConnection (Pending, ConditionsNotMet, Ready, Failed, Unknown)
+    v2OffloadableTextValue:
+      type: object
+      properties:
+        remote:
+          type: string
+        inline:
+          type: string
+      title: A text value that can be either inline or stored remotely
+    v2RetrieveBooksConnectionsResponse:
+      type: object
+      properties:
+        book_connections:
+          type: array
+          items:
+            $ref: '#/components/schemas/v2BookConnectionDescriptor'
+          title: The list of book connections
+        next_page_token:
+          type: string
+          description: The token to use to retrieve the next page of connections.
+    v2RetrieveBookConceptsResponse:
+      type: object
+      properties:
+        concepts:
+          type: array
+          items:
+            $ref: '#/components/schemas/v2ConceptDescriptor'
+          title: Available concepts
+      title: Retrieve all the available concept descriptors for a book
+    v2ConceptType:
+      type: object
+      properties:
+        scalar_type:
+          $ref: '#/components/schemas/v2ConceptScalarType'
+        optional_type:
+          $ref: '#/components/schemas/v2ConceptOptionalType'
+        list_type:
+          $ref: '#/components/schemas/v2ConceptListType'
+        dictionary_type:
+          $ref: '#/components/schemas/v2ConceptDictionaryType'
+        table_type:
+          $ref: '#/components/schemas/v2ConceptTableType'
+        opaque_type:
+          $ref: '#/components/schemas/v2ConceptOpaqueType'
+        any_type:
+          $ref: '#/components/schemas/v2ConceptAnyType'
+        union_type:
+          $ref: '#/components/schemas/v2ConceptUnionType'
+        self_type:
+          $ref: '#/components/schemas/v2ConceptSelfType'
+        sensitive_type:
+          $ref: '#/components/schemas/v2ConceptSensitiveType'
+        enum_type:
+          $ref: '#/components/schemas/v2ConceptEnumType'
+    bdkV2ListValue:
+      type: object
+      properties:
+        values:
+          type: array
+          items:
+            $ref: '#/components/schemas/bdkV2Value'
+          title: All the values inside the list
+      title: A collection of values
+    v2SearchBooksResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/v2SearchBookMatch'
+          title: Ranked list of book matches for the given query
+      title: Search results for books
+    SetAutomationsForTriggerInstanceBody:
+      type: object
+      properties:
+        automation_ids:
+          type: array
+          items:
+            type: string
+          title: The identifiers of the automations to attach to the trigger instance
+        connection_id:
+          type: string
+          title: The id of the book connection
+    v2SensitiveValue:
+      type: object
+      properties:
+        value:
+          $ref: '#/components/schemas/bdkV2Value'
+      title: A sensitive value is any value marked as sensitive (to prevent exposure)
+    v2UnaryOperator:
+      type: string
+      enum:
+      - UnaryOperatorNot
+      - UnaryOperatorExists
+      default: UnaryOperatorNot
+    v2SetAutomationsForTriggerInstanceResponse:
+      type: object
+      properties:
+        trigger_instance:
+          $ref: '#/components/schemas/v2TriggerInstance'
+    v2RetrieveBookVersionsResponse:
+      type: object
+      properties:
+        versions:
+          type: array
+          items:
+            type: string
+          title: All available versions for the specified book
+    SearchWorkspaceBooksBody:
+      type: object
+      properties:
+        query:
+          type: string
+          title: Free-text search query to match against book name, version, tags, or descriptions
+        top_k:
+          type: integer
+          format: int64
+          title: Maximum number of results to return
+        max_distance:
+          type: number
+          format: float
+          title: Maximum distance threshold for similarity matching
+      title: Search for books across the library in a workspace
+    v2Table:
+      type: object
+      properties:
+        columns:
+          type: array
+          items:
+            $ref: '#/components/schemas/v2Column'
+      description: 'A table is a column-oriented structure. All the values inside each column must
+
+        be of equal length.'
+    v2ExampleDescriptor:
+      type: object
+      properties:
+        description:
+          type: string
+          title: The description of the example
+        snippet:
+          type: string
+          title: The example snippet
+    v2OAuthFlow:
+      type: string
+      enum:
+      - OAuthFlowAuthorizationCode
+      - OAuthFlowClientCredentials
+      default: OAuthFlowAuthorizationCode
+      title: Supported OAuth flows
+    v2ConceptOptionalType:
+      type: object
+      properties:
+        inner:
+          $ref: '#/components/schemas/v2ConceptType'
+    v2ConnectionRequired:
+      type: string
+      enum:
+      - Optional
+      - Always
+      - Never
+      default: Optional
+      title: Connection required
+    bdkV2EnvironmentInformation:
+      type: object
+      properties:
+        version:
+          type: string
+        runtime_name:
+          type: string
+          title: Runtime name
+        runtime_version:
+          type: string
+          title: Runtime version
+        bci_protocol_version:
+          type: string
+          title: BCI Protocol version
+        api_version:
+          type: string
+          title: BDK API Version
+        path:
+          type: array
+          items:
+            type: string
+          title: Book path under which books will be discovered
+      title: Information about the environment
+    v2ConceptEnumTypeMember:
+      type: object
+      properties:
+        name:
+          type: string
+        noun_phrase:
+          $ref: '#/components/schemas/v2NounPhrase'
+        description:
+          type: string
+    bdkV2Value:
+      type: object
+      properties:
+        null_value:
+          type: string
+        conceptual_value:
+          $ref: '#/components/schemas/v2NounPhrase'
+        text_value:
+          type: string
+          title: 'deprecated: use offloadable_text_value (15) for new code'
+        number_value:
+          type: number
+          format: double
+        boolean_value:
+          type: boolean
+        datetime_value:
+          type: string
+          format: date-time
+        date_value:
+          $ref: '#/components/schemas/v2Date'
+        time_value:
+          $ref: '#/components/schemas/v2Time'
+        file_value:
+          $ref: '#/components/schemas/v2FileValue'
+        dictionary_value:
+          $ref: '#/components/schemas/v2DictionaryValue'
+        list_value:
+          $ref: '#/components/schemas/bdkV2ListValue'
+        opaque_value:
+          $ref: '#/components/schemas/v2OpaqueValue'
+        table_value:
+          $ref: '#/components/schemas/v2TableValue'
+        sensitive_value:
+          $ref: '#/components/schemas/v2SensitiveValue'
+        offloadable_text_value:
+          $ref: '#/components/schemas/v2OffloadableTextValue'
+        offloadable_dictionary_value:
+          $ref: '#/components/schemas/v2OffloadableDictionaryValue'
+        offloadable_list_value:
+          $ref: '#/components/schemas/v2OffloadableListValue'
+      title: A union of all possible values
+    v2ConceptTableType:
+      type: object
+      properties:
+        columns:
+          type: array
+          items:
+            $ref: '#/components/schemas/v2ConceptTableTypeColumn'
+        description:
+          type: string
+    v2RetrieveDiscoverablesResponse:
+      type: object
+      properties:
+        discoverables:
+          type: array
+          items:
+            $ref: '#/components/schemas/v2Discoverable'
+          title: The retrieved Discoverables
+      title: The response to a get discoverables request
+    v2BinaryOperator:
+      type: string
+      enum:
+      - BinaryOperatorAnd
+      - BinaryOperatorOr
+      - BinaryOperatorEquals
+      - BinaryOperatorNotEquals
+      - BinaryOperatorIn
+      - BinaryOperatorHas
+      - BinaryOperatorLessThan
+      - BinaryOperatorGreaterThan
+      - BinaryOperatorLessThanOrEqual
+      - BinaryOperatorGreaterThanOrEqual
+      default: BinaryOperatorAnd
+    v2SearchBookProcedureMatch:
+      type: object
+      properties:
+        book_name:
+          type: string
+          title: Book name owning the procedure
+        book_version:
+          type: string
+          title: Book version owning the procedure
+        procedure:
+          $ref: '#/components/schemas/v2BookProcedureDescriptor'
+        score:
+          type: number
+          format: double
+          title: Relevance score (higher is better)
+      title: A match result for a searched procedure
+    v2NounPhrases:
+      type: object
+      properties:
+        noun_phrases:
+          type: array
+          items:
+            $ref: '#/components/schemas/v2NounPhrase'
+    v2Expression:
+      type: object
+      properties:
+        binary_expression:
+          $ref: '#/components/schemas/v2BinaryExpression'
+        unary_expression:
+          $ref: '#/components/schemas/v2UnaryExpression'
+        value_expression:
+          $ref: '#/components/schemas/bdkV2Value'
+        noun_phrases_expression:
+          $ref: '#/components/schemas/v2NounPhrases'
+    v2RetrieveBookProceduresResponse:
+      type: object
+      properties:
+        procedures:
+          type: array
+          items:
+            $ref: '#/components/schemas/v2BookProcedureDescriptor'
+          title: Available procedures
+      title: Retrieve all the available signatures for a book
+    v2DictionaryValue:
+      type: object
+      properties:
+        fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/v2DictionaryValueField'
+          title: All the fields alongside their values in the dictionary
+        is_a:
+          type: array
+          items:
+            $ref: '#/components/schemas/v2NounPhrase'
+          title: Is a replationships for the dictionary
+      title: Value to be used when the type is dictionary
+    v2CredentialType:
+      type: string
+      enum:
+      - CredentialTypeText
+      - CredentialTypeSensitiveText
+      default: CredentialTypeText
+      title: Supported configuration types
+    v2UnaryExpression:
+      type: object
+      properties:
+        operator:
+          $ref: '#/components/schemas/v2UnaryOperator'
+        inner:
+          $ref: '#/components/schemas/v2Expression'
+    v2SearchBookProceduresRequest:
+      type: object
+      properties:
+        query:
+          type: string
+          title: Free-text search query to match against procedure metadata and signatures
+        top_k:
+          type: integer
+          format: int64
+          title: Maximum number of results to return
+        max_distance:
+          type: number
+          format: float
+          title: Maximum distance threshold for similarity matching
+      title: Search for procedures across all available books
+    v2BookOAuthAuthenticationDescriptor:
+      type: object
+      properties:
+        id:
+          type: string
+          description: 'Since books can have multiple authentication mechanisms there is
+
+            and ID to differentiate each mechanism.'
+        provider:
+          $ref: '#/components/schemas/v2OAuthProvider'
+        flows:
+          type: array
+          items:
+            $ref: '#/components/schemas/v2OAuthFlow'
+          title: Supported OAuth flows
+        authorize_endpoint:
+          type: string
+          title: Authorize endpoint
+        token_endpoint:
+          type: string
+          title: Token endpoint
+        scope:
+          type: array
+          items:
+            type: string
+          title: Scopes
+        name:
+          type: string
+          title: A name for the authentication
+        arguments:
+          type: array
+          items:
+            $ref: '#/components/schemas/v2OAuthArgumentDescriptor'
+          title: 'Additional arguments which are not part of the OAuth specification
+
+            but are required for the authentication to work (such as tenant_id)'
+        credentials:
+          type: array
+          items:
+            $ref: '#/components/schemas/v2CredentialDescriptor'
+          title: Credential descriptors
+        preferred:
+          type: boolean
+          title: If this is a preferred authentication method
+    v2BookConnectionStateCategory:
+      type: string
+      enum:
+      - BOOK_CONNECTION_STATE_CATEGORY_WARNING
+      - BOOK_CONNECTION_STATE_CATEGORY_READY
+      - BOOK_CONNECTION_STATE_CATEGORY_FAILED
+      default: BOOK_CONNECTION_STATE_CATEGORY_WARNING
+      title: The category/level of the connection state
+    v2SearchBookConceptsRequest:
+      type: object
+      properties:
+        query:
+          type: string
+          title: Free-text search query to match against concept names and descriptions
+        top_k:
+          type: integer
+          format: int64
+          title: Maximum number of results to return
+        max_distance:
+          type: number
+          format: float
+          title: Maximum distance threshold for similarity matching
+      title: Search for concepts across all available books
+    v2BookConnectionDescriptor:
+      type: object
+      properties:
+        book_name:
+          type: string
+          title: The name of the book
+        book_version:
+          type: string
+          title: The version of the book
+        connection_id:
+          type: string
+          title: The connection id of the book
+        connection_name:
+          type: string
+          title: The connection name
+        authentication:
+          $ref: '#/components/schemas/v2Authentication'
+        config:
+          type: array
+          items:
+            $ref: '#/components/schemas/v2ConceptValue'
+          title: 'Input config concepts. Note: replaced by config_map'
+        labels:
+          type: array
+          items:
+            $ref: '#/components/schemas/bdkV2Label'
+          title: Labels associated with the connection
+        status:
+          $ref: '#/components/schemas/v2BookConnectionStatus'
+        endpoint:
+          type: string
+          title: The endpoint of the connection
+        discovered:
+          type: array
+          items:
+            type: string
+          title: The list of things that have been discovered
+        config_map:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/bdkV2Value'
+          title: Configured values
+    v2TableValue:
+      type: object
+      properties:
+        remote:
+          type: string
+        inline:
+          $ref: '#/components/schemas/v2Table'
+      title: 'A table that is represented remote as an URL to a file that is Feather-formatted
+
+        or inline via the Table message'
+    v2Discoverable:
+      type: object
+      properties:
+        name:
+          type: string
+          title: The name of the discoverable
+        description:
+          type: string
+          title: The description of the discoverable
+    v2File:
+      type: object
+      properties:
+        file_name:
+          type: string
+          title: The name of the file
+        content:
+          type: string
+          format: byte
+          title: Content of the file as a byte stream
+    v2RetrieveWorkspaceTriggerInstancesResponse:
+      type: object
+      properties:
+        trigger_instances:
+          type: array
+          items:
+            $ref: '#/components/schemas/v2TriggerInstance'
+          title: The trigger instances
+    UpgradeWorkspaceBookConnectionBody:
+      type: object
+      properties:
+        new_book_version:
+          type: string
+          title: The new version to upgrade book to
+    v2Column:
+      type: object
+      properties:
+        values:
+          type: array
+          items:
+            $ref: '#/components/schemas/bdkV2Value'
+        name:
+          type: string
+    v2ConceptEnumType:
+      type: object
+      properties:
+        is_a:
+          type: array
+          items:
+            $ref: '#/components/schemas/v2NounPhrase'
+        members:
+          type: array
+          items:
+            $ref: '#/components/schemas/v2ConceptEnumTypeMember'
+        description:
+          type: string
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: Personal Access Token.
+x-refined-from:
+- kognitos-openapi.yaml
+- kognitos-openapi.yml

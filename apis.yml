@@ -1,23 +1,368 @@
 aid: kognitos
+
 name: Kognitos
-description: 'Kognitos is a company surfaced via the API Evangelist harvest backlog (source: secondary-market)
-  and added to the network as a stub for full-pipeline profiling.'
+
+description: Kognitos is a neurosymbolic agentic AI platform that automates finance, accounts payable, healthcare, and IT workflows in plain English
+  ("English as code"), positioned as deterministic agentic AI for the enterprise with zero hallucinations and full audit compliance. The platform
+  runs on AWS, offers integrations with SAP, Oracle Cloud ERP, Microsoft Dynamics 365 and Workday, and exposes a REST API (base https://app.us-1.kognitos.com/api/v1,
+  Bearer personal access tokens) for managing organizations, workspaces, automations, runs, books, files, exceptions and analytics.
+
 url: https://raw.githubusercontent.com/api-evangelist/kognitos/refs/heads/main/apis.yml
+
+image: https://www.kognitos.com/img/kognitos-og.png?v=cee38495
+
 x-type: company
+
 x-source: harvest:secondary-market
-x-tier: stub
-x-tier-reason: harvest
+
+x-tier: profiled
+x-tier-reason: enrichment pass 2026-10-09 (modular-v1; was harvest)
+
 specificationVersion: '0.20'
+
 created: '2026-10-09'
+
 modified: '2026-10-09'
+
 tags:
 - Company
-apis: []
+- Agentic AI
+- Automation
+- Workflow Automation
+- Finance Automation
+- Accounts Payable
+- Neurosymbolic AI
+- Enterprise
+
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
+
 common:
+- type: AgenticAccess
+  url: agentic-access/kognitos-agentic-access.yml
+- type: Plans
+  url: plans/kognitos-plans-pricing.yml
+- type: Spectral
+  url: rules/kognitos-rules.yml
+- type: Spectral
+  url: rules/kognitos-openapi-spectral-rules.yml
+- type: JSONLD
+  url: json-ld/kognitos-context.jsonld
+- type: Vocabulary
+  url: vocabulary/kognitos-vocabulary.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: DataModel
+  url: data-model/kognitos-data-model.yml
+- type: Conventions
+  url: conventions/kognitos-conventions.yml
+- type: Sandbox
+  url: sandbox/kognitos-sandbox.yml
+- type: Compliance
+  url: https://trust.kognitos.com/
+- type: Deprecation
+  url: lifecycle/kognitos-lifecycle.yml
+- type: Lifecycle
+  url: lifecycle/kognitos-lifecycle.yml
+- type: ErrorCatalog
+  url: errors/kognitos-problem-types.yml
+- type: Conformance
+  url: conformance/kognitos-conformance.yml
+- type: Overlay
+  url: overlays/kognitos-openapi-overlay.yaml
+- type: LLMsTxt
+  url: llms/kognitos-llms.txt
+- type: ToolCrosswalk
+  url: mcp/kognitos-tool-crosswalk.yml
+- type: MCPServer
+  url: mcp/kognitos-mcp.yml
+- type: WellKnown
+  url: well-known/kognitos-well-known.yml
+- type: Hosts
+  url: hosts/kognitos-hosts.yml
+- type: Vendors
+  url: vendors/kognitos-vendors.yml
+- type: SDKs
+  url: packages/kognitos-packages.yml
+- type: Packages
+  url: packages/kognitos-packages.yml
+- type: Newsroom
+  url: https://www.kognitos.com/news/
+- type: Authentication
+  url: authentication/kognitos-authentication.yml
+- type: TrustCenter
+  url: security/kognitos-trust-center.yml
+- type: DomainSecurity
+  url: security/kognitos-domain-security.yml
 - type: Website
+  url: https://www.kognitos.com
+- type: DeveloperPortal
+  url: https://www.kognitos.com/developer/
+- type: Documentation
+  url: https://docs.kognitos.com/
+- type: APIReference
+  url: https://docs.kognitos.com/guides/api-reference/api-reference
+- type: GettingStarted
+  url: https://docs.kognitos.com/guides/getting-started/quick-start
+- type: LLMsTxt
+  url: https://docs.kognitos.com/llms.txt
+- type: Login
+  url: https://app.us-1.kognitos.com/
+- type: StatusPage
+  url: https://status.kognitos.com/
+- type: TrustCenter
+  url: https://trust.kognitos.com/
+- type: Blog
+  url: https://www.kognitos.com/blog/
+- type: Support
+  url: https://www.kognitos.com/contact-us/
+- type: GitHubOrganization
+  url: https://github.com/kognitos
+- type: TermsOfService
+  url: https://www.kognitos.com/terms/
+- type: PrivacyPolicy
+  url: https://www.kognitos.com/privacy/
+- type: LinkedIn
+  url: https://www.linkedin.com/company/kognitos/
+- type: X
+  url: https://x.com/kognitos_inc
+- type: YouTube
+  url: https://www.youtube.com/@KognitosAutomation
+- type: EquityZen
   url: https://equityzen.com/company/kognitos
+- type: SpectralRules
+  url: https://github.com/kognitos/openapi/blob/edf6b8b8988fd6aff8938039aaa1e96c2ec88b6b/.spectral.yaml
+
+apis:
+- aid: kognitos:kognitos-mcp-server
+  name: Kognitos MCP Server
+  description: >-
+    The Kognitos MCP Server lets AI assistants (Claude Desktop, Claude Code, Claude.ai and other Model
+    Context Protocol clients) list automations, start runs, inspect exceptions and manage schedules in
+    a Kognitos workspace over the Streamable HTTP transport, authenticated with OAuth 2.1.
+  humanURL: https://docs.kognitos.com/guides/mcp/mcp
+  baseURL: https://mcp.us-1.kognitos.com/
+  tags:
+  - MCP
+  - Agentic AI
+  properties:
+  - type: Documentation
+    url: https://docs.kognitos.com/guides/mcp/mcp
+- aid: kognitos:kognitos-analytics-api
+  name: Kognitos Analytics API
+  description: Query dashboards, automation estimates, insights, and metrics.
+  humanURL: https://docs.kognitos.com/guides/api-reference/api-reference
+  baseURL: https://app.us-1.kognitos.com/api/v1
+  tags:
+  - Analytics
+  properties:
+  - type: OpenAPI
+    url: openapi/kognitos-analytics-api-openapi.yml
+  - type: Documentation
+    url: https://docs.kognitos.com/guides/api-reference/api-reference
+  - type: Authentication
+    url: https://docs.kognitos.com/guides/api-reference/api-keys
+  - type: JSONSchema
+    url: json-schema/kognitos-v1-automation-schema.json
+  - type: JSONSchema
+    url: json-schema/kognitos-v1-exception-schema.json
+  - type: JSONSchema
+    url: json-schema/kognitos-v1-guide-entry-schema.json
+  - type: JSONSchema
+    url: json-schema/kognitos-api-http-body-schema.json
+  - type: JSONSchema
+    url: json-schema/kognitos-v1-run-schema.json
+  - type: JSONSchema
+    url: json-schema/kognitos-v1-list-run-events-response-schema.json
+- aid: kognitos:kognitos-automations-api
+  name: Kognitos Automations API
+  description: Create and configure automations, revisions, schedules, triggers, and connections.
+  humanURL: https://docs.kognitos.com/guides/api-reference/api-reference
+  baseURL: https://app.us-1.kognitos.com/api/v1
+  tags:
+  - Automations
+  properties:
+  - type: OpenAPI
+    url: openapi/kognitos-automations-api-openapi.yml
+  - type: Documentation
+    url: https://docs.kognitos.com/guides/api-reference/api-reference
+  - type: Authentication
+    url: https://docs.kognitos.com/guides/api-reference/api-keys
+  - type: JSONSchema
+    url: json-schema/kognitos-v1-automation-schema.json
+  - type: JSONSchema
+    url: json-schema/kognitos-v1-exception-schema.json
+  - type: JSONSchema
+    url: json-schema/kognitos-v1-guide-entry-schema.json
+  - type: JSONSchema
+    url: json-schema/kognitos-api-http-body-schema.json
+  - type: JSONSchema
+    url: json-schema/kognitos-v1-run-schema.json
+  - type: JSONSchema
+    url: json-schema/kognitos-v1-list-run-events-response-schema.json
+- aid: kognitos:kognitos-books-api
+  name: Kognitos Books API
+  description: Browse and search books, concepts, procedures, connections, and triggers.
+  humanURL: https://docs.kognitos.com/guides/api-reference/api-reference
+  baseURL: https://app.us-1.kognitos.com/api/v1
+  tags:
+  - Books
+  properties:
+  - type: OpenAPI
+    url: openapi/kognitos-books-api-openapi.yml
+  - type: Documentation
+    url: https://docs.kognitos.com/guides/api-reference/api-reference
+  - type: Authentication
+    url: https://docs.kognitos.com/guides/api-reference/api-keys
+  - type: JSONSchema
+    url: json-schema/kognitos-v1-automation-schema.json
+  - type: JSONSchema
+    url: json-schema/kognitos-v1-exception-schema.json
+  - type: JSONSchema
+    url: json-schema/kognitos-v1-guide-entry-schema.json
+  - type: JSONSchema
+    url: json-schema/kognitos-api-http-body-schema.json
+  - type: JSONSchema
+    url: json-schema/kognitos-v1-run-schema.json
+  - type: JSONSchema
+    url: json-schema/kognitos-v1-list-run-events-response-schema.json
+- aid: kognitos:kognitos-exceptions-api
+  name: Kognitos Exceptions API
+  description: >-
+    Track exceptions, view analytics, manage agent events, and access troubleshooting guides.
+  humanURL: https://docs.kognitos.com/guides/api-reference/api-reference
+  baseURL: https://app.us-1.kognitos.com/api/v1
+  tags:
+  - Exceptions
+  properties:
+  - type: OpenAPI
+    url: openapi/kognitos-exceptions-api-openapi.yml
+  - type: Documentation
+    url: https://docs.kognitos.com/guides/api-reference/api-reference
+  - type: Authentication
+    url: https://docs.kognitos.com/guides/api-reference/api-keys
+  - type: JSONSchema
+    url: json-schema/kognitos-v1-automation-schema.json
+  - type: JSONSchema
+    url: json-schema/kognitos-v1-exception-schema.json
+  - type: JSONSchema
+    url: json-schema/kognitos-v1-guide-entry-schema.json
+  - type: JSONSchema
+    url: json-schema/kognitos-api-http-body-schema.json
+  - type: JSONSchema
+    url: json-schema/kognitos-v1-run-schema.json
+  - type: JSONSchema
+    url: json-schema/kognitos-v1-list-run-events-response-schema.json
+- aid: kognitos:kognitos-files-api
+  name: Kognitos Files API
+  description: Upload, download, and manage files.
+  humanURL: https://docs.kognitos.com/guides/api-reference/api-reference
+  baseURL: https://app.us-1.kognitos.com/api/v1
+  tags:
+  - Files
+  properties:
+  - type: OpenAPI
+    url: openapi/kognitos-files-api-openapi.yml
+  - type: Documentation
+    url: https://docs.kognitos.com/guides/api-reference/api-reference
+  - type: Authentication
+    url: https://docs.kognitos.com/guides/api-reference/api-keys
+  - type: JSONSchema
+    url: json-schema/kognitos-v1-automation-schema.json
+  - type: JSONSchema
+    url: json-schema/kognitos-v1-exception-schema.json
+  - type: JSONSchema
+    url: json-schema/kognitos-v1-guide-entry-schema.json
+  - type: JSONSchema
+    url: json-schema/kognitos-api-http-body-schema.json
+  - type: JSONSchema
+    url: json-schema/kognitos-v1-run-schema.json
+  - type: JSONSchema
+    url: json-schema/kognitos-v1-list-run-events-response-schema.json
+- aid: kognitos:kognitos-organizations-api
+  name: Kognitos Organizations API
+  description: Manage organizations, users, roles, invitations, and preferences.
+  humanURL: https://docs.kognitos.com/guides/api-reference/api-reference
+  baseURL: https://app.us-1.kognitos.com/api/v1
+  tags:
+  - Organizations
+  properties:
+  - type: OpenAPI
+    url: openapi/kognitos-organizations-api-openapi.yml
+  - type: Documentation
+    url: https://docs.kognitos.com/guides/api-reference/api-reference
+  - type: Authentication
+    url: https://docs.kognitos.com/guides/api-reference/api-keys
+  - type: JSONSchema
+    url: json-schema/kognitos-v1-automation-schema.json
+  - type: JSONSchema
+    url: json-schema/kognitos-v1-exception-schema.json
+  - type: JSONSchema
+    url: json-schema/kognitos-v1-guide-entry-schema.json
+  - type: JSONSchema
+    url: json-schema/kognitos-api-http-body-schema.json
+  - type: JSONSchema
+    url: json-schema/kognitos-v1-run-schema.json
+  - type: JSONSchema
+    url: json-schema/kognitos-v1-list-run-events-response-schema.json
+- aid: kognitos:kognitos-runs-api
+  name: Kognitos Runs API
+  description: Execute automations and manage run lifecycle — start, pause, continue, and view events.
+  humanURL: https://docs.kognitos.com/guides/api-reference/api-reference
+  baseURL: https://app.us-1.kognitos.com/api/v1
+  tags:
+  - Runs
+  properties:
+  - type: OpenAPI
+    url: openapi/kognitos-runs-api-openapi.yml
+  - type: Documentation
+    url: https://docs.kognitos.com/guides/api-reference/api-reference
+  - type: Authentication
+    url: https://docs.kognitos.com/guides/api-reference/api-keys
+  - type: JSONSchema
+    url: json-schema/kognitos-v1-automation-schema.json
+  - type: JSONSchema
+    url: json-schema/kognitos-v1-exception-schema.json
+  - type: JSONSchema
+    url: json-schema/kognitos-v1-guide-entry-schema.json
+  - type: JSONSchema
+    url: json-schema/kognitos-api-http-body-schema.json
+  - type: JSONSchema
+    url: json-schema/kognitos-v1-run-schema.json
+  - type: JSONSchema
+    url: json-schema/kognitos-v1-list-run-events-response-schema.json
+- aid: kognitos:kognitos-workspaces-api
+  name: Kognitos Workspaces API
+  description: Manage workspaces, members, roles, invitations, and preferences.
+  humanURL: https://docs.kognitos.com/guides/api-reference/api-reference
+  baseURL: https://app.us-1.kognitos.com/api/v1
+  tags:
+  - Workspaces
+  properties:
+  - type: OpenAPI
+    url: openapi/kognitos-workspaces-api-openapi.yml
+  - type: Documentation
+    url: https://docs.kognitos.com/guides/api-reference/api-reference
+  - type: Authentication
+    url: https://docs.kognitos.com/guides/api-reference/api-keys
+  - type: JSONSchema
+    url: json-schema/kognitos-v1-automation-schema.json
+  - type: JSONSchema
+    url: json-schema/kognitos-v1-exception-schema.json
+  - type: JSONSchema
+    url: json-schema/kognitos-v1-guide-entry-schema.json
+  - type: JSONSchema
+    url: json-schema/kognitos-api-http-body-schema.json
+  - type: JSONSchema
+    url: json-schema/kognitos-v1-run-schema.json
+  - type: JSONSchema
+    url: json-schema/kognitos-v1-list-run-events-response-schema.json
+x-enrichment:
+  date: '2026-10-09'
+  status: enriched
+  artifacts_added: 46
+  pass: modular-v1
+  engine: identity=anthropic,contract=anthropic,surfaces=anthropic,docs=anthropic,regulatory=anthropic

@@ -1,0 +1,457 @@
+generated: '2026-10-09'
+method: derived
+generator: derive-vocabulary.py
+source: openapi/kognitos-openapi.yml
+vocabulary:
+  name: Kognitos Domain Vocabulary
+  description: 'Terms declared by Kognitos''s own API contract: its resource groups, objects and enumerations, with the contract''s definitions.
+    Derived, not authored.'
+  version: '2026-10-09'
+  terms:
+  - term: Organizations
+    definition: Manage organizations, users, roles, invitations, and preferences.
+    tags:
+    - Resource Group
+    source: openapi/kognitos-openapi.yml
+  - term: Workspaces
+    definition: Manage workspaces, members, roles, invitations, and preferences.
+    tags:
+    - Resource Group
+    source: openapi/kognitos-openapi.yml
+  - term: Automations
+    definition: Create and configure automations, revisions, schedules, triggers, and connections.
+    tags:
+    - Resource Group
+    source: openapi/kognitos-openapi.yml
+  - term: Runs
+    definition: Execute automations and manage run lifecycle — start, pause, continue, and view events.
+    tags:
+    - Resource Group
+    source: openapi/kognitos-openapi.yml
+  - term: Books
+    definition: Browse and search books, concepts, procedures, connections, and triggers.
+    tags:
+    - Resource Group
+    source: openapi/kognitos-openapi.yml
+  - term: Files
+    definition: Upload, download, and manage files.
+    tags:
+    - Resource Group
+    source: openapi/kognitos-openapi.yml
+  - term: Exceptions
+    definition: Track exceptions, view analytics, manage agent events, and access troubleshooting guides.
+    tags:
+    - Resource Group
+    source: openapi/kognitos-openapi.yml
+  - term: Analytics
+    definition: Query dashboards, automation estimates, insights, and metrics.
+    tags:
+    - Resource Group
+    source: openapi/kognitos-openapi.yml
+  - term: v1QueryAutomationRunAggregatesResponse
+    definition: Response message for QueryAutomationRunAggregates method. Contains statistics for each automation in the workspace.
+    tags:
+    - Object
+    source: openapi/kognitos-openapi.yml#/components/schemas/v1QueryAutomationRunAggregatesResponse
+  - term: v1AutomationRunAggregateEntry
+    definition: Entry for automation run statistics. Contains the automation ID and its associated run counts.
+    tags:
+    - Object
+    source: openapi/kognitos-openapi.yml#/components/schemas/v1AutomationRunAggregateEntry
+  - term: v1AutomationRunAggregate
+    definition: Stats for a single automation. Contains run counts and other metrics.
+    tags:
+    - Object
+    source: openapi/kognitos-openapi.yml#/components/schemas/v1AutomationRunAggregate
+  - term: v1ListWorkspaceRolesResponse
+    definition: Response message for ListWorkspaceRoles.
+    tags:
+    - Object
+    source: openapi/kognitos-openapi.yml#/components/schemas/v1ListWorkspaceRolesResponse
+  - term: v1Role
+    definition: A Role represents a concrete, assignable role that can be assigned to users. Roles can be created from RoleTemplates or as standalone
+      custom roles.
+    tags:
+    - Object
+    source: openapi/kognitos-openapi.yml#/components/schemas/v1Role
+  - term: v1ListAutomationTriggersResponse
+    definition: Response containing the list of active triggers for an automation.
+    tags:
+    - Object
+    source: openapi/kognitos-openapi.yml#/components/schemas/v1ListAutomationTriggersResponse
+  - term: v1AutomationTrigger
+    definition: AutomationTrigger represents phase configuration metadata for an external trigger. The trigger itself is created and managed by
+      another service; this message stores additional metadata about how the trigger relates to automation phases.
+    tags:
+    - Object
+    source: openapi/kognitos-openapi.yml#/components/schemas/v1AutomationTrigger
+  - term: v1PhaseType
+    definition: 'PhaseType defines the type of phase for an automation trigger. - PHASE_TYPE_UNSPECIFIED: Unspecified phase type. - PHASE_TYPE_PRE:
+      Pre-processing phase. - PHASE_TYPE_MAIN: Main processing phase. - PHASE_TYPE_POST: Post-processing phase.'
+    tags:
+    - Enumeration
+    source: openapi/kognitos-openapi.yml#/components/schemas/v1PhaseType
+  - term: v1PhaseSubType
+    definition: 'PhaseSubType defines the sub-type within a phase for an automation trigger. - PHASE_SUB_TYPE_UNSPECIFIED: Unspecified phase sub-type.
+      - PHASE_SUB_TYPE_EMAIL: Email trigger sub-type. - PHASE_SUB_TYPE_SCHEDULE: Schedule-based trigger sub-type. - PHASE_SUB_TYPE_WEBHOOK: Webhook
+      trigger sub-type. - PHASE_SUB_TYPE_API: API trigger sub-type.'
+    tags:
+    - Enumeration
+    source: openapi/kognitos-openapi.yml#/components/schemas/v1PhaseSubType
+  - term: v1Workspace
+    definition: A Workspace is a container for agents within an organization.
+    tags:
+    - Object
+    source: openapi/kognitos-openapi.yml#/components/schemas/v1Workspace
+  - term: v1ListRunEventsResponse
+    definition: 'Response message for the ListRunEvents RPC. Contains a page of run events in chronological order, along with pagination information
+      for retrieving additional events. Events are sorted by their occurrence time, providing a complete timeline of the run''s execution. The
+      response may contain fewer events than requested if: - The run has fewer remaining events than the page size - This is the final pag'
+    tags:
+    - Object
+    source: openapi/kognitos-openapi.yml#/components/schemas/v1ListRunEventsResponse
+  - term: v1RunEvent
+    definition: A single event that occurred during an automation run execution.
+    tags:
+    - Object
+    source: openapi/kognitos-openapi.yml#/components/schemas/v1RunEvent
+  - term: Journal event for an execution, capturing status and node-level events
+    definition: 'Object declared by the contract with fields: execution_id, run_id, event_time, started, completed, stopped, failed, node_started,
+      node_executed, node_skipped, node_patched, patched_node_started. (8 more)'
+    tags:
+    - Object
+    source: openapi/kognitos-openapi.yml#/components/schemas/v1ExecutionJournal
+  - term: v1ExecutionCompleted
+    definition: ExecutionCompleted indicates that Jarvis has successfully completed the execution. The final result value is included in this
+      message, representing the return value of the executed code.
+    tags:
+    - Object
+    source: openapi/kognitos-openapi.yml#/components/schemas/v1ExecutionCompleted
+  - term: commonV1Value
+    definition: 'Represents a runtime value that can be produced by the Jarvis interpreter. This message provides a type-safe way to serialize
+      and transmit values between the Jarvis interpreter and other services via gRPC. It supports all the basic data types that can be represented
+      in the Jarvis language runtime. The oneof structure ensures that exactly one value type is set at a time, providing both type safety '
+    tags:
+    - Object
+    source: openapi/kognitos-openapi.yml#/components/schemas/commonV1Value
+  - term: typeDateTime
+    definition: 'Represents civil time (or occasionally physical time). This type can represent a civil time in one of a few possible ways: *
+      When utc_offset is set and time_zone is unset: a civil time on a calendar day with a particular offset from UTC. * When time_zone is set
+      and utc_offset is unset: a civil time on a calendar day in a particular time zone. * When neither time_zone nor utc_offset is set: a civil'
+    tags:
+    - Object
+    source: openapi/kognitos-openapi.yml#/components/schemas/typeDateTime
+  - term: typeTimeZone
+    definition: Represents a time zone from the [IANA Time Zone Database](https://www.iana.org/time-zones).
+    tags:
+    - Object
+    source: openapi/kognitos-openapi.yml#/components/schemas/typeTimeZone
+  - term: v1Number
+    definition: 'A fixed-precision decimal number with up to 28 fractional digits. This message represents decimal numbers with exact precision,
+      avoiding floating-point rounding errors. It''s particularly useful for financial calculations, measurements, and any scenario where exact
+      decimal representation is required. The value is calculated as: m / 10^e, where: - m is an unsigned 96-bit integer composed of (lo, mid'
+    tags:
+    - Object
+    source: openapi/kognitos-openapi.yml#/components/schemas/v1Number
+  - term: A file value represents a file that can be either inline or remote
+    definition: 'Object declared by the contract with fields: remote, inline.'
+    tags:
+    - Object
+    source: openapi/kognitos-openapi.yml#/components/schemas/v1FileValue
+  - term: v1File
+    definition: 'Object declared by the contract with fields: file_name, content.'
+    tags:
+    - Object
+    source: openapi/kognitos-openapi.yml#/components/schemas/v1File
+  - term: typeTimeOfDay
+    definition: Represents a time of day. The date and time zone are either not significant or are specified elsewhere. An API may choose to allow
+      leap seconds. Related types are [google.type.Date][google.type.Date] and `google.protobuf.Timestamp`.
+    tags:
+    - Object
+    source: openapi/kognitos-openapi.yml#/components/schemas/typeTimeOfDay
+  - term: 'A table that is represented remote as an URL to a file that is Feather-formatted
+
+      or inline via the Table message'
+    definition: 'Object declared by the contract with fields: remote, inline.'
+    tags:
+    - Object
+    source: openapi/kognitos-openapi.yml#/components/schemas/v1TableValue
+  - term: v1Table
+    definition: A table is a column-oriented structure. All the values inside each column must be of equal length.
+    tags:
+    - Object
+    source: openapi/kognitos-openapi.yml#/components/schemas/v1Table
+  - term: v1Column
+    definition: 'Object declared by the contract with fields: values, name.'
+    tags:
+    - Object
+    source: openapi/kognitos-openapi.yml#/components/schemas/v1Column
+  - term: A union of all possible values
+    definition: 'Object declared by the contract with fields: null_value, conceptual_value, text_value, number_value, boolean_value, datetime_value,
+      date_value, time_value, file_value, dictionary_value, list_value, opaque_value. (2 more)'
+    tags:
+    - Object
+    source: openapi/kognitos-openapi.yml#/components/schemas/bdkV1Value
+  - term: Value to be used when the type is dictionary
+    definition: 'Object declared by the contract with fields: fields, is_a.'
+    tags:
+    - Object
+    source: openapi/kognitos-openapi.yml#/components/schemas/v1DictionaryValue
+  - term: v1NounPhrase
+    definition: 'Object declared by the contract with fields: modifiers, head.'
+    tags:
+    - Object
+    source: openapi/kognitos-openapi.yml#/components/schemas/v1NounPhrase
+  - term: Each key-value pair inside a dictionary
+    definition: 'Object declared by the contract with fields: key, value.'
+    tags:
+    - Object
+    source: openapi/kognitos-openapi.yml#/components/schemas/v1DictionaryValueField
+  - term: v1OpaqueValue
+    definition: 'Object declared by the contract with fields: content, is_a.'
+    tags:
+    - Object
+    source: openapi/kognitos-openapi.yml#/components/schemas/v1OpaqueValue
+  - term: A sensitive value is any value marked as sensitive (to prevent exposure)
+    definition: 'Object declared by the contract with fields: value.'
+    tags:
+    - Object
+    source: openapi/kognitos-openapi.yml#/components/schemas/v1SensitiveValue
+  - term: v1Date
+    definition: 'Object declared by the contract with fields: year, month, day.'
+    tags:
+    - Object
+    source: openapi/kognitos-openapi.yml#/components/schemas/v1Date
+  - term: v1Time
+    definition: 'Object declared by the contract with fields: hours, minutes, seconds, nanos.'
+    tags:
+    - Object
+    source: openapi/kognitos-openapi.yml#/components/schemas/v1Time
+  - term: A collection of values
+    definition: 'Object declared by the contract with fields: values.'
+    tags:
+    - Object
+    source: openapi/kognitos-openapi.yml#/components/schemas/bdkV1ListValue
+  - term: v1Dictionary
+    definition: 'Represents a key-value mapping (similar to hash maps or dictionaries). This message stores associations between keys and values,
+      where keys must be hashable types (null, bool, Number, string, Date, TimeOfDay, DateTime, TimeZone). Keys are unique within a dictionary
+      - duplicate keys will overwrite previous values. The dictionary maintains insertion order for consistent iteration behavior. Examples:'
+    tags:
+    - Object
+    source: openapi/kognitos-openapi.yml#/components/schemas/v1Dictionary
+  - term: v1DictionaryEntry
+    definition: Represents a single key-value pair within a Dictionary. Both key and value can be any Value type, though keys should be hashable
+      types for proper dictionary behavior. Non-hashable keys (like lists or dictionaries) may cause runtime errors.
+    tags:
+    - Object
+    source: openapi/kognitos-openapi.yml#/components/schemas/v1DictionaryEntry
+  - term: v1HashableValue
+    definition: 'Represents a hashable value that can be used as a dictionary key. This message contains only the hashable types from the Value
+      message, corresponding to Python''s hashable types. These types can be safely used as keys in maps and dictionaries. Hashable types include:
+      bool, Number, string, Date, TimeOfDay, DateTime and Duration.'
+    tags:
+    - Object
+    source: openapi/kognitos-openapi.yml#/components/schemas/v1HashableValue
+  - term: 'Represents a whole or partial calendar date, such as a birthday. The time of
+
+      day and time zone are either specified elsewhere or are insignificant. The
+
+      date is relative to the Gregorian Calendar. This can represent one of the
+
+      following:'
+    definition: '* A full date, with non-zero year, month, and day values * A month and day value, with a zero year, such as an anniversary *
+      A year on its own, with zero month and day values * A year and month value, with a zero day, such as a credit card expiration date Related
+      types are [google.type.TimeOfDay][google.type.TimeOfDay] and `google.protobuf.Timestamp`.'
+    tags:
+    - Object
+    source: openapi/kognitos-openapi.yml#/components/schemas/typeDate
+  - term: v1List
+    definition: 'Represents an ordered collection of values (similar to arrays or lists). This message can contain any number of Value elements
+      in a specific order. Lists are mutable and can grow or shrink during runtime. Elements can be accessed by their zero-based index position.
+      Examples: - [1, 2, 3] - list of numbers - ["hello", "world"] - list of strings - [true, 42, "mixed"] - list with mixed types - [[1, 2]'
+    tags:
+    - Object
+    source: openapi/kognitos-openapi.yml#/components/schemas/v1List
+  - term: v1Set
+    definition: Represents an unordered collection of unique values. This message stores a collection of unique elements, where duplicate values
+      are automatically removed. Only hashable types can be stored in sets. Sets are useful for membership testing, removing duplicates, and mathematical
+      set operations like union, intersection, and difference. The set does not maintain insertion order - elements may appear in
+    tags:
+    - Object
+    source: openapi/kognitos-openapi.yml#/components/schemas/v1Set
+  - term: v1AutomationStage
+    definition: 'AutomationStage represents the publication stage of an automation. This enum is shared across services that manage or execute
+      automations. - AUTOMATION_STAGE_UNSPECIFIED: Automation stage is not specified. - AUTOMATION_STAGE_DRAFT: Automation is in draft stage and
+      can be modified. - AUTOMATION_STAGE_PUBLISHED: Automation is published and immutable, ready for execution.'
+    tags:
+    - Enumeration
+    source: openapi/kognitos-openapi.yml#/components/schemas/v1AutomationStage
+  - term: v1ExecutionStarted
+    definition: ExecutionStarted indicates that Jarvis has started the execution.
+    tags:
+    - Object
+    source: openapi/kognitos-openapi.yml#/components/schemas/v1ExecutionStarted
+  - term: Event emitted after executing a node inside a patch, with I/O and errors
+    definition: 'Object declared by the contract with fields: patch_location, node_location, inputs, outputs, error, node_id, book_function_call,
+      node_kind.'
+    tags:
+    - Object
+    source: openapi/kognitos-openapi.yml#/components/schemas/v1PatchedNodeExecuted
+  - term: v1BookFunctionCall
+    definition: BookFunctionCall represents a call to an external book function with its inputs and outputs.
+    tags:
+    - Object
+    source: openapi/kognitos-openapi.yml#/components/schemas/v1BookFunctionCall
+  - term: v1BookFunction
+    definition: BookFunction represents a reference to an external book function.
+    tags:
+    - Object
+    source: openapi/kognitos-openapi.yml#/components/schemas/v1BookFunction
+  - term: commonV1Location
+    definition: Location represents a generic span within some underlying content. It specifies the starting byte offset and the ending byte offset
+      (exclusive) of the span. This can be used for pointing to regions in files, buffers, logs, messages, or any other byte-addressable resource.
+    tags:
+    - Object
+    source: openapi/kognitos-openapi.yml#/components/schemas/commonV1Location
+  - term: v1ExecutionError
+    definition: ExecutionError represents an error that occurred during execution.
+    tags:
+    - Object
+    source: openapi/kognitos-openapi.yml#/components/schemas/v1ExecutionError
+  - term: v1Context
+    definition: Context provides additional information about the execution environment, such as stack traces for debugging purposes.
+    tags:
+    - Object
+    source: openapi/kognitos-openapi.yml#/components/schemas/v1Context
+  - term: Event emitted after Jarvis finishes executing an AST node, with I/O and errors
+    definition: 'Object declared by the contract with fields: code_location, inputs, outputs, error, node_id, book_function_call, node_kind.'
+    tags:
+    - Object
+    source: openapi/kognitos-openapi.yml#/components/schemas/v1NodeExecuted
+  - term: Event emitted when Jarvis begins executing an AST node
+    definition: 'Object declared by the contract with fields: code_location, node_id, node_kind.'
+    tags:
+    - Object
+    source: openapi/kognitos-openapi.yml#/components/schemas/v1NodeStarted
+  - term: Event emitted when Jarvis starts executing a node inside a patch
+    definition: 'Object declared by the contract with fields: patch_location, node_location, node_id, node_kind.'
+    tags:
+    - Object
+    source: openapi/kognitos-openapi.yml#/components/schemas/v1PatchedNodeStarted
+  - term: v1ExecutionFailed
+    definition: ExecutionFailed indicates that the execution encountered an error and could not complete successfully.
+    tags:
+    - Object
+    source: openapi/kognitos-openapi.yml#/components/schemas/v1ExecutionFailed
+  - term: Event emitted when a patch is applied to an AST node
+    definition: 'Object declared by the contract with fields: code_location, code_patch, inputs_patch, connections, node_id, node_kind.'
+    tags:
+    - Object
+    source: openapi/kognitos-openapi.yml#/components/schemas/v1NodePatched
+  - term: v1BookConnection
+    definition: BookConnection is a resource representing a connection to a book instance. A connection has a unique identifier and an endpoint.
+    tags:
+    - Object
+    source: openapi/kognitos-openapi.yml#/components/schemas/v1BookConnection
+  - term: v1ExecutionStopped
+    definition: ExecutionStopped indicates that the execution was stopped before completion due to a specific reason.
+    tags:
+    - Object
+    source: openapi/kognitos-openapi.yml#/components/schemas/v1ExecutionStopped
+  - term: v1ProgramStopped
+    definition: ProgramStopped indicates that the execution was stopped by the program.
+    tags:
+    - Object
+    source: openapi/kognitos-openapi.yml#/components/schemas/v1ProgramStopped
+  - term: v1UserStopped
+    definition: UserStopped indicates that the execution was stopped by a user.
+    tags:
+    - Object
+    source: openapi/kognitos-openapi.yml#/components/schemas/v1UserStopped
+  - term: v1WaitingOnTimer
+    definition: WaitingOnTimer indicates that the execution is stopped because its waiting for a timer to fire. The run manager is expected to
+      resume the execution when the timer fires.
+    tags:
+    - Object
+    source: openapi/kognitos-openapi.yml#/components/schemas/v1WaitingOnTimer
+  - term: v1WaitingOnBook
+    definition: WaitingOnBook indicates that the execution is stopped because its waiting on an async book procedure to complete. The run manager
+      is expected to resume the execution when the book procedure completes.
+    tags:
+    - Object
+    source: openapi/kognitos-openapi.yml#/components/schemas/v1WaitingOnBook
+  - term: Event emitted when Jarvis skips executing an AST node
+    definition: 'Object declared by the contract with fields: code_location, node_id, node_kind.'
+    tags:
+    - Object
+    source: openapi/kognitos-openapi.yml#/components/schemas/v1NodeSkipped
+  - term: v1RunUpdate
+    definition: RunUpdate represents a single update to a run's state.
+    tags:
+    - Object
+    source: openapi/kognitos-openapi.yml#/components/schemas/v1RunUpdate
+  - term: v1Run
+    definition: Run represents a single execution instance of code in the Jeeves platform. Contains the executable code, metadata, and current
+      execution state.
+    tags:
+    - Object
+    source: openapi/kognitos-openapi.yml#/components/schemas/v1Run
+  - term: v1InvocationDetails
+    definition: InvocationDetails contains additional information about the entity that initiated a run.
+    tags:
+    - Object
+    source: openapi/kognitos-openapi.yml#/components/schemas/v1InvocationDetails
+  - term: v1InvocationSource
+    definition: 'InvocationSource identifies the entity responsible for creating a run. - INVOCATION_SOURCE_UNSPECIFIED: Unspecified invocation
+      source. - INVOCATION_SOURCE_MANUAL: Run was manually initiated by a user. - INVOCATION_SOURCE_TRIGGER: Run was triggered by an event or
+      trigger. - INVOCATION_SOURCE_SCHEDULE: Run was initiated by a schedule.'
+    tags:
+    - Enumeration
+    source: openapi/kognitos-openapi.yml#/components/schemas/v1InvocationSource
+  - term: v1RunState
+    definition: RunState represents the overall lifecycle state of a run. Tracks the run from initial submission through completion or failure.
+    tags:
+    - Object
+    source: openapi/kognitos-openapi.yml#/components/schemas/v1RunState
+  - term: v1AwaitingGuidanceRunState
+    definition: Run is waiting for external guidance or user input. Requires manual intervention or external decision to proceed.
+    tags:
+    - Object
+    source: openapi/kognitos-openapi.yml#/components/schemas/v1AwaitingGuidanceRunState
+  - term: v1FailedRunState
+    definition: Run has failed due to an error. Execution stopped due to an unrecoverable error condition.
+    tags:
+    - Object
+    source: openapi/kognitos-openapi.yml#/components/schemas/v1FailedRunState
+  - term: v1StoppedRunState
+    definition: Run has been stopped and can be resumed later. Execution is temporarily stopped but can continue from current state.
+    tags:
+    - Object
+    source: openapi/kognitos-openapi.yml#/components/schemas/v1StoppedRunState
+  - term: v1StoppingRunState
+    definition: Run is in the process of being stopped. Execution is stopping gracefully and will transition to STOPPED state.
+    tags:
+    - Object
+    source: openapi/kognitos-openapi.yml#/components/schemas/v1StoppingRunState
+  - term: v1CompletedRunState
+    definition: Run has completed successfully. All code has been executed and results are available.
+    tags:
+    - Object
+    source: openapi/kognitos-openapi.yml#/components/schemas/v1CompletedRunState
+  - term: v1PendingRunState
+    definition: Run has been submitted and is waiting to start execution. The run is queued and will begin when resources become available.
+    tags:
+    - Object
+    source: openapi/kognitos-openapi.yml#/components/schemas/v1PendingRunState
+  - term: v1ExecutingRunState
+    definition: Run is currently being executed. Code is actively running and making progress.
+    tags:
+    - Object
+    source: openapi/kognitos-openapi.yml#/components/schemas/v1ExecutingRunState
+  - term: v1ExecutableSteps
+    definition: ExecutableSteps represents a sequence of steps of execution of a run. Each step is a separate computable unit with its own code,
+      book connections and optional inputs. The first step may optionally have an input provided to it when the run is invoked. The output of
+      each step becomes the input of the next step and the output of the last step becomes the output of the run.
+    tags:
+    - Object
+    source: openapi/kognitos-openapi.yml#/components/schemas/v1ExecutableSteps

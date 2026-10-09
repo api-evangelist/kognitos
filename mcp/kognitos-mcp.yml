@@ -1,0 +1,66 @@
+generated: '2026-10-09'
+method: searched
+status: official
+source: https://docs.kognitos.com/guides/mcp/mcp
+llms_source: https://docs.kognitos.com/llms.txt
+name: Kognitos MCP Server
+description: >-
+  Official hosted Kognitos MCP server. Lets MCP clients (Claude Desktop, Claude Code,
+  Claude.ai, ChatGPT and others) list automations, start runs, inspect exceptions and
+  manage schedules in a Kognitos workspace. Tool table is the provider's own documented
+  list; we did not call tools/list (the endpoint requires auth).
+server:
+  url: https://mcp.us-1.kognitos.com/
+  transport: streamable-http
+  clients_doc: https://docs.kognitos.com/guides/mcp/clients
+auth:
+  methods:
+    - type: oauth2
+      version: '2.1'
+      recommended: true
+      authorization_server: https://auth.app.us-1.kognitos.com/
+      scopes: [mcp:access, offline_access]
+    - type: api-key
+      header: 'Authorization: Bearer YOUR_API_KEY'
+      docs: https://docs.kognitos.com/guides/api-reference/api-keys
+deployment:
+  mode: remote
+  endpoint: https://mcp.us-1.kognitos.com/
+  auth: oauth
+  verified: probed
+rfc9728:
+  url: https://mcp.us-1.kognitos.com/.well-known/oauth-protected-resource
+  status: 200
+  resource: https://mcp.us-1.kognitos.com/
+  authorization_servers: [https://auth.app.us-1.kognitos.com/]
+  bearer_methods_supported: [header]
+  scopes_supported: [mcp:access, offline_access]
+probes:
+  - {url: https://mcp.us-1.kognitos.com/, method: POST initialize (unauthenticated), status: 401, date: '2026-10-09'}
+  - {url: https://mcp.us-1.kognitos.com/.well-known/oauth-protected-resource, method: GET, status: 200, date: '2026-10-09'}
+tool_source: documented-table
+tool_count: 19
+tools:
+  - {name: kognitos_list_organizations, group: Organizations and Workspaces, actions: [], description: List organizations you belong to.}
+  - {name: kognitos_list_workspaces, group: Organizations and Workspaces, actions: [], description: List workspaces in an organization.}
+  - {name: kognitos_automations, group: Automations, actions: [list, get, query], description: Browse, inspect, or query automations by stage.}
+  - {name: kognitos_create_automation, group: Automations, actions: [], description: Create a new automation from a natural language description.}
+  - {name: kognitos_threads, group: Automations, actions: [get, list, list_messages], description: Read thread state and list messages in a thread.}
+  - {name: kognitos_manage_thread, group: Automations, actions: [create, send_message, stop], description: Create threads, send messages to the AI agent, or stop a thread.}
+  - {name: kognitos_manage_automation, group: Automations, actions: [publish, activate, deactivate, delete, discard_draft, rename, fork], description: Manage the automation lifecycle. delete removes the published version (preserves the draft if present); discard_draft removes the in-progress draft only.}
+  - {name: kognitos_invoke_automation, group: Automations, actions: [], description: Start a run of an automation.}
+  - {name: kognitos_runs, group: Runs, actions: [list, get, get_run_outputs, list_events], description: Monitor run status, retrieve outputs, and view execution logs.}
+  - {name: kognitos_control_run, group: Runs, actions: [pause, continue], description: Pause a running automation or resume a paused one.}
+  - {name: kognitos_get_schedule, group: Scheduling, actions: [], description: Get the current schedule for an automation.}
+  - {name: kognitos_manage_schedule, group: Scheduling, actions: [create, update, enable, disable, delete], description: Create, update, enable/disable, or delete an automation schedule.}
+  - {name: kognitos_inspect_exceptions, group: Exceptions, actions: [list, get, count, list_events, get_guide, list_guides], description: Inspect exceptions and view troubleshooting guides.}
+  - {name: kognitos_reply_to_exception, group: Exceptions, actions: [], description: Send a message to the exception resolution agent.}
+  - {name: kognitos_manage_exceptions, group: Exceptions, actions: [archive, unarchive, assign], description: Archive, unarchive, or assign exceptions.}
+  - {name: kognitos_books, group: Integrations, actions: [search, list_workspace_books, search_procedures], description: Discover integrations and search for procedures.}
+  - {name: kognitos_analytics, group: Analytics, actions: [run_stats, insights, exception_insights], description: 'Platform health: run statistics, org-level insights, and exception metrics.'}
+  - {name: kognitos_read_file, group: Files, actions: [get_metadata, read_file], description: Inspect file metadata or read file content inline.}
+  - {name: kognitos_upload_file, group: Files, actions: [], description: Upload a file (base64 or pre-signed URL) for automation inputs.}
+notes: >-
+  19 tools (grouped actions) per the provider's documented Tools table. The docs
+  warn that the assistant acts on content it reads and advise against connecting the
+  server to automations that ingest untrusted input without review.

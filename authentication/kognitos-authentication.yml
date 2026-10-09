@@ -1,0 +1,41 @@
+generated: '2026-10-09'
+method: searched
+source: https://docs.kognitos.com/guides/api-reference/api-keys
+docs: https://docs.kognitos.com/guides/api-reference/api-keys
+summary:
+  types:
+  - http
+  - oauth2
+schemes:
+- name: BearerAuth
+  type: http
+  scheme: bearer
+  description: Personal Access Token (API key) sent in the Authorization header as Bearer YOUR_API_KEY. Created in
+    the Kognitos UI (user menu > API Keys); shown once at creation. Expiration choices are 7 days, 30 days,
+    60 days, 90 days, 180 days, or 1 year. Each key is scoped to All Workspaces or Specific Workspaces and
+    carries a permission level of All, Read only, or Restricted (custom per-resource permissions). Up to
+    10 API keys per organization. Deleting a key immediately revokes it.
+  applies_to: Kognitos REST API (https://app.us-1.kognitos.com/api/v1) and MCP server (non-interactive use)
+  sources:
+  - openapi/kognitos-openapi.yml
+  - https://docs.kognitos.com/guides/api-reference/api-reference
+  - https://docs.kognitos.com/guides/api-reference/api-keys
+- name: MCP OAuth 2.1
+  type: oauth2
+  description: The MCP server (https://mcp.us-1.kognitos.com/) supports OAuth 2.1 for interactive clients
+    (Claude Desktop, Claude Code, Claude.ai) - browser login and approval, short-lived tokens refreshed by
+    the client, access scoped to the user's account and permissions. Documented as recommended over API
+    keys for interactive clients. No scope list is published.
+  applies_to: Kognitos MCP Server only
+  sources:
+  - https://docs.kognitos.com/guides/mcp/mcp
+permission_levels:
+- name: All
+  access: Full read and write access to all API endpoints, including run archiving
+- name: Read only
+  access: Read access only (list, get, query endpoints)
+- name: Restricted
+  access: Custom per-resource permissions (includes granular control over run management and archiving)
+legacy:
+  note: The legacy REST API v1/v2 (rest-api.app.kognitos.com) authenticates with an x-api-key header.
+  source: https://docs.kognitos.com/legacy/legacy-experience/rest-api/migrating-to-v2

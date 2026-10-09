@@ -1,0 +1,22 @@
+generated: '2026-10-09'
+method: derived
+generator: derive-problem-types.py
+source:
+- openapi/kognitos-openapi.yml
+format: custom
+envelope:
+  media_type: application/json
+  schema: rpcStatus
+coverage:
+  operations: 102
+  statuses_declared: 1
+problems:
+- status: default
+  title: null
+  description: An unexpected error response.
+  operations: 102
+  media_types:
+  - application/json
+  - application/octet-stream
+  - application/x-ndjson
+  schema: rpcStatus
