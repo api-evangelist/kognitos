@@ -1,6 +1,7 @@
 openapi: 3.2.0
 info:
   title: Kognitos Analytics API
+  description: REST API for Kognitos platform — PAT-eligible endpoints
   version: 1.0.0
   contact:
     name: Kognitos
@@ -8,7 +9,6 @@ info:
   license:
     name: MIT
     url: https://opensource.org/licenses/MIT
-  description: 'Operations tagged Analytics across 2 of this provider''s published API definitions: kognitos-openapi.yaml, kognitos-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://app.us-1.kognitos.com
 security:
@@ -53,8 +53,6 @@ paths:
         required: true
       tags:
       - Analytics
-    servers:
-    - url: https://app.us-1.kognitos.com
   /api/v1/organizations/{organization_id}/dashboards:queryInsights:
     get:
       summary: Query Insights
@@ -130,8 +128,6 @@ paths:
           type: string
       tags:
       - Analytics
-    servers:
-    - url: https://app.us-1.kognitos.com
   /api/v1/organizations/{organization_id}/dashboards:queryAutomationEstimates:
     get:
       summary: Query Automation Estimates
@@ -157,8 +153,6 @@ paths:
           type: string
       tags:
       - Analytics
-    servers:
-    - url: https://app.us-1.kognitos.com
   /api/v1/organizations/{organization_id}/metrics:query:
     get:
       summary: Query Metrics
@@ -411,44 +405,91 @@ paths:
           type: string
       tags:
       - Analytics
-    servers:
-    - url: https://app.us-1.kognitos.com
 components:
   schemas:
-    rpcStatus:
-      type: object
-      properties:
-        code:
-          type: integer
-          format: int32
-        message:
-          type: string
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/protobufAny'
-    v1MetricInterval:
+    v1AggregationFunction:
       type: string
       enum:
-      - METRIC_INTERVAL_UNSPECIFIED
-      - METRIC_INTERVAL_HOUR
-      - METRIC_INTERVAL_DAY
-      - METRIC_INTERVAL_WEEK
-      - METRIC_INTERVAL_MONTH
-      default: METRIC_INTERVAL_UNSPECIFIED
-      description: "Time interval for metric aggregation.\n\nSpecifies the granularity at which metric data points are aggregated.\nThe server may adjust the requested interval based on the time range\nor data availability.\n\n - METRIC_INTERVAL_UNSPECIFIED: Unspecified interval. Server will determine appropriate interval.\n - METRIC_INTERVAL_HOUR: Hourly aggregation.\n - METRIC_INTERVAL_DAY: Daily aggregation.\n - METRIC_INTERVAL_WEEK: Weekly aggregation.\n - METRIC_INTERVAL_MONTH: Monthly aggregation."
-    dashboardsConfigureAutomationEstimatesResponse:
+      - AGGREGATION_FUNCTION_UNSPECIFIED
+      - AGGREGATION_FUNCTION_COUNT
+      - AGGREGATION_FUNCTION_SUM
+      - AGGREGATION_FUNCTION_AVG
+      - AGGREGATION_FUNCTION_MIN
+      - AGGREGATION_FUNCTION_MAX
+      default: AGGREGATION_FUNCTION_UNSPECIFIED
+      description: "Aggregation function for metric values.\n\nSpecifies how metric values should be aggregated within each interval.\n\n - AGGREGATION_FUNCTION_UNSPECIFIED: Unspecified aggregation. Defaults to COUNT.\n - AGGREGATION_FUNCTION_COUNT: Count of occurrences.\n - AGGREGATION_FUNCTION_SUM: Sum of values.\n - AGGREGATION_FUNCTION_AVG: Average of values.\n - AGGREGATION_FUNCTION_MIN: Minimum value.\n - AGGREGATION_FUNCTION_MAX: Maximum value."
+    dashboardsAutomationRunInsightList:
+      type: object
+      properties:
+        values:
+          type: array
+          items:
+            $ref: '#/components/schemas/dashboardsAutomationRunInsight'
+          description: List of run insights per automation.
+          readOnly: true
+      description: AutomationRunInsightList contains run insights for automations within a workspace.
+    ConfigureAutomationEstimatesBody:
       type: object
       properties:
         automation_estimates:
           type: array
           items:
             $ref: '#/components/schemas/dashboardsAutomationEstimate'
-          description: The list of configured automation estimates.
-          readOnly: true
-      description: 'Response message for ConfigureAutomationEstimates method.
+          description: The list of automation estimates to configure.
+      description: 'Request message for ConfigureAutomationEstimates method.
 
-        Returns the configured automation estimates for the workspace.'
+        Configures the estimated cost and time savings for automations within a workspace.'
+      required:
+      - automation_estimates
+    dashboardsAutomationEstimate:
+      type: object
+      properties:
+        automation_id:
+          type: string
+          title: 'The automation ID this estimate applies to.
+
+            Format: organizations/{organization}/workspaces/{workspace}/automations/{automation}'
+        cost_usd:
+          type: string
+          description: The estimated cost saved per run in USD.
+        time_saved_secs:
+          type: integer
+          format: int32
+          description: The estimated time saved per run in seconds.
+      description: AutomationEstimate represents the estimated value metrics for an automation.
+      required:
+      - automation_id
+      - cost_usd
+      - time_saved_secs
+    dashboardsCumulativeRunInsightList:
+      type: object
+      properties:
+        values:
+          type: array
+          items:
+            $ref: '#/components/schemas/dashboardsCumulativeRunInsight'
+          description: List of run insights per time period.
+          readOnly: true
+      description: CumulativeRunInsightList contains run insights grouped per time period within a workspace.
+    dashboardsRunsAwaitingGuidanceByPeriod:
+      type: object
+      properties:
+        window_label:
+          type: string
+          description: The display label of the time period (e.g., "January 2026", "December 2025").
+          readOnly: true
+        runs_awaiting_guidance:
+          type: string
+          format: int64
+          description: Number of runs created in this period that are awaiting guidance.
+          readOnly: true
+      description: RunsAwaitingGuidanceByPeriod contains runs awaiting guidance for a specific time period.
+    protobufAny:
+      type: object
+      properties:
+        '@type':
+          type: string
+      additionalProperties: {}
     v1QueryMetricsResponse:
       type: object
       properties:
@@ -507,52 +548,6 @@ components:
           description: Number of runs that required manual resolution.
           readOnly: true
       description: CumulativeCompletionInsight contains completion metrics for a specific time period.
-    protobufAny:
-      type: object
-      properties:
-        '@type':
-          type: string
-      additionalProperties: {}
-    dashboardsTrend:
-      type: object
-      properties:
-        percent_change:
-          type: number
-          format: double
-          description: 'The percentage change compared to the previous time window.
-
-            Positive values indicate increase, negative values indicate decrease.'
-          readOnly: true
-        comparison_window:
-          type: string
-          description: The label of the time window being compared against (e.g., "Last Week", "Previous Month").
-          readOnly: true
-      description: Trend represents a percentage change compared to a previous time window.
-    dashboardsQueryAutomationEstimatesResponse:
-      type: object
-      properties:
-        workspace_estimates:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/dashboardsAutomationEstimateList'
-          title: 'Automation estimates grouped per workspace.
-
-            Key: workspace_id (format: organizations/{org}/workspaces/{workspace})'
-          readOnly: true
-      description: 'Response message for QueryAutomationEstimates method.
-
-        Contains automation estimates grouped by workspace.'
-    v1AggregationFunction:
-      type: string
-      enum:
-      - AGGREGATION_FUNCTION_UNSPECIFIED
-      - AGGREGATION_FUNCTION_COUNT
-      - AGGREGATION_FUNCTION_SUM
-      - AGGREGATION_FUNCTION_AVG
-      - AGGREGATION_FUNCTION_MIN
-      - AGGREGATION_FUNCTION_MAX
-      default: AGGREGATION_FUNCTION_UNSPECIFIED
-      description: "Aggregation function for metric values.\n\nSpecifies how metric values should be aggregated within each interval.\n\n - AGGREGATION_FUNCTION_UNSPECIFIED: Unspecified aggregation. Defaults to COUNT.\n - AGGREGATION_FUNCTION_COUNT: Count of occurrences.\n - AGGREGATION_FUNCTION_SUM: Sum of values.\n - AGGREGATION_FUNCTION_AVG: Average of values.\n - AGGREGATION_FUNCTION_MIN: Minimum value.\n - AGGREGATION_FUNCTION_MAX: Maximum value."
     dashboardsRunInsight:
       type: object
       properties:
@@ -580,100 +575,6 @@ components:
         trend:
           $ref: '#/components/schemas/dashboardsTrend'
       description: RunInsight contains aggregated runCount metrics.
-    dashboardsValueInsight:
-      type: object
-      properties:
-        total_money_saved_usd:
-          type: string
-          description: Total money saved across all automations and workspaces in USD.
-          readOnly: true
-        total_time_saved_secs:
-          type: string
-          format: int64
-          description: Total time saved across all automations and workspaces in seconds.
-          readOnly: true
-        insights_per_automation_per_workspace:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/dashboardsAutomationValueInsightList'
-          title: 'Value insights grouped per automation per workspace.
-
-            Key: workspace_id (format: organizations/{org}/workspaces/{workspace})'
-          readOnly: true
-        insights_per_period_per_workspace:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/dashboardsCumulativeValueInsightList'
-          title: 'Value insights grouped per time period per workspace.
-
-            Key: workspace_id (format: organizations/{org}/workspaces/{workspace})'
-          readOnly: true
-      description: ValueInsight contains aggregated value metrics (cost and time savings).
-    dashboardsAutomationEstimate:
-      type: object
-      properties:
-        automation_id:
-          type: string
-          title: 'The automation ID this estimate applies to.
-
-            Format: organizations/{organization}/workspaces/{workspace}/automations/{automation}'
-        cost_usd:
-          type: string
-          description: The estimated cost saved per run in USD.
-        time_saved_secs:
-          type: integer
-          format: int32
-          description: The estimated time saved per run in seconds.
-      description: AutomationEstimate represents the estimated value metrics for an automation.
-      required:
-      - automation_id
-      - cost_usd
-      - time_saved_secs
-    dashboardsCumulativeRunInsightList:
-      type: object
-      properties:
-        values:
-          type: array
-          items:
-            $ref: '#/components/schemas/dashboardsCumulativeRunInsight'
-          description: List of run insights per time period.
-          readOnly: true
-      description: CumulativeRunInsightList contains run insights grouped per time period within a workspace.
-    v1MetricSeries:
-      type: object
-      properties:
-        tags:
-          type: object
-          additionalProperties:
-            type: string
-          description: 'Tags identifying this series.
-
-
-            The unique combination of group_by tag values that define this series.
-
-            If group_by is empty, this will be an empty map.
-
-
-            Example: {"status": "success", "workspace_id": "ws_123"}'
-          readOnly: true
-        points:
-          type: array
-          items:
-            $ref: '#/components/schemas/v1MetricDataPoint'
-          description: 'Time series data points for this specific tag combination.
-
-
-            Chronologically ordered data points showing the metric value over time.'
-          readOnly: true
-      description: 'A single time series for a specific combination of tag values.
-
-
-        Each series represents one unique combination of the group_by dimensions,
-
-        containing data points over time for that specific combination.'
-      required:
-      - tags
-      - points
     dashboardsCompletionInsight:
       type: object
       properties:
@@ -696,204 +597,16 @@ components:
           description: Straight-through processing rate.
           readOnly: true
       description: CompletionInsight contains completion rate metrics.
-    dashboardsQueryInsightsResponse:
-      type: object
-      properties:
-        value_insight:
-          $ref: '#/components/schemas/dashboardsValueInsight'
-        run_insight:
-          $ref: '#/components/schemas/dashboardsRunInsight'
-        completion_insight:
-          $ref: '#/components/schemas/dashboardsCompletionInsight'
-        awaiting_guidance_insight:
-          $ref: '#/components/schemas/dashboardsAwaitingGuidanceInsight'
-      description: 'Response message for QueryInsights method.
-
-        Contains aggregated analytics insights across value, runs, and completions.'
-    dashboardsAutomationValueInsightList:
-      type: object
-      properties:
-        values:
-          type: array
-          items:
-            $ref: '#/components/schemas/dashboardsAutomationValueInsight'
-          description: List of value insights per automation.
-          readOnly: true
-      description: AutomationValueInsightList contains value insights for automations within a workspace.
-    dashboardsAutomationRunInsight:
-      type: object
-      properties:
-        automation_id:
-          type: string
-          title: 'The automation ID.
-
-            Format: organizations/{organization}/workspaces/{workspace}/automations/{automation}'
-          readOnly: true
-        display_name:
-          type: string
-          description: The display name of the automation.
-          readOnly: true
-        runs_count:
-          type: string
-          format: int64
-          description: Number of runs for this automation.
-          readOnly: true
-      description: AutomationRunInsight contains run count metrics for a specific automation.
-    dashboardsRunsAwaitingGuidanceByPeriod:
-      type: object
-      properties:
-        window_label:
-          type: string
-          description: The display label of the time period (e.g., "January 2026", "December 2025").
-          readOnly: true
-        runs_awaiting_guidance:
-          type: string
-          format: int64
-          description: Number of runs created in this period that are awaiting guidance.
-          readOnly: true
-      description: RunsAwaitingGuidanceByPeriod contains runs awaiting guidance for a specific time period.
-    dashboardsCumulativeValueInsight:
-      type: object
-      properties:
-        window_label:
-          type: string
-          description: The display label of the time period (e.g., "Week 1", "January 2025").
-          readOnly: true
-        time_saved_secs:
-          type: string
-          format: int64
-          description: Time saved during this period in seconds.
-          readOnly: true
-        money_saved_usd:
-          type: string
-          description: Money saved during this period in USD.
-          readOnly: true
-      description: CumulativeValueInsight contains value metrics for a specific time period.
-    v1MetricResult:
-      type: object
-      properties:
-        metric:
-          type: string
-          description: 'The name of this metric.
-
-
-            Echoes back the metric name from the request.'
-          readOnly: true
-        interval:
-          $ref: '#/components/schemas/v1MetricInterval'
-        aggregation:
-          $ref: '#/components/schemas/v1AggregationFunction'
-        series:
-          type: array
-          items:
-            $ref: '#/components/schemas/v1MetricSeries'
-          description: 'Multiple time series, one per unique group_by combination.
-
-
-            If group_by is empty, there will be exactly one series with empty tags.
-
-            If group_by has values, there will be one series per unique combination
-
-            found in the data.
-
-
-            Series are ordered according to the order_by parameter in the request.
-
-            If page_size was specified, results are paginated across all metrics.
-
-
-            The list may be empty if no data exists for the requested time range.'
-          readOnly: true
-      description: 'Result for a single metric query.
-
-
-        Contains the time series data and metadata for one metric.'
-      required:
-      - metric
-      - interval
-      - aggregation
-      - series
-    dashboardsAutomationEstimateList:
-      type: object
-      properties:
-        estimates:
-          type: array
-          items:
-            $ref: '#/components/schemas/dashboardsAutomationEstimate'
-          description: List of automation estimates for a workspace.
-          readOnly: true
-      description: Wrapper for a list of automation estimates.
-    dashboardsAutomationValueInsight:
-      type: object
-      properties:
-        automation_id:
-          type: string
-          title: 'The automation ID.
-
-            Format: organizations/{organization}/workspaces/{workspace}/automations/{automation}'
-          readOnly: true
-        display_name:
-          type: string
-          description: The display name of the automation.
-          readOnly: true
-        time_saved_secs:
-          type: string
-          format: int64
-          description: Time saved by this automation in seconds.
-          readOnly: true
-        money_saved_usd:
-          type: string
-          description: Money saved by this automation in USD.
-          readOnly: true
-      description: AutomationValueInsight contains value metrics for a specific automation.
-    dashboardsAwaitingGuidanceInsight:
-      type: object
-      properties:
-        total_runs_awaiting_guidance:
-          type: string
-          format: int64
-          description: Total number of runs awaiting guidance.
-          readOnly: true
-        runs_per_period:
-          type: array
-          items:
-            $ref: '#/components/schemas/dashboardsRunsAwaitingGuidanceByPeriod'
-          description: Runs awaiting guidance grouped per time period.
-          readOnly: true
-      description: AwaitingGuidanceInsight contains metrics for runs awaiting guidance.
-    dashboardsCumulativeRunInsight:
-      type: object
-      properties:
-        window_label:
-          type: string
-          description: The display label of the time period (e.g., "Week 1", "January 2025").
-          readOnly: true
-        runs_count:
-          type: string
-          format: int64
-          description: Number of runs during this period.
-          readOnly: true
-      description: CumulativeRunInsight contains run count metrics for a specific time period.
-    dashboardsAutomationRunInsightList:
-      type: object
-      properties:
-        values:
-          type: array
-          items:
-            $ref: '#/components/schemas/dashboardsAutomationRunInsight'
-          description: List of run insights per automation.
-          readOnly: true
-      description: AutomationRunInsightList contains run insights for automations within a workspace.
-    dashboardsCumulativeValueInsightList:
-      type: object
-      properties:
-        values:
-          type: array
-          items:
-            $ref: '#/components/schemas/dashboardsCumulativeValueInsight'
-          description: List of value insights per time period.
-          readOnly: true
-      description: CumulativeValueInsightList contains value insights grouped per time period within a workspace.
+    v1MetricInterval:
+      type: string
+      enum:
+      - METRIC_INTERVAL_UNSPECIFIED
+      - METRIC_INTERVAL_HOUR
+      - METRIC_INTERVAL_DAY
+      - METRIC_INTERVAL_WEEK
+      - METRIC_INTERVAL_MONTH
+      default: METRIC_INTERVAL_UNSPECIFIED
+      description: "Time interval for metric aggregation.\n\nSpecifies the granularity at which metric data points are aggregated.\nThe server may adjust the requested interval based on the time range\nor data availability.\n\n - METRIC_INTERVAL_UNSPECIFIED: Unspecified interval. Server will determine appropriate interval.\n - METRIC_INTERVAL_HOUR: Hourly aggregation.\n - METRIC_INTERVAL_DAY: Daily aggregation.\n - METRIC_INTERVAL_WEEK: Weekly aggregation.\n - METRIC_INTERVAL_MONTH: Monthly aggregation."
     v1MetricDataPoint:
       type: object
       properties:
@@ -943,24 +656,300 @@ components:
       - start_time
       - value
       - window_label
-    ConfigureAutomationEstimatesBody:
+    dashboardsQueryInsightsResponse:
+      type: object
+      properties:
+        value_insight:
+          $ref: '#/components/schemas/dashboardsValueInsight'
+        run_insight:
+          $ref: '#/components/schemas/dashboardsRunInsight'
+        completion_insight:
+          $ref: '#/components/schemas/dashboardsCompletionInsight'
+        awaiting_guidance_insight:
+          $ref: '#/components/schemas/dashboardsAwaitingGuidanceInsight'
+      description: 'Response message for QueryInsights method.
+
+        Contains aggregated analytics insights across value, runs, and completions.'
+    dashboardsConfigureAutomationEstimatesResponse:
       type: object
       properties:
         automation_estimates:
           type: array
           items:
             $ref: '#/components/schemas/dashboardsAutomationEstimate'
-          description: The list of automation estimates to configure.
-      description: 'Request message for ConfigureAutomationEstimates method.
+          description: The list of configured automation estimates.
+          readOnly: true
+      description: 'Response message for ConfigureAutomationEstimates method.
 
-        Configures the estimated cost and time savings for automations within a workspace.'
+        Returns the configured automation estimates for the workspace.'
+    rpcStatus:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/protobufAny'
+    dashboardsCumulativeRunInsight:
+      type: object
+      properties:
+        window_label:
+          type: string
+          description: The display label of the time period (e.g., "Week 1", "January 2025").
+          readOnly: true
+        runs_count:
+          type: string
+          format: int64
+          description: Number of runs during this period.
+          readOnly: true
+      description: CumulativeRunInsight contains run count metrics for a specific time period.
+    dashboardsValueInsight:
+      type: object
+      properties:
+        total_money_saved_usd:
+          type: string
+          description: Total money saved across all automations and workspaces in USD.
+          readOnly: true
+        total_time_saved_secs:
+          type: string
+          format: int64
+          description: Total time saved across all automations and workspaces in seconds.
+          readOnly: true
+        insights_per_automation_per_workspace:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/dashboardsAutomationValueInsightList'
+          title: 'Value insights grouped per automation per workspace.
+
+            Key: workspace_id (format: organizations/{org}/workspaces/{workspace})'
+          readOnly: true
+        insights_per_period_per_workspace:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/dashboardsCumulativeValueInsightList'
+          title: 'Value insights grouped per time period per workspace.
+
+            Key: workspace_id (format: organizations/{org}/workspaces/{workspace})'
+          readOnly: true
+      description: ValueInsight contains aggregated value metrics (cost and time savings).
+    dashboardsAutomationValueInsight:
+      type: object
+      properties:
+        automation_id:
+          type: string
+          title: 'The automation ID.
+
+            Format: organizations/{organization}/workspaces/{workspace}/automations/{automation}'
+          readOnly: true
+        display_name:
+          type: string
+          description: The display name of the automation.
+          readOnly: true
+        time_saved_secs:
+          type: string
+          format: int64
+          description: Time saved by this automation in seconds.
+          readOnly: true
+        money_saved_usd:
+          type: string
+          description: Money saved by this automation in USD.
+          readOnly: true
+      description: AutomationValueInsight contains value metrics for a specific automation.
+    dashboardsTrend:
+      type: object
+      properties:
+        percent_change:
+          type: number
+          format: double
+          description: 'The percentage change compared to the previous time window.
+
+            Positive values indicate increase, negative values indicate decrease.'
+          readOnly: true
+        comparison_window:
+          type: string
+          description: The label of the time window being compared against (e.g., "Last Week", "Previous Month").
+          readOnly: true
+      description: Trend represents a percentage change compared to a previous time window.
+    dashboardsQueryAutomationEstimatesResponse:
+      type: object
+      properties:
+        workspace_estimates:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/dashboardsAutomationEstimateList'
+          title: 'Automation estimates grouped per workspace.
+
+            Key: workspace_id (format: organizations/{org}/workspaces/{workspace})'
+          readOnly: true
+      description: 'Response message for QueryAutomationEstimates method.
+
+        Contains automation estimates grouped by workspace.'
+    dashboardsAutomationValueInsightList:
+      type: object
+      properties:
+        values:
+          type: array
+          items:
+            $ref: '#/components/schemas/dashboardsAutomationValueInsight'
+          description: List of value insights per automation.
+          readOnly: true
+      description: AutomationValueInsightList contains value insights for automations within a workspace.
+    v1MetricResult:
+      type: object
+      properties:
+        metric:
+          type: string
+          description: 'The name of this metric.
+
+
+            Echoes back the metric name from the request.'
+          readOnly: true
+        interval:
+          $ref: '#/components/schemas/v1MetricInterval'
+        aggregation:
+          $ref: '#/components/schemas/v1AggregationFunction'
+        series:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1MetricSeries'
+          description: 'Multiple time series, one per unique group_by combination.
+
+
+            If group_by is empty, there will be exactly one series with empty tags.
+
+            If group_by has values, there will be one series per unique combination
+
+            found in the data.
+
+
+            Series are ordered according to the order_by parameter in the request.
+
+            If page_size was specified, results are paginated across all metrics.
+
+
+            The list may be empty if no data exists for the requested time range.'
+          readOnly: true
+      description: 'Result for a single metric query.
+
+
+        Contains the time series data and metadata for one metric.'
       required:
-      - automation_estimates
+      - metric
+      - interval
+      - aggregation
+      - series
+    dashboardsAwaitingGuidanceInsight:
+      type: object
+      properties:
+        total_runs_awaiting_guidance:
+          type: string
+          format: int64
+          description: Total number of runs awaiting guidance.
+          readOnly: true
+        runs_per_period:
+          type: array
+          items:
+            $ref: '#/components/schemas/dashboardsRunsAwaitingGuidanceByPeriod'
+          description: Runs awaiting guidance grouped per time period.
+          readOnly: true
+      description: AwaitingGuidanceInsight contains metrics for runs awaiting guidance.
+    dashboardsAutomationEstimateList:
+      type: object
+      properties:
+        estimates:
+          type: array
+          items:
+            $ref: '#/components/schemas/dashboardsAutomationEstimate'
+          description: List of automation estimates for a workspace.
+          readOnly: true
+      description: Wrapper for a list of automation estimates.
+    dashboardsCumulativeValueInsight:
+      type: object
+      properties:
+        window_label:
+          type: string
+          description: The display label of the time period (e.g., "Week 1", "January 2025").
+          readOnly: true
+        time_saved_secs:
+          type: string
+          format: int64
+          description: Time saved during this period in seconds.
+          readOnly: true
+        money_saved_usd:
+          type: string
+          description: Money saved during this period in USD.
+          readOnly: true
+      description: CumulativeValueInsight contains value metrics for a specific time period.
+    dashboardsCumulativeValueInsightList:
+      type: object
+      properties:
+        values:
+          type: array
+          items:
+            $ref: '#/components/schemas/dashboardsCumulativeValueInsight'
+          description: List of value insights per time period.
+          readOnly: true
+      description: CumulativeValueInsightList contains value insights grouped per time period within a workspace.
+    v1MetricSeries:
+      type: object
+      properties:
+        tags:
+          type: object
+          additionalProperties:
+            type: string
+          description: 'Tags identifying this series.
+
+
+            The unique combination of group_by tag values that define this series.
+
+            If group_by is empty, this will be an empty map.
+
+
+            Example: {"status": "success", "workspace_id": "ws_123"}'
+          readOnly: true
+        points:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1MetricDataPoint'
+          description: 'Time series data points for this specific tag combination.
+
+
+            Chronologically ordered data points showing the metric value over time.'
+          readOnly: true
+      description: 'A single time series for a specific combination of tag values.
+
+
+        Each series represents one unique combination of the group_by dimensions,
+
+        containing data points over time for that specific combination.'
+      required:
+      - tags
+      - points
+    dashboardsAutomationRunInsight:
+      type: object
+      properties:
+        automation_id:
+          type: string
+          title: 'The automation ID.
+
+            Format: organizations/{organization}/workspaces/{workspace}/automations/{automation}'
+          readOnly: true
+        display_name:
+          type: string
+          description: The display name of the automation.
+          readOnly: true
+        runs_count:
+          type: string
+          format: int64
+          description: Number of runs for this automation.
+          readOnly: true
+      description: AutomationRunInsight contains run count metrics for a specific automation.
   securitySchemes:
     BearerAuth:
       type: http
       scheme: bearer
       description: Personal Access Token.
-x-refined-from:
-- kognitos-openapi.yaml
-- kognitos-openapi.yml

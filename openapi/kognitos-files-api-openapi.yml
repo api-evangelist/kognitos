@@ -1,6 +1,7 @@
 openapi: 3.2.0
 info:
   title: Kognitos Files API
+  description: REST API for Kognitos platform — PAT-eligible endpoints
   version: 1.0.0
   contact:
     name: Kognitos
@@ -8,7 +9,6 @@ info:
   license:
     name: MIT
     url: https://opensource.org/licenses/MIT
-  description: 'Operations tagged Files across 2 of this provider''s published API definitions: kognitos-openapi.yaml, kognitos-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://app.us-1.kognitos.com
 security:
@@ -85,8 +85,6 @@ paths:
               type: object
         description: File upload data
         required: true
-    servers:
-    - url: https://app.us-1.kognitos.com
   /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/files/{file}:download:
     get:
       summary: Download File
@@ -136,8 +134,6 @@ paths:
           type: string
       tags:
       - Files
-    servers:
-    - url: https://app.us-1.kognitos.com
   /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/files/{file}/metadata:
     get:
       summary: Get File Metadata
@@ -173,8 +169,6 @@ paths:
           type: string
       tags:
       - Files
-    servers:
-    - url: https://app.us-1.kognitos.com
   /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/files/{file}:
     delete:
       summary: Delete File
@@ -211,8 +205,6 @@ paths:
           type: string
       tags:
       - Files
-    servers:
-    - url: https://app.us-1.kognitos.com
   /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/files:generateUploadUrl:
     post:
       summary: Generate Upload Url
@@ -249,8 +241,6 @@ paths:
         required: true
       tags:
       - Files
-    servers:
-    - url: https://app.us-1.kognitos.com
   /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/files/{file}:generateDownloadUrl:
     post:
       summary: Generate Download Url
@@ -292,8 +282,6 @@ paths:
         required: true
       tags:
       - Files
-    servers:
-    - url: https://app.us-1.kognitos.com
 components:
   schemas:
     protobufAny:
@@ -302,16 +290,6 @@ components:
         '@type':
           type: string
       additionalProperties: {}
-    v1UploadFileResponse:
-      type: object
-      properties:
-        metadata:
-          $ref: '#/components/schemas/v1FileMetadata'
-      title: 'Response after uploading a file
-
-        For HTTP/REST: Returns JSON with metadata
-
-        HTTP Status: 201 Created with Location header pointing to the created resource'
     apiHttpBody:
       type: object
       properties:
@@ -330,14 +308,16 @@ components:
 
             for streaming APIs.'
       description: "Message that represents an arbitrary HTTP body. It should only be used for\npayload formats that can't be represented as JSON, such as raw binary or\nan HTML page.\n\n\nThis message can be used both in streaming and non-streaming API methods in\nthe request as well as the response.\n\nIt can be used as a top-level request field, which is convenient if one\nwants to extract parameters from either the URL or HTTP template into the\nrequest fields and also want access to the raw HTTP body.\n\nExample:\n\n    message GetResourceRequest {\n      // A unique request id.\n      string request_id = 1;\n\n      // The raw HTTP body is bound to this field.\n      google.api.HttpBody http_body = 2;\n\n    }\n\n    service ResourceService {\n      rpc GetResource(GetResourceRequest)\n        returns (google.api.HttpBody);\n      rpc UpdateResource(google.api.HttpBody)\n        returns (google.protobuf.Empty);\n\n    }\n\nExample with streaming methods:\n\n    service CaldavService {\n      rpc GetCalendar(stream google.api.HttpBody)\n        returns (stream google.api.HttpBody);\n      rpc UpdateCalendar(stream google.api.HttpBody)\n        returns (stream google.api.HttpBody);\n\n    }\n\nUse of this type only changes how the request and response bodies are\nhandled, all other features will continue to work unchanged."
-    GenerateUploadUrlBody:
+    v1UploadFileResponse:
       type: object
       properties:
-        expire_duration:
-          type: string
-          title: Optional expiration duration
-      description: If no expiration duration is provided, the default is 1 hour.
-      title: Request to generate presigned upload URL
+        metadata:
+          $ref: '#/components/schemas/v1FileMetadata'
+      title: 'Response after uploading a file
+
+        For HTTP/REST: Returns JSON with metadata
+
+        HTTP Status: 201 Created with Location header pointing to the created resource'
     v1GenerateDownloadUrlResponse:
       type: object
       properties:
@@ -372,6 +352,14 @@ components:
       title: File metadata resource in the Bishop system
       required:
       - filename
+    GenerateUploadUrlBody:
+      type: object
+      properties:
+        expire_duration:
+          type: string
+          title: Optional expiration duration
+      description: If no expiration duration is provided, the default is 1 hour.
+      title: Request to generate presigned upload URL
     v1GenerateUploadUrlResponse:
       type: object
       properties:
@@ -379,6 +367,14 @@ components:
           type: string
           title: Presigned upload URI
       title: Response with presigned upload URL
+    GenerateDownloadUrlBody:
+      type: object
+      properties:
+        expire_duration:
+          type: string
+          title: Optional expiration duration
+      description: If no expiration duration is provided, the default is 1 hour.
+      title: Request to generate presigned download URL
     rpcStatus:
       type: object
       properties:
@@ -391,19 +387,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/protobufAny'
-    GenerateDownloadUrlBody:
-      type: object
-      properties:
-        expire_duration:
-          type: string
-          title: Optional expiration duration
-      description: If no expiration duration is provided, the default is 1 hour.
-      title: Request to generate presigned download URL
   securitySchemes:
     BearerAuth:
       type: http
       scheme: bearer
       description: Personal Access Token.
-x-refined-from:
-- kognitos-openapi.yaml
-- kognitos-openapi.yml

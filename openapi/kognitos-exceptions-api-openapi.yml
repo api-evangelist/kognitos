@@ -1,6 +1,7 @@
 openapi: 3.2.0
 info:
   title: Kognitos Exceptions API
+  description: REST API for Kognitos platform — PAT-eligible endpoints
   version: 1.0.0
   contact:
     name: Kognitos
@@ -8,7 +9,6 @@ info:
   license:
     name: MIT
     url: https://opensource.org/licenses/MIT
-  description: 'Operations tagged Exceptions across 2 of this provider''s published API definitions: kognitos-openapi.yaml, kognitos-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://app.us-1.kognitos.com
 security:
@@ -52,8 +52,6 @@ paths:
           type: string
       tags:
       - Exceptions
-    servers:
-    - url: https://app.us-1.kognitos.com
   /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/exceptions:
     get:
       summary: List Exceptions
@@ -122,8 +120,6 @@ paths:
           type: string
       tags:
       - Exceptions
-    servers:
-    - url: https://app.us-1.kognitos.com
   ? /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}/runs/{run_id}/agents/{agent_id}/events
   : post:
       summary: Create Event
@@ -280,8 +276,6 @@ paths:
           type: string
       tags:
       - Exceptions
-    servers:
-    - url: https://app.us-1.kognitos.com
   ? /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}/runs/{run_id}/agents/{agent_id}/events/{event_id}
   : get:
       summary: Get Event
@@ -332,8 +326,6 @@ paths:
           type: string
       tags:
       - Exceptions
-    servers:
-    - url: https://app.us-1.kognitos.com
   ? /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}/runs/{run_id}/agents/{agent_id}/events:stream
   : get:
       summary: Stream Events
@@ -381,8 +373,6 @@ paths:
           type: string
       tags:
       - Exceptions
-    servers:
-    - url: https://app.us-1.kognitos.com
   ? /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}/runs/{run_id}/agents/{agent_id}/events:cancelGeneration
   : post:
       summary: Cancel Generation
@@ -428,8 +418,6 @@ paths:
           type: string
       tags:
       - Exceptions
-    servers:
-    - url: https://app.us-1.kognitos.com
   /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/exceptionGroups:
     get:
       summary: List Exception Groups
@@ -477,8 +465,6 @@ paths:
           type: string
       tags:
       - Exceptions
-    servers:
-    - url: https://app.us-1.kognitos.com
   /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/exceptions:countByGroup:
     get:
       summary: Count Exceptions By Group
@@ -536,8 +522,6 @@ paths:
           type: string
       tags:
       - Exceptions
-    servers:
-    - url: https://app.us-1.kognitos.com
   /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/exceptions:countByAutomation:
     get:
       summary: Count Exceptions By Automation
@@ -597,8 +581,6 @@ paths:
           type: string
       tags:
       - Exceptions
-    servers:
-    - url: https://app.us-1.kognitos.com
   ? /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}/guideEntries/{guide_entry_id}
   : get:
       summary: Get Guide Entry
@@ -639,8 +621,6 @@ paths:
           type: string
       tags:
       - Exceptions
-    servers:
-    - url: https://app.us-1.kognitos.com
   /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}/guideEntries:
     get:
       summary: List Guide Entries
@@ -768,24 +748,50 @@ paths:
           type: string
       tags:
       - Exceptions
-    servers:
-    - url: https://app.us-1.kognitos.com
 components:
   schemas:
-    v1CancelGenerationResponse:
-      type: object
-      description: 'Response for canceling ongoing event generation.
-
-        Empty response. Reserved for future extensibility.'
-    v1InputContent:
+    v1Event:
       type: object
       properties:
-        text:
+        name:
           type: string
-          description: Text content.
-        file:
-          $ref: '#/components/schemas/v1FileInputContent'
-      description: InputContent represents a single input item that can be text or binary.
+          title: 'The full resource name of the event.
+
+            Format: organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}/runs/{run_id}/agents/{agent_id}/events/{event_id}'
+        state:
+          $ref: '#/components/schemas/v1EventState'
+        create_time:
+          type: string
+          format: date-time
+          description: The timestamp when the event was created.
+          readOnly: true
+        update_time:
+          type: string
+          format: date-time
+          description: The timestamp when the event was last updated.
+          readOnly: true
+        user_message:
+          $ref: '#/components/schemas/v1UserMessage'
+        agent_message:
+          $ref: '#/components/schemas/v1AgentMessage'
+        tool_call_request:
+          $ref: '#/components/schemas/v1ToolCallRequest'
+        tool_call_result:
+          $ref: '#/components/schemas/v1ToolCallResult'
+        thinking:
+          $ref: '#/components/schemas/v1Thinking'
+        system_message:
+          $ref: '#/components/schemas/v1SystemMessage'
+        completion_response:
+          $ref: '#/components/schemas/v1CompletionResponse'
+        exception:
+          type: string
+          title: 'An optional exception resource name that the event belongs to.
+
+            Format: organizations/{organization_id}/workspaces/{workspace_id}/exceptions/{exception_id}'
+      description: 'An event in a run conversation thread about an exception.
+
+        Events form a timeline of interactions between users, AI agents, and the system.'
     v1AutomationStage:
       type: string
       enum:
@@ -794,6 +800,298 @@ components:
       - AUTOMATION_STAGE_PUBLISHED
       default: AUTOMATION_STAGE_UNSPECIFIED
       description: "AutomationStage represents the publication stage of an automation.\nThis enum is shared across services that manage or execute automations.\n\n - AUTOMATION_STAGE_UNSPECIFIED: Automation stage is not specified.\n - AUTOMATION_STAGE_DRAFT: Automation is in draft stage and can be modified.\n - AUTOMATION_STAGE_PUBLISHED: Automation is published and immutable, ready for execution."
+    v1CompletionResponse:
+      type: object
+      properties:
+        content:
+          type: string
+          description: Final content if successful.
+        error:
+          type: string
+          description: Error description if the request failed.
+      description: Terminal completion for the agent workflow.
+    v1ExceptionAutomationCount:
+      type: object
+      properties:
+        automation:
+          type: string
+          title: 'The automation resource name.
+
+            Format: organizations/{organization}/workspaces/{workspace}/automations/{automation}'
+        count:
+          type: integer
+          format: int32
+          description: Number of exceptions for this automation.
+      description: Exception count for a specific automation.
+    v1EventState:
+      type: string
+      enum:
+      - STATE_UNSPECIFIED
+      - STATE_STREAMING
+      - STATE_COMPLETE
+      default: STATE_UNSPECIFIED
+      description: "The state of an event.\n\n - STATE_UNSPECIFIED: The state is not specified. This value is not used.\n - STATE_STREAMING: The event fields are being generated by the AI agent. event_data fields may have partial values.\n - STATE_COMPLETE: The event fields are done being generated."
+    v1GuideEntryState:
+      type: string
+      enum:
+      - STATE_UNSPECIFIED
+      - STATE_PENDING_APPROVAL
+      - STATE_APPROVED
+      - STATE_REJECTED
+      - STATE_ARCHIVED
+      default: STATE_UNSPECIFIED
+      description: "The state of a guide entry.\n\n - STATE_UNSPECIFIED: The state is not specified.\n - STATE_PENDING_APPROVAL: The guide entry is pending approval.\n - STATE_APPROVED: The guide entry is approved.\n - STATE_REJECTED: The guide entry is rejected.\n - STATE_ARCHIVED: The guide entry is archived."
+    v1InputContentList:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1InputContent'
+          description: The list of input content items.
+      description: A list of input content items (can contain text and/or binary content).
+      required:
+      - items
+    v1AgentMessage:
+      type: object
+      properties:
+        content:
+          type: string
+          description: The content of the message. CommonMark(GFM) formatted.
+          readOnly: true
+      description: A message from the AI agent.
+    v1ListEventsResponse:
+      type: object
+      properties:
+        events:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1Event'
+          description: The events in the conversation thread, ordered by creation time (newest first).
+        next_page_token:
+          type: string
+          description: 'A token to retrieve the next page of results.
+
+            Pass this value in the `page_token` field in the subsequent call to `ListEvents`
+
+            to continue listing results. Will be empty when there are no more results.'
+        total_size:
+          type: integer
+          format: int32
+          description: 'The total number of events in the conversation thread across all pages.
+
+            This count is not affected by page_size or page_token parameters.'
+      description: A response to a list events request.
+    v1CancelGenerationResponse:
+      type: object
+      description: 'Response for canceling ongoing event generation.
+
+        Empty response. Reserved for future extensibility.'
+    protobufAny:
+      type: object
+      properties:
+        '@type':
+          type: string
+      additionalProperties: {}
+    v1Thinking:
+      type: object
+      properties:
+        content:
+          type: string
+          description: The thinking content. CommonMark(GFM) formatted.
+          readOnly: true
+      description: Thinking or reasoning by the AI agent.
+    v1ToolCallResult:
+      type: object
+      properties:
+        tool_call_id:
+          type: string
+          description: The unique identifier for the tool call. Used to match the tool call request with the tool call result.
+          readOnly: true
+        result:
+          type: string
+          description: 'The result of the tool call.
+
+            Note: Clients should not parse this field. The length of this field may change during
+
+            STATE_STREAMING as the agent constructs the tool call result.'
+          readOnly: true
+      description: A tool call result returned by the tool.
+    v1CountExceptionsByGroupResponse:
+      type: object
+      properties:
+        group_counts:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1ExceptionGroupCount'
+          description: Exception counts by group, including metadata for each group.
+        next_page_token:
+          type: string
+          description: 'Token to retrieve the next page of results.
+
+            Empty when there are no more results.'
+        total_size:
+          type: integer
+          format: int32
+          description: 'Total number of groups with exceptions (across all pages).
+
+            Respects the filter from the request.'
+        total_exception_count:
+          type: integer
+          format: int32
+          description: 'Total count of all exceptions across all groups.
+
+            Respects the filter from the request.
+
+            This is the sum of all counts in group_counts (across all pages).
+
+            Useful for displaying summary statistics like "110 total exceptions across 3 groups".'
+      description: Response containing exception counts by group.
+    v1ListGuideEntriesResponse:
+      type: object
+      properties:
+        guide_entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1GuideEntry'
+          title: The guide entries
+        next_page_token:
+          type: string
+          description: 'A token to retrieve the next page of results.
+
+            Pass this value in the `page_token` field in the subsequent call to `ListGuideEntries`
+
+            to continue listing results. Will be empty when there are no more results.'
+        total_size:
+          type: integer
+          format: int32
+          description: 'The total number of guide entries across all pages.
+
+            This count respects the show_deleted parameter but is not affected by page_size or page_token.'
+      title: Response to a list guide entries request
+    v1GuideEntry:
+      type: object
+      properties:
+        name:
+          type: string
+          title: 'Resource name
+
+            Format: organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}/guideEntries/{guide_entry_id}'
+        content:
+          type: string
+          description: 'Markdown-formatted entry content
+
+            Deprecated: Use resolution_steps and resolution_code instead.'
+        source_exception:
+          type: string
+          title: Exception that led to this entry's creation
+        source_run:
+          type: string
+          title: Run where this entry was first created
+        create_time:
+          type: string
+          format: date-time
+          title: Creation timestamp
+          readOnly: true
+        update_time:
+          type: string
+          format: date-time
+          title: Last update timestamp
+          readOnly: true
+        delete_time:
+          type: string
+          format: date-time
+          description: 'The time when this guide entry was soft-deleted.
+
+            If not set, the entry has not been deleted.
+
+            Soft-deleted entries are not physically removed but marked as deleted.
+
+            Always set the state to STATE_ARCHIVED whenever the entry is soft-deleted.'
+          readOnly: true
+        title:
+          type: string
+          description: 'Title of the guide entry
+
+            Marked as optional for backwards compatibility.
+
+            Can be set when creating or updating the guide entry.'
+        automation:
+          type: string
+          title: 'The automation that the guide entry belongs to.
+
+            Format: organizations/{organization}/workspaces/{workspace}/automations/{automation}'
+          readOnly: true
+        root_cause:
+          type: string
+          description: 'Root cause analysis explaining why the exception occurred.
+
+            This provides technical context about what caused the issue.
+
+            Marked as optional for backwards compatibility.'
+        state:
+          $ref: '#/components/schemas/v1GuideEntryState'
+        version:
+          type: string
+          title: 'Semantic version of this specific version of the guide entry (format: major.minor).
+
+            Incremented each time the guide entry is updated.
+
+            Examples: "0.1", "1.0", "1.1", "2.0"'
+          readOnly: true
+        resolution_steps:
+          type: string
+          description: "Human-readable explanation of the resolution action and steps.\nGitHub Flavored Markdown (GFM) formatted.\n\nResolution Field Guidelines:\n- At least one of resolution_steps, resolution_code, or resolution_notes should be present\n  for the guide entry to be useful. Entries with none of these fields are considered incomplete.\n- These fields are complementary and can be used together:\n  - resolution_steps: The primary resolution instructions\n  - resolution_code: Supporting code examples\n  - resolution_notes: Additional context or caveats"
+        resolution_code:
+          type: string
+          description: 'Example code illustrating how this type of exception was resolved.
+
+            Serves as a reference when handling similar exceptions in future runs.
+
+            May require adaptation based on specific context and should not be applied verbatim.'
+        resolution_notes:
+          type: string
+          description: 'Additional notes, caveats, or context about the resolution.
+
+            GitHub Flavored Markdown (GFM) formatted.
+
+            Use for edge cases, warnings, or supplementary information.'
+      title: A troubleshooting guide entry for an automation
+    commonV1Location:
+      type: object
+      properties:
+        start_byte:
+          type: string
+          format: int64
+          title: Starting Byte of the span, It will be zero-based
+        end_byte:
+          type: string
+          format: int64
+          title: Ending Byte(exclusive) of the span, It will be zero-based
+      description: 'Location represents a generic span within some underlying content.
+
+        It specifies the starting byte offset and the ending byte offset (exclusive) of the span.
+
+        This can be used for pointing to regions in files, buffers, logs, messages,
+
+        or any other byte-addressable resource.'
+    v1FileContent:
+      type: object
+      properties:
+        mime_type:
+          type: string
+          description: The MIME type of the file.
+        content:
+          type: string
+          format: byte
+          title: The raw binary content of the file
+        filename:
+          type: string
+          title: The name of the file, including extension if applicable
+      description: FileContent represents a file with its name and binary content.
+      required:
+      - mime_type
+      - content
     rpcStatus:
       type: object
       properties:
@@ -806,6 +1104,148 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/protobufAny'
+    v1ExceptionGroup:
+      type: object
+      properties:
+        name:
+          type: string
+          description: 'The static types (e.g., "missing_values", "user_system_error", "internal_error").
+
+            group name is fully qualified
+
+            Format: organizations/{organization_id}/workspaces/{workspace_id}/exceptionGroups/missing_values
+
+            Format: organizations/{organization_id}/workspaces/{workspace_id}/exceptionGroups/user_system_error
+
+            Format: organizations/{organization_id}/workspaces/{workspace_id}/exceptionGroups/internal_error
+
+            This is maintained by the system until we promote these to full resources.
+
+            This is the value used in the Exception.group field.'
+        title:
+          type: string
+          description: Human-readable display name for UI.
+        description:
+          type: string
+          description: Description of what this group represents.
+        suggested_action:
+          type: string
+          description: Suggested action to resolve exceptions in this group.
+        default_assignee:
+          type: string
+          title: 'Default assignee for new exceptions in this group.
+
+            When set, new exceptions in this group will be automatically assigned to this user.
+
+            Empty string means no default assignee is set.
+
+            Format: users/{user}'
+      description: 'Groups are not full resources and cannot be created or modified via the API (for now)
+
+        In future, we may promote these to full resources.'
+    v1UserMessage:
+      type: object
+      properties:
+        user:
+          type: string
+          title: 'The user who authored the message.
+
+            Format: users/{user}'
+        content:
+          type: string
+          description: Simple text content.
+        content_list:
+          $ref: '#/components/schemas/v1InputContentList'
+      description: A message from a user.
+    v1ExceptionGroupCount:
+      type: object
+      properties:
+        group:
+          $ref: '#/components/schemas/v1ExceptionGroup'
+        count:
+          type: integer
+          format: int32
+          description: Number of exceptions in this group.
+      description: Exception count for a specific group, including group metadata.
+    v1SystemMessage:
+      type: object
+      properties:
+        content:
+          type: string
+          description: The content of the system message. CommonMark(GFM) formatted.
+          readOnly: true
+      description: A system-generated message.
+    v1FileInputContent:
+      type: object
+      properties:
+        remote:
+          type: string
+          title: Reference to a remote file via URL or file path
+        inline:
+          $ref: '#/components/schemas/v1FileContent'
+      description: FileInputContent represents a file that can be either stored inline or referenced remotely.
+    v1InputContent:
+      type: object
+      properties:
+        text:
+          type: string
+          description: Text content.
+        file:
+          $ref: '#/components/schemas/v1FileInputContent'
+      description: InputContent represents a single input item that can be text or binary.
+    v1ListExceptionGroupsResponse:
+      type: object
+      properties:
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1ExceptionGroup'
+          description: Available exception groups and their metadata.
+        next_page_token:
+          type: string
+          description: 'Token to retrieve the next page of results.
+
+            Empty when there are no more results.'
+      description: Response containing available exception groups.
+    v1CountExceptionsByAutomationResponse:
+      type: object
+      properties:
+        automation_counts:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1ExceptionAutomationCount'
+          description: Exception counts by automation.
+        next_page_token:
+          type: string
+          description: 'Token to retrieve the next page of results.
+
+            Empty when there are no more results.'
+        total_size:
+          type: integer
+          format: int32
+          description: 'Total number of automations with exceptions (across all pages).
+
+            Respects the filter from the request.'
+        total_exception_count:
+          type: integer
+          format: int32
+          description: 'Total count of all exceptions across all automations.
+
+            Respects the filter from the request.
+
+            This is the sum of all counts in automation_counts (across all pages).
+
+            Useful for displaying summary statistics like "500 total exceptions across 25 automations".'
+      description: Response containing exception counts by automation.
+    v1ExceptionState:
+      type: string
+      enum:
+      - EXCEPTION_STATE_UNSPECIFIED
+      - EXCEPTION_STATE_PENDING
+      - EXCEPTION_STATE_RESOLVED
+      - EXCEPTION_STATE_ARCHIVED
+      default: EXCEPTION_STATE_UNSPECIFIED
+      description: "The state of an exception.\n\n - EXCEPTION_STATE_UNSPECIFIED: The state is not specified.\n - EXCEPTION_STATE_PENDING: The exception is pending resolution.\nThis is the initial state when an exception is created.\nTransitions:\nOn creation --> PENDING\nPENDING --> RESOLVED: Exception successfully resolved (run can continue)\nPENDING --> ARCHIVED: Exception archived without resolution (run abandoned)\n - EXCEPTION_STATE_RESOLVED: The exception has been resolved.\nRESOLVED is a terminal state. Resolved exceptions are retained for historical records\nTransitions:\nPENDING --> RESOLVED: Exception resolved (run can continue)\n - EXCEPTION_STATE_ARCHIVED: The exception has been archived.\nArchived exceptions are retained for historical records and audit purposes.\nTransitions:\nPENDING --> ARCHIVED: Exception archived without resolution (run abandoned)\nARCHIVED --> PENDING: Exception unarchived (run can continue)"
     v1Exception:
       type: object
       properties:
@@ -924,310 +1364,6 @@ components:
       - run
       - location
       - message
-    protobufAny:
-      type: object
-      properties:
-        '@type':
-          type: string
-      additionalProperties: {}
-    v1ListEventsResponse:
-      type: object
-      properties:
-        events:
-          type: array
-          items:
-            $ref: '#/components/schemas/v1Event'
-          description: The events in the conversation thread, ordered by creation time (newest first).
-        next_page_token:
-          type: string
-          description: 'A token to retrieve the next page of results.
-
-            Pass this value in the `page_token` field in the subsequent call to `ListEvents`
-
-            to continue listing results. Will be empty when there are no more results.'
-        total_size:
-          type: integer
-          format: int32
-          description: 'The total number of events in the conversation thread across all pages.
-
-            This count is not affected by page_size or page_token parameters.'
-      description: A response to a list events request.
-    v1UserMessage:
-      type: object
-      properties:
-        user:
-          type: string
-          title: 'The user who authored the message.
-
-            Format: users/{user}'
-        content:
-          type: string
-          description: Simple text content.
-        content_list:
-          $ref: '#/components/schemas/v1InputContentList'
-      description: A message from a user.
-    v1CountExceptionsByGroupResponse:
-      type: object
-      properties:
-        group_counts:
-          type: array
-          items:
-            $ref: '#/components/schemas/v1ExceptionGroupCount'
-          description: Exception counts by group, including metadata for each group.
-        next_page_token:
-          type: string
-          description: 'Token to retrieve the next page of results.
-
-            Empty when there are no more results.'
-        total_size:
-          type: integer
-          format: int32
-          description: 'Total number of groups with exceptions (across all pages).
-
-            Respects the filter from the request.'
-        total_exception_count:
-          type: integer
-          format: int32
-          description: 'Total count of all exceptions across all groups.
-
-            Respects the filter from the request.
-
-            This is the sum of all counts in group_counts (across all pages).
-
-            Useful for displaying summary statistics like "110 total exceptions across 3 groups".'
-      description: Response containing exception counts by group.
-    v1InputContentList:
-      type: object
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/v1InputContent'
-          description: The list of input content items.
-      description: A list of input content items (can contain text and/or binary content).
-      required:
-      - items
-    v1CountExceptionsByAutomationResponse:
-      type: object
-      properties:
-        automation_counts:
-          type: array
-          items:
-            $ref: '#/components/schemas/v1ExceptionAutomationCount'
-          description: Exception counts by automation.
-        next_page_token:
-          type: string
-          description: 'Token to retrieve the next page of results.
-
-            Empty when there are no more results.'
-        total_size:
-          type: integer
-          format: int32
-          description: 'Total number of automations with exceptions (across all pages).
-
-            Respects the filter from the request.'
-        total_exception_count:
-          type: integer
-          format: int32
-          description: 'Total count of all exceptions across all automations.
-
-            Respects the filter from the request.
-
-            This is the sum of all counts in automation_counts (across all pages).
-
-            Useful for displaying summary statistics like "500 total exceptions across 25 automations".'
-      description: Response containing exception counts by automation.
-    v1AgentMessage:
-      type: object
-      properties:
-        content:
-          type: string
-          description: The content of the message. CommonMark(GFM) formatted.
-          readOnly: true
-      description: A message from the AI agent.
-    v1ExceptionState:
-      type: string
-      enum:
-      - EXCEPTION_STATE_UNSPECIFIED
-      - EXCEPTION_STATE_PENDING
-      - EXCEPTION_STATE_RESOLVED
-      - EXCEPTION_STATE_ARCHIVED
-      default: EXCEPTION_STATE_UNSPECIFIED
-      description: "The state of an exception.\n\n - EXCEPTION_STATE_UNSPECIFIED: The state is not specified.\n - EXCEPTION_STATE_PENDING: The exception is pending resolution.\nThis is the initial state when an exception is created.\nTransitions:\nOn creation --> PENDING\nPENDING --> RESOLVED: Exception successfully resolved (run can continue)\nPENDING --> ARCHIVED: Exception archived without resolution (run abandoned)\n - EXCEPTION_STATE_RESOLVED: The exception has been resolved.\nRESOLVED is a terminal state. Resolved exceptions are retained for historical records\nTransitions:\nPENDING --> RESOLVED: Exception resolved (run can continue)\n - EXCEPTION_STATE_ARCHIVED: The exception has been archived.\nArchived exceptions are retained for historical records and audit purposes.\nTransitions:\nPENDING --> ARCHIVED: Exception archived without resolution (run abandoned)\nARCHIVED --> PENDING: Exception unarchived (run can continue)"
-    v1FileContent:
-      type: object
-      properties:
-        mime_type:
-          type: string
-          description: The MIME type of the file.
-        content:
-          type: string
-          format: byte
-          title: The raw binary content of the file
-        filename:
-          type: string
-          title: The name of the file, including extension if applicable
-      description: FileContent represents a file with its name and binary content.
-      required:
-      - mime_type
-      - content
-    v1ExceptionGroup:
-      type: object
-      properties:
-        name:
-          type: string
-          description: 'The static types (e.g., "missing_values", "user_system_error", "internal_error").
-
-            group name is fully qualified
-
-            Format: organizations/{organization_id}/workspaces/{workspace_id}/exceptionGroups/missing_values
-
-            Format: organizations/{organization_id}/workspaces/{workspace_id}/exceptionGroups/user_system_error
-
-            Format: organizations/{organization_id}/workspaces/{workspace_id}/exceptionGroups/internal_error
-
-            This is maintained by the system until we promote these to full resources.
-
-            This is the value used in the Exception.group field.'
-        title:
-          type: string
-          description: Human-readable display name for UI.
-        description:
-          type: string
-          description: Description of what this group represents.
-        suggested_action:
-          type: string
-          description: Suggested action to resolve exceptions in this group.
-        default_assignee:
-          type: string
-          title: 'Default assignee for new exceptions in this group.
-
-            When set, new exceptions in this group will be automatically assigned to this user.
-
-            Empty string means no default assignee is set.
-
-            Format: users/{user}'
-      description: 'Groups are not full resources and cannot be created or modified via the API (for now)
-
-        In future, we may promote these to full resources.'
-    v1SystemMessage:
-      type: object
-      properties:
-        content:
-          type: string
-          description: The content of the system message. CommonMark(GFM) formatted.
-          readOnly: true
-      description: A system-generated message.
-    v1GuideEntryState:
-      type: string
-      enum:
-      - STATE_UNSPECIFIED
-      - STATE_PENDING_APPROVAL
-      - STATE_APPROVED
-      - STATE_REJECTED
-      - STATE_ARCHIVED
-      default: STATE_UNSPECIFIED
-      description: "The state of a guide entry.\n\n - STATE_UNSPECIFIED: The state is not specified.\n - STATE_PENDING_APPROVAL: The guide entry is pending approval.\n - STATE_APPROVED: The guide entry is approved.\n - STATE_REJECTED: The guide entry is rejected.\n - STATE_ARCHIVED: The guide entry is archived."
-    v1ExceptionGroupCount:
-      type: object
-      properties:
-        group:
-          $ref: '#/components/schemas/v1ExceptionGroup'
-        count:
-          type: integer
-          format: int32
-          description: Number of exceptions in this group.
-      description: Exception count for a specific group, including group metadata.
-    v1ListExceptionsResponse:
-      type: object
-      properties:
-        exceptions:
-          type: array
-          items:
-            $ref: '#/components/schemas/v1Exception'
-          description: The exceptions.
-        next_page_token:
-          type: string
-          description: 'A token to retrieve the next page of results.
-
-            Pass this value in the `page_token` field in the subsequent call to `ListExceptions`
-
-            to continue listing results. Will be empty when there are no more results.'
-        total_size:
-          type: integer
-          format: int32
-          description: 'The total number of exceptions that match the given filter across all pages.
-
-            This count is not affected by page_size or page_token parameters.'
-      description: A response to a list exceptions request.
-    v1Event:
-      type: object
-      properties:
-        name:
-          type: string
-          title: 'The full resource name of the event.
-
-            Format: organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}/runs/{run_id}/agents/{agent_id}/events/{event_id}'
-        state:
-          $ref: '#/components/schemas/v1EventState'
-        create_time:
-          type: string
-          format: date-time
-          description: The timestamp when the event was created.
-          readOnly: true
-        update_time:
-          type: string
-          format: date-time
-          description: The timestamp when the event was last updated.
-          readOnly: true
-        user_message:
-          $ref: '#/components/schemas/v1UserMessage'
-        agent_message:
-          $ref: '#/components/schemas/v1AgentMessage'
-        tool_call_request:
-          $ref: '#/components/schemas/v1ToolCallRequest'
-        tool_call_result:
-          $ref: '#/components/schemas/v1ToolCallResult'
-        thinking:
-          $ref: '#/components/schemas/v1Thinking'
-        system_message:
-          $ref: '#/components/schemas/v1SystemMessage'
-        completion_response:
-          $ref: '#/components/schemas/v1CompletionResponse'
-        exception:
-          type: string
-          title: 'An optional exception resource name that the event belongs to.
-
-            Format: organizations/{organization_id}/workspaces/{workspace_id}/exceptions/{exception_id}'
-      description: 'An event in a run conversation thread about an exception.
-
-        Events form a timeline of interactions between users, AI agents, and the system.'
-    commonV1Location:
-      type: object
-      properties:
-        start_byte:
-          type: string
-          format: int64
-          title: Starting Byte of the span, It will be zero-based
-        end_byte:
-          type: string
-          format: int64
-          title: Ending Byte(exclusive) of the span, It will be zero-based
-      description: 'Location represents a generic span within some underlying content.
-
-        It specifies the starting byte offset and the ending byte offset (exclusive) of the span.
-
-        This can be used for pointing to regions in files, buffers, logs, messages,
-
-        or any other byte-addressable resource.'
-    v1Thinking:
-      type: object
-      properties:
-        content:
-          type: string
-          description: The thinking content. CommonMark(GFM) formatted.
-          readOnly: true
-      description: Thinking or reasoning by the AI agent.
     v1ToolCallRequest:
       type: object
       properties:
@@ -1250,191 +1386,30 @@ components:
             STATE_STREAMING as the agent constructs the tool call arguments.'
           readOnly: true
       description: A tool call request made by the AI agent.
-    v1CompletionResponse:
+    v1ListExceptionsResponse:
       type: object
       properties:
-        content:
-          type: string
-          description: Final content if successful.
-        error:
-          type: string
-          description: Error description if the request failed.
-      description: Terminal completion for the agent workflow.
-    v1EventState:
-      type: string
-      enum:
-      - STATE_UNSPECIFIED
-      - STATE_STREAMING
-      - STATE_COMPLETE
-      default: STATE_UNSPECIFIED
-      description: "The state of an event.\n\n - STATE_UNSPECIFIED: The state is not specified. This value is not used.\n - STATE_STREAMING: The event fields are being generated by the AI agent. event_data fields may have partial values.\n - STATE_COMPLETE: The event fields are done being generated."
-    v1ListExceptionGroupsResponse:
-      type: object
-      properties:
-        groups:
+        exceptions:
           type: array
           items:
-            $ref: '#/components/schemas/v1ExceptionGroup'
-          description: Available exception groups and their metadata.
-        next_page_token:
-          type: string
-          description: 'Token to retrieve the next page of results.
-
-            Empty when there are no more results.'
-      description: Response containing available exception groups.
-    v1ListGuideEntriesResponse:
-      type: object
-      properties:
-        guide_entries:
-          type: array
-          items:
-            $ref: '#/components/schemas/v1GuideEntry'
-          title: The guide entries
+            $ref: '#/components/schemas/v1Exception'
+          description: The exceptions.
         next_page_token:
           type: string
           description: 'A token to retrieve the next page of results.
 
-            Pass this value in the `page_token` field in the subsequent call to `ListGuideEntries`
+            Pass this value in the `page_token` field in the subsequent call to `ListExceptions`
 
             to continue listing results. Will be empty when there are no more results.'
         total_size:
           type: integer
           format: int32
-          description: 'The total number of guide entries across all pages.
+          description: 'The total number of exceptions that match the given filter across all pages.
 
-            This count respects the show_deleted parameter but is not affected by page_size or page_token.'
-      title: Response to a list guide entries request
-    v1FileInputContent:
-      type: object
-      properties:
-        remote:
-          type: string
-          title: Reference to a remote file via URL or file path
-        inline:
-          $ref: '#/components/schemas/v1FileContent'
-      description: FileInputContent represents a file that can be either stored inline or referenced remotely.
-    v1GuideEntry:
-      type: object
-      properties:
-        name:
-          type: string
-          title: 'Resource name
-
-            Format: organizations/{organization_id}/workspaces/{workspace_id}/automations/{automation_id}/guideEntries/{guide_entry_id}'
-        content:
-          type: string
-          description: 'Markdown-formatted entry content
-
-            Deprecated: Use resolution_steps and resolution_code instead.'
-        source_exception:
-          type: string
-          title: Exception that led to this entry's creation
-        source_run:
-          type: string
-          title: Run where this entry was first created
-        create_time:
-          type: string
-          format: date-time
-          title: Creation timestamp
-          readOnly: true
-        update_time:
-          type: string
-          format: date-time
-          title: Last update timestamp
-          readOnly: true
-        delete_time:
-          type: string
-          format: date-time
-          description: 'The time when this guide entry was soft-deleted.
-
-            If not set, the entry has not been deleted.
-
-            Soft-deleted entries are not physically removed but marked as deleted.
-
-            Always set the state to STATE_ARCHIVED whenever the entry is soft-deleted.'
-          readOnly: true
-        title:
-          type: string
-          description: 'Title of the guide entry
-
-            Marked as optional for backwards compatibility.
-
-            Can be set when creating or updating the guide entry.'
-        automation:
-          type: string
-          title: 'The automation that the guide entry belongs to.
-
-            Format: organizations/{organization}/workspaces/{workspace}/automations/{automation}'
-          readOnly: true
-        root_cause:
-          type: string
-          description: 'Root cause analysis explaining why the exception occurred.
-
-            This provides technical context about what caused the issue.
-
-            Marked as optional for backwards compatibility.'
-        state:
-          $ref: '#/components/schemas/v1GuideEntryState'
-        version:
-          type: string
-          title: 'Semantic version of this specific version of the guide entry (format: major.minor).
-
-            Incremented each time the guide entry is updated.
-
-            Examples: "0.1", "1.0", "1.1", "2.0"'
-          readOnly: true
-        resolution_steps:
-          type: string
-          description: "Human-readable explanation of the resolution action and steps.\nGitHub Flavored Markdown (GFM) formatted.\n\nResolution Field Guidelines:\n- At least one of resolution_steps, resolution_code, or resolution_notes should be present\n  for the guide entry to be useful. Entries with none of these fields are considered incomplete.\n- These fields are complementary and can be used together:\n  - resolution_steps: The primary resolution instructions\n  - resolution_code: Supporting code examples\n  - resolution_notes: Additional context or caveats"
-        resolution_code:
-          type: string
-          description: 'Example code illustrating how this type of exception was resolved.
-
-            Serves as a reference when handling similar exceptions in future runs.
-
-            May require adaptation based on specific context and should not be applied verbatim.'
-        resolution_notes:
-          type: string
-          description: 'Additional notes, caveats, or context about the resolution.
-
-            GitHub Flavored Markdown (GFM) formatted.
-
-            Use for edge cases, warnings, or supplementary information.'
-      title: A troubleshooting guide entry for an automation
-    v1ToolCallResult:
-      type: object
-      properties:
-        tool_call_id:
-          type: string
-          description: The unique identifier for the tool call. Used to match the tool call request with the tool call result.
-          readOnly: true
-        result:
-          type: string
-          description: 'The result of the tool call.
-
-            Note: Clients should not parse this field. The length of this field may change during
-
-            STATE_STREAMING as the agent constructs the tool call result.'
-          readOnly: true
-      description: A tool call result returned by the tool.
-    v1ExceptionAutomationCount:
-      type: object
-      properties:
-        automation:
-          type: string
-          title: 'The automation resource name.
-
-            Format: organizations/{organization}/workspaces/{workspace}/automations/{automation}'
-        count:
-          type: integer
-          format: int32
-          description: Number of exceptions for this automation.
-      description: Exception count for a specific automation.
+            This count is not affected by page_size or page_token parameters.'
+      description: A response to a list exceptions request.
   securitySchemes:
     BearerAuth:
       type: http
       scheme: bearer
       description: Personal Access Token.
-x-refined-from:
-- kognitos-openapi.yaml
-- kognitos-openapi.yml

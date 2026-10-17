@@ -1,6 +1,7 @@
 openapi: 3.2.0
 info:
   title: Kognitos Workspaces API
+  description: REST API for Kognitos platform — PAT-eligible endpoints
   version: 1.0.0
   contact:
     name: Kognitos
@@ -8,7 +9,6 @@ info:
   license:
     name: MIT
     url: https://opensource.org/licenses/MIT
-  description: 'Operations tagged Workspaces across 2 of this provider''s published API definitions: kognitos-openapi.yaml, kognitos-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://app.us-1.kognitos.com
 security:
@@ -47,8 +47,6 @@ paths:
           type: string
       tags:
       - Workspaces
-    servers:
-    - url: https://app.us-1.kognitos.com
   /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/invites:
     get:
       summary: List Workspace User Invites
@@ -98,8 +96,6 @@ paths:
           type: string
       tags:
       - Workspaces
-    servers:
-    - url: https://app.us-1.kognitos.com
   /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/roles:
     get:
       summary: List Workspace Roles
@@ -149,8 +145,6 @@ paths:
           type: string
       tags:
       - Workspaces
-    servers:
-    - url: https://app.us-1.kognitos.com
   /api/v1/organizations/{organization_id}/workspaces/{workspace_id}/users:
     get:
       summary: List Workspace Users
@@ -230,8 +224,6 @@ paths:
           type: string
       tags:
       - Workspaces
-    servers:
-    - url: https://app.us-1.kognitos.com
   /api/v1/organizations/{organization_id}/workspaces:countUsers:
     post:
       summary: Count Workspace Users
@@ -263,8 +255,6 @@ paths:
         required: true
       tags:
       - Workspaces
-    servers:
-    - url: https://app.us-1.kognitos.com
   /api/v1/organizations/{organization_id}/workspaces/{workspace_id}:
     get:
       summary: Get Workspace
@@ -295,8 +285,6 @@ paths:
           type: string
       tags:
       - Workspaces
-    servers:
-    - url: https://app.us-1.kognitos.com
   /api/v1/organizations/{organization_id}/workspaces:
     get:
       summary: List Workspaces
@@ -363,8 +351,6 @@ paths:
           type: string
       tags:
       - Workspaces
-    servers:
-    - url: https://app.us-1.kognitos.com
   /api/v1/me/organizations/{organization_id}/workspaces:
     get:
       summary: Current User Organization Workspaces
@@ -421,8 +407,6 @@ paths:
           type: string
       tags:
       - Workspaces
-    servers:
-    - url: https://app.us-1.kognitos.com
 components:
   schemas:
     v1UserWithRoles:
@@ -442,78 +426,6 @@ components:
         This type is reusable for both organization and workspace user listing APIs.
 
         The RoleScope field in each role indicates whether the role is org-level or workspace-level.'
-    v1CurrentUserOrganizationWorkspacesResponse:
-      type: object
-      properties:
-        user_workspaces:
-          type: array
-          items:
-            $ref: '#/components/schemas/v1Workspace'
-          description: The list of workspaces the current user has access to in the organization.
-        next_page_token:
-          type: string
-          description: 'A token to retrieve the next page of results.
-
-            Pass this value in the `page_token` field in the subsequent call to
-
-            `CurrentUserOrganizationWorkspaces` to get the next page of results. If this field is
-
-            empty, it means there are no more results.'
-      description: Response message for listing workspaces for the current user within a specific organization.
-    rpcStatus:
-      type: object
-      properties:
-        code:
-          type: integer
-          format: int32
-        message:
-          type: string
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/protobufAny'
-    CountWorkspaceUsersBody:
-      type: object
-      properties:
-        workspace_ids:
-          type: array
-          items:
-            type: string
-          title: 'The list of workspace IDs to get user counts for.
-
-            Each workspace_id should be the workspace identifier (not the full resource name).
-
-            The full workspace resource names will be constructed as:
-
-            organizations/{organization}/workspaces/{workspace_id}'
-      description: Request message for counting users in specific workspaces.
-      required:
-      - workspace_ids
-    v1RoleScope:
-      type: string
-      enum:
-      - ROLE_SCOPE_UNSPECIFIED
-      - ROLE_SCOPE_ORGANIZATION
-      - ROLE_SCOPE_WORKSPACE
-      default: ROLE_SCOPE_UNSPECIFIED
-      description: "Defines the scope at which a role can be applied.\n\n - ROLE_SCOPE_UNSPECIFIED: Unspecified role scope.\n - ROLE_SCOPE_ORGANIZATION: Role applies at the organization level.\n - ROLE_SCOPE_WORKSPACE: Role applies at the workspace level."
-    v1RoleBasicInfo:
-      type: object
-      properties:
-        name:
-          type: string
-          description: The role name (e.g., "workspace-admin", "org-admin", or custom role name).
-        role_scope:
-          $ref: '#/components/schemas/v1RoleScope'
-      title: 'Lightweight role information following the UserBasicInfo pattern.
-
-        Note: RoleScope is imported from rbac.proto'
-    protobufAny:
-      type: object
-      properties:
-        '@type':
-          type: string
-      additionalProperties: {}
     v1CountWorkspaceUsersResponse:
       type: object
       properties:
@@ -526,6 +438,65 @@ components:
 
             The key is the workspace ID, and the value is the count of users in that workspace.'
       description: Response message for counting users in specific workspaces.
+    protobufAny:
+      type: object
+      properties:
+        '@type':
+          type: string
+      additionalProperties: {}
+    v1UserInvitation:
+      type: object
+      properties:
+        email:
+          type: string
+          description: The user's email address.
+        invitation_id:
+          type: string
+          description: The invitation ID.
+      description: A UserInvitation represents a pending invitation with user email and invitation ID.
+    v1ListWorkspacesResponse:
+      type: object
+      properties:
+        workspaces:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1Workspace'
+          description: The list of workspaces.
+        next_page_token:
+          type: string
+          description: 'A token to retrieve the next page of results.
+
+            Pass this value in the `page_token` field in the subsequent call to
+
+            `ListWorkspaces` to get the next page of results. If this field is
+
+            empty, it means there are no more results.'
+      description: Response message for listing workspaces.
+    v1UserBasicInfo:
+      type: object
+      properties:
+        name:
+          type: string
+          title: 'The unique resource name of the user basic info.
+
+            Format: `organizations/{organization}/users/{user_basic_info}`'
+        display_name:
+          type: string
+          description: The user's display name.
+        email:
+          type: string
+          description: The user's email address.
+      description: 'Contains basic information about a user.
+
+        This is a lightweight representation used when full user details are not needed.'
+    v1RoleScope:
+      type: string
+      enum:
+      - ROLE_SCOPE_UNSPECIFIED
+      - ROLE_SCOPE_ORGANIZATION
+      - ROLE_SCOPE_WORKSPACE
+      default: ROLE_SCOPE_UNSPECIFIED
+      description: "Defines the scope at which a role can be applied.\n\n - ROLE_SCOPE_UNSPECIFIED: Unspecified role scope.\n - ROLE_SCOPE_ORGANIZATION: Role applies at the organization level.\n - ROLE_SCOPE_WORKSPACE: Role applies at the workspace level."
     v1ListWorkspaceUserInvitesResponse:
       type: object
       properties:
@@ -542,25 +513,6 @@ components:
 
             ListWorkspaceUserInvites to get the next page of results.'
       description: Response message for ListWorkspaceUserInvites.
-    v1DateFormat:
-      type: string
-      enum:
-      - DATE_FORMAT_UNSPECIFIED
-      - DATE_FORMAT_DD_MM_YYYY_SLASH
-      - DATE_FORMAT_MM_DD_YYYY_SLASH
-      - DATE_FORMAT_YYYY_MM_DD_DASH
-      - DATE_FORMAT_DD_MM_YYYY_DASH
-      - DATE_FORMAT_MM_DD_YYYY_DASH
-      - DATE_FORMAT_YYYY_MM_DD_SLASH
-      - DATE_FORMAT_DD_MM_YYYY_DOT
-      - DATE_FORMAT_MM_DD_YYYY_DOT
-      - DATE_FORMAT_YYYY_MM_DD_DOT
-      - DATE_FORMAT_DD_MMM_YYYY
-      - DATE_FORMAT_MMM_DD_YYYY
-      - DATE_FORMAT_DD_MMMM_YYYY
-      - DATE_FORMAT_MMMM_DD_YYYY
-      default: DATE_FORMAT_UNSPECIFIED
-      description: "Supported date formats.\n\n - DATE_FORMAT_UNSPECIFIED: Unspecified date format.\n - DATE_FORMAT_DD_MM_YYYY_SLASH: DD/MM/YYYY format.\n - DATE_FORMAT_MM_DD_YYYY_SLASH: MM/DD/YYYY format.\n - DATE_FORMAT_YYYY_MM_DD_DASH: YYYY-MM-DD format (ISO 8601).\n - DATE_FORMAT_DD_MM_YYYY_DASH: DD-MM-YYYY format.\n - DATE_FORMAT_MM_DD_YYYY_DASH: MM-DD-YYYY format.\n - DATE_FORMAT_YYYY_MM_DD_SLASH: YYYY/MM/DD format.\n - DATE_FORMAT_DD_MM_YYYY_DOT: DD.MM.YYYY format (European style).\n - DATE_FORMAT_MM_DD_YYYY_DOT: MM.DD.YYYY format.\n - DATE_FORMAT_YYYY_MM_DD_DOT: YYYY.MM.DD format.\n - DATE_FORMAT_DD_MMM_YYYY: DD MMM YYYY format (e.g., 15 Jan 2024).\n - DATE_FORMAT_MMM_DD_YYYY: MMM DD, YYYY format (e.g., Jan 15, 2024).\n - DATE_FORMAT_DD_MMMM_YYYY: DD MMMM YYYY format (e.g., 15 January 2024).\n - DATE_FORMAT_MMMM_DD_YYYY: MMMM DD, YYYY format (e.g., January 15, 2024)."
     v1ListWorkspaceRolesResponse:
       type: object
       properties:
@@ -577,24 +529,18 @@ components:
 
             ListWorkspaceRoles to get the next page of results.'
       description: Response message for ListWorkspaceRoles.
-    v1ListWorkspaceUsersResponse:
+    rpcStatus:
       type: object
       properties:
-        users:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        details:
           type: array
           items:
-            $ref: '#/components/schemas/v1UserWithRoles'
-          description: The list of users in the workspace with their roles.
-        next_page_token:
-          type: string
-          description: 'A token to retrieve the next page of results.
-
-            Pass this value in the `page_token` field in the subsequent call to
-
-            `ListWorkspaceUsers` to get the next page of results. If this field is
-
-            empty, it means there are no more results.'
-      description: Response message for listing users in a workspace.
+            $ref: '#/components/schemas/protobufAny'
     v1TimeFormat:
       type: string
       enum:
@@ -625,33 +571,102 @@ components:
       - DECIMAL_SYMBOL_COMMA
       default: DECIMAL_SYMBOL_UNSPECIFIED
       description: "Supported decimal symbols.\n\n - DECIMAL_SYMBOL_UNSPECIFIED: Unspecified decimal symbol.\n - DECIMAL_SYMBOL_PERIOD: Period (.) as decimal separator.\n - DECIMAL_SYMBOL_COMMA: Comma (,) as decimal separator."
-    v1UserInvitation:
-      type: object
-      properties:
-        email:
-          type: string
-          description: The user's email address.
-        invitation_id:
-          type: string
-          description: The invitation ID.
-      description: A UserInvitation represents a pending invitation with user email and invitation ID.
-    v1UserBasicInfo:
+    v1Role:
       type: object
       properties:
         name:
           type: string
-          title: 'The unique resource name of the user basic info.
+          title: 'Resource name of the role.
 
-            Format: `organizations/{organization}/users/{user_basic_info}`'
-        display_name:
-          type: string
-          description: The user's display name.
-        email:
-          type: string
-          description: The user's email address.
-      description: 'Contains basic information about a user.
+            Format: organizations/{organization}/roles/{role} (org-level)
 
-        This is a lightweight representation used when full user details are not needed.'
+            Format: organizations/{organization}/workspaces/{workspace}/roles/{role} (workspace-level)'
+        title:
+          type: string
+          description: Human-readable title of the role (e.g., "Administrator", "Editor").
+        description:
+          type: string
+          description: Description of what this role grants.
+        permissions:
+          type: array
+          items:
+            type: string
+          title: 'List of permission strings this role grants.
+
+            Format: "action:Resource" (e.g., "create:Automation", "read:Workspace")'
+          readOnly: true
+      description: 'A Role represents a concrete, assignable role that can be assigned to users.
+
+        Roles can be created from RoleTemplates or as standalone custom roles.'
+      required:
+      - title
+    v1CurrentUserOrganizationWorkspacesResponse:
+      type: object
+      properties:
+        user_workspaces:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1Workspace'
+          description: The list of workspaces the current user has access to in the organization.
+        next_page_token:
+          type: string
+          description: 'A token to retrieve the next page of results.
+
+            Pass this value in the `page_token` field in the subsequent call to
+
+            `CurrentUserOrganizationWorkspaces` to get the next page of results. If this field is
+
+            empty, it means there are no more results.'
+      description: Response message for listing workspaces for the current user within a specific organization.
+    v1GeneralPreferences:
+      type: object
+      properties:
+        time_zone:
+          type: string
+          description: 'The time zone preference.
+
+            Should be an IANA timezone identifier (e.g., "America/New_York", "Europe/London", "UTC").'
+        time_format:
+          $ref: '#/components/schemas/v1TimeFormat'
+        date_format:
+          $ref: '#/components/schemas/v1DateFormat'
+        decimal_symbol:
+          $ref: '#/components/schemas/v1DecimalSymbol'
+        decimal_places:
+          type: integer
+          format: int32
+          description: The number of digits after decimal point.
+        measurement_system:
+          $ref: '#/components/schemas/v1MeasurementSystem'
+      description: 'General preferences for display and formatting.
+
+        Used by both workspace and organization preferences.'
+    v1ListWorkspaceUsersResponse:
+      type: object
+      properties:
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/v1UserWithRoles'
+          description: The list of users in the workspace with their roles.
+        next_page_token:
+          type: string
+          description: 'A token to retrieve the next page of results.
+
+            Pass this value in the `page_token` field in the subsequent call to
+
+            `ListWorkspaceUsers` to get the next page of results. If this field is
+
+            empty, it means there are no more results.'
+      description: Response message for listing users in a workspace.
+    v1MeasurementSystem:
+      type: string
+      enum:
+      - MEASUREMENT_SYSTEM_UNSPECIFIED
+      - MEASUREMENT_SYSTEM_METRIC
+      - MEASUREMENT_SYSTEM_IMPERIAL
+      default: MEASUREMENT_SYSTEM_UNSPECIFIED
+      description: "Supported measurement systems.\n\n - MEASUREMENT_SYSTEM_UNSPECIFIED: Unspecified measurement system.\n - MEASUREMENT_SYSTEM_METRIC: Metric system.\n - MEASUREMENT_SYSTEM_IMPERIAL: Imperial system."
     v1Workspace:
       type: object
       properties:
@@ -698,89 +713,55 @@ components:
       description: A Workspace is a container for agents within an organization.
       required:
       - title
-    v1Role:
+    v1DateFormat:
+      type: string
+      enum:
+      - DATE_FORMAT_UNSPECIFIED
+      - DATE_FORMAT_DD_MM_YYYY_SLASH
+      - DATE_FORMAT_MM_DD_YYYY_SLASH
+      - DATE_FORMAT_YYYY_MM_DD_DASH
+      - DATE_FORMAT_DD_MM_YYYY_DASH
+      - DATE_FORMAT_MM_DD_YYYY_DASH
+      - DATE_FORMAT_YYYY_MM_DD_SLASH
+      - DATE_FORMAT_DD_MM_YYYY_DOT
+      - DATE_FORMAT_MM_DD_YYYY_DOT
+      - DATE_FORMAT_YYYY_MM_DD_DOT
+      - DATE_FORMAT_DD_MMM_YYYY
+      - DATE_FORMAT_MMM_DD_YYYY
+      - DATE_FORMAT_DD_MMMM_YYYY
+      - DATE_FORMAT_MMMM_DD_YYYY
+      default: DATE_FORMAT_UNSPECIFIED
+      description: "Supported date formats.\n\n - DATE_FORMAT_UNSPECIFIED: Unspecified date format.\n - DATE_FORMAT_DD_MM_YYYY_SLASH: DD/MM/YYYY format.\n - DATE_FORMAT_MM_DD_YYYY_SLASH: MM/DD/YYYY format.\n - DATE_FORMAT_YYYY_MM_DD_DASH: YYYY-MM-DD format (ISO 8601).\n - DATE_FORMAT_DD_MM_YYYY_DASH: DD-MM-YYYY format.\n - DATE_FORMAT_MM_DD_YYYY_DASH: MM-DD-YYYY format.\n - DATE_FORMAT_YYYY_MM_DD_SLASH: YYYY/MM/DD format.\n - DATE_FORMAT_DD_MM_YYYY_DOT: DD.MM.YYYY format (European style).\n - DATE_FORMAT_MM_DD_YYYY_DOT: MM.DD.YYYY format.\n - DATE_FORMAT_YYYY_MM_DD_DOT: YYYY.MM.DD format.\n - DATE_FORMAT_DD_MMM_YYYY: DD MMM YYYY format (e.g., 15 Jan 2024).\n - DATE_FORMAT_MMM_DD_YYYY: MMM DD, YYYY format (e.g., Jan 15, 2024).\n - DATE_FORMAT_DD_MMMM_YYYY: DD MMMM YYYY format (e.g., 15 January 2024).\n - DATE_FORMAT_MMMM_DD_YYYY: MMMM DD, YYYY format (e.g., January 15, 2024)."
+    CountWorkspaceUsersBody:
+      type: object
+      properties:
+        workspace_ids:
+          type: array
+          items:
+            type: string
+          title: 'The list of workspace IDs to get user counts for.
+
+            Each workspace_id should be the workspace identifier (not the full resource name).
+
+            The full workspace resource names will be constructed as:
+
+            organizations/{organization}/workspaces/{workspace_id}'
+      description: Request message for counting users in specific workspaces.
+      required:
+      - workspace_ids
+    v1RoleBasicInfo:
       type: object
       properties:
         name:
           type: string
-          title: 'Resource name of the role.
+          description: The role name (e.g., "workspace-admin", "org-admin", or custom role name).
+        role_scope:
+          $ref: '#/components/schemas/v1RoleScope'
+      title: 'Lightweight role information following the UserBasicInfo pattern.
 
-            Format: organizations/{organization}/roles/{role} (org-level)
-
-            Format: organizations/{organization}/workspaces/{workspace}/roles/{role} (workspace-level)'
-        title:
-          type: string
-          description: Human-readable title of the role (e.g., "Administrator", "Editor").
-        description:
-          type: string
-          description: Description of what this role grants.
-        permissions:
-          type: array
-          items:
-            type: string
-          title: 'List of permission strings this role grants.
-
-            Format: "action:Resource" (e.g., "create:Automation", "read:Workspace")'
-          readOnly: true
-      description: 'A Role represents a concrete, assignable role that can be assigned to users.
-
-        Roles can be created from RoleTemplates or as standalone custom roles.'
-      required:
-      - title
-    v1ListWorkspacesResponse:
-      type: object
-      properties:
-        workspaces:
-          type: array
-          items:
-            $ref: '#/components/schemas/v1Workspace'
-          description: The list of workspaces.
-        next_page_token:
-          type: string
-          description: 'A token to retrieve the next page of results.
-
-            Pass this value in the `page_token` field in the subsequent call to
-
-            `ListWorkspaces` to get the next page of results. If this field is
-
-            empty, it means there are no more results.'
-      description: Response message for listing workspaces.
-    v1GeneralPreferences:
-      type: object
-      properties:
-        time_zone:
-          type: string
-          description: 'The time zone preference.
-
-            Should be an IANA timezone identifier (e.g., "America/New_York", "Europe/London", "UTC").'
-        time_format:
-          $ref: '#/components/schemas/v1TimeFormat'
-        date_format:
-          $ref: '#/components/schemas/v1DateFormat'
-        decimal_symbol:
-          $ref: '#/components/schemas/v1DecimalSymbol'
-        decimal_places:
-          type: integer
-          format: int32
-          description: The number of digits after decimal point.
-        measurement_system:
-          $ref: '#/components/schemas/v1MeasurementSystem'
-      description: 'General preferences for display and formatting.
-
-        Used by both workspace and organization preferences.'
-    v1MeasurementSystem:
-      type: string
-      enum:
-      - MEASUREMENT_SYSTEM_UNSPECIFIED
-      - MEASUREMENT_SYSTEM_METRIC
-      - MEASUREMENT_SYSTEM_IMPERIAL
-      default: MEASUREMENT_SYSTEM_UNSPECIFIED
-      description: "Supported measurement systems.\n\n - MEASUREMENT_SYSTEM_UNSPECIFIED: Unspecified measurement system.\n - MEASUREMENT_SYSTEM_METRIC: Metric system.\n - MEASUREMENT_SYSTEM_IMPERIAL: Imperial system."
+        Note: RoleScope is imported from rbac.proto'
   securitySchemes:
     BearerAuth:
       type: http
       scheme: bearer
       description: Personal Access Token.
-x-refined-from:
-- kognitos-openapi.yaml
-- kognitos-openapi.yml

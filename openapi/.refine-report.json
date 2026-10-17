@@ -1,8 +1,7 @@
 {
   "provider": "kognitos",
   "sources": [
-    "_original/kognitos-openapi.yaml",
-    "kognitos-openapi.yml"
+    "_original/kognitos-openapi.yaml"
   ],
   "outputs": [
     "kognitos-analytics-api-openapi.yml",
@@ -14,24 +13,24 @@
     "kognitos-runs-api-openapi.yml",
     "kognitos-workspaces-api-openapi.yml"
   ],
-  "archived": [
-    "archived openapi/kognitos-openapi.yml"
-  ],
+  "archived": [],
   "errors": [],
   "warnings": [],
   "notes": [
+    "1 archived document(s) dropped as subsets of other archived documents",
     "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
     "kognitos-openapi.yaml: upgraded openapi 3.0.0 -> OpenAPI 3.2.0",
-    "kognitos-openapi.yml: upgraded openapi 3.0.0 -> OpenAPI 3.2.0",
-    "tag 'Analytics' spans 2 source specs (kognitos-openapi.yaml, kognitos-openapi.yml): per-path servers applied",
-    "tag 'Automations' spans 2 source specs (kognitos-openapi.yaml, kognitos-openapi.yml): per-path servers applied",
-    "tag 'Books' spans 2 source specs (kognitos-openapi.yaml, kognitos-openapi.yml): per-path servers applied",
-    "tag 'Exceptions' spans 2 source specs (kognitos-openapi.yaml, kognitos-openapi.yml): per-path servers applied",
-    "tag 'Files' spans 2 source specs (kognitos-openapi.yaml, kognitos-openapi.yml): per-path servers applied",
-    "tag 'Organizations' spans 2 source specs (kognitos-openapi.yaml, kognitos-openapi.yml): per-path servers applied",
-    "tag 'Runs' spans 2 source specs (kognitos-openapi.yaml, kognitos-openapi.yml): per-path servers applied",
-    "tag 'Workspaces' spans 2 source specs (kognitos-openapi.yaml, kognitos-openapi.yml): per-path servers applied",
-    "apis.yml register: written (+8 apis, 9 total)"
+    "apis.yml register: already-registered"
   ],
-  "skipped": []
+  "skipped": [
+    "_original/kognitos-openapi.yml: archived document superseded by a larger archived document",
+    "kognitos-analytics-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "kognitos-automations-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "kognitos-books-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "kognitos-exceptions-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "kognitos-files-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "kognitos-organizations-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "kognitos-runs-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "kognitos-workspaces-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }
