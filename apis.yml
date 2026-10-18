@@ -26,6 +26,15 @@ modified: '2026-10-09'
 
 tags:
 - Company
+- AI Agents
+- Automation
+- Workflow Automation
+- Finance Automation
+- Accounts Payable
+- Neuro-Symbolic AI
+- Enterprise
+tags_raw:
+- Company
 - Agentic AI
 - Automation
 - Workflow Automation
@@ -147,6 +156,9 @@ apis:
   baseURL: https://mcp.us-1.kognitos.com/
   tags:
   - MCP
+  - AI Agents
+  tags_raw:
+  - MCP
   - Agentic AI
   properties:
   - type: Documentation
@@ -183,6 +195,8 @@ apis:
   humanURL: https://docs.kognitos.com/guides/api-reference/api-reference
   baseURL: https://app.us-1.kognitos.com/api/v1
   tags:
+  - Automation
+  tags_raw:
   - Automations
   properties:
   - type: OpenAPI
@@ -262,6 +276,8 @@ apis:
   humanURL: https://docs.kognitos.com/guides/api-reference/api-reference
   baseURL: https://app.us-1.kognitos.com/api/v1
   tags:
+  - File
+  tags_raw:
   - Files
   properties:
   - type: OpenAPI
@@ -288,6 +304,8 @@ apis:
   humanURL: https://docs.kognitos.com/guides/api-reference/api-reference
   baseURL: https://app.us-1.kognitos.com/api/v1
   tags:
+  - Organization
+  tags_raw:
   - Organizations
   properties:
   - type: OpenAPI
@@ -340,6 +358,8 @@ apis:
   humanURL: https://docs.kognitos.com/guides/api-reference/api-reference
   baseURL: https://app.us-1.kognitos.com/api/v1
   tags:
+  - Workspace
+  tags_raw:
   - Workspaces
   properties:
   - type: OpenAPI
