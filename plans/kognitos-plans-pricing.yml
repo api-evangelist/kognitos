@@ -21,3 +21,22 @@ plans:
   price_text: request pricing via the Kognitos sales team
   features:
   - Pricing scales with the volume of automated transactions and complexity of agents rather than the number of seats or robots deployed.
+x-canonical:
+  generated: '2026-10-18'
+  vocabulary: all/0-working/economics/plans-canonical.yml
+  models:
+  - negotiated
+  units: []
+  plans:
+  - name: Free workspace
+    access: other
+    model: unstated
+    model_how: derived
+    units: []
+    periods: []
+  - name: Enterprise
+    access: other
+    model: negotiated
+    model_how: derived
+    units: []
+    periods: []
