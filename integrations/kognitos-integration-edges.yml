@@ -1,5 +1,17 @@
-generated: '2026-10-13'
+generated: '2026-10-20'
 method: searched
+source:
+- https://registry.npmjs.org
+- https://pypi.org/pypi
+- https://rubygems.org/api/v1
+- https://crates.io/api/v1
+- https://repo1.maven.org/maven2
+- https://api.nuget.org/v3
+- https://proxy.golang.org
+- https://zapier.com/apps/kognitos/integrations
+- https://n8n.io/integrations/kognitos/
+- https://composio.dev/toolkits/kognitos
+- https://monid.ai/tools/kognitos
 checked:
 - https://api.nuget.org/v3
 - https://aws.amazon.com/marketplace/
@@ -9,6 +21,11 @@ checked:
 - https://registry.npmjs.org
 - https://repo1.maven.org/maven2
 - https://rubygems.org/api/v1
+- https://composio.dev/toolkits/kognitos
+- https://monid.ai/tools/kognitos
+- https://n8n.io/integrations/kognitos/
+- https://zapier.com/apps/kognitos/integrations
+summary: null
 marketplace_apps: []
 edges:
 - partner_name: AWS Marketplace
@@ -57,11 +74,4 @@ edges:
     detected: '2026-10-18'
   detected_by: sweep-official-sdks.py
   first_seen: '2026-10-18'
-source:
-- https://api.nuget.org/v3
-- https://crates.io/api/v1
-- https://proxy.golang.org
-- https://pypi.org/pypi
-- https://registry.npmjs.org
-- https://repo1.maven.org/maven2
-- https://rubygems.org/api/v1
+templates: []
