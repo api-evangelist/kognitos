@@ -64,5 +64,160 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Kognitos is a company surfaced via the API Evangelist harvest backlog (source: secondary-market) and added to the network as a stub for full-pipeline profiling.
-- https://equityzen.com/company/kognitos
+Kognitos is a neurosymbolic agentic AI platform that automates finance, accounts payable, healthcare, and IT workflows in plain English ("English as code"), positioned as deterministic agentic AI for the enterprise with zero hallucinations and full audit compliance. The platform runs on AWS, offers integrations with SAP, Oracle Cloud ERP, Microsoft Dynamics 365 and Workday, and exposes a REST API (base https://app.us-1.kognitos.com/api/v1, Bearer personal access tokens) for managing organizations, workspaces, automations, runs, books, files, exceptions and analytics.
+
+**Areas:** Company · AI Agents · Automation · Workflow Automation · Finance Automation · Accounts Payable · Neuro-Symbolic AI · Enterprise
+
+## Kognitos on APIs.io
+
+Everything profiled for Kognitos is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/kognitos/](https://apis.io/providers/kognitos/)** — or go straight to one of the APIs or properties below.
+
+### APIs (9)
+
+- [Kognitos MCP Server](https://apis.io/apis/kognitos/kognitos-mcp-server/) — The Kognitos MCP Server lets AI assistants (Claude Desktop, Claude Code, Claude.ai and other Model Context Protocol clients) list automations, start runs,…
+- [Kognitos Analytics API](https://apis.io/apis/kognitos/kognitos-analytics-api/) — Query dashboards, automation estimates, insights, and metrics.
+- [Kognitos Automations API](https://apis.io/apis/kognitos/kognitos-automations-api/) — Create and configure automations, revisions, schedules, triggers, and connections.
+- [Kognitos Books API](https://apis.io/apis/kognitos/kognitos-books-api/) — Browse and search books, concepts, procedures, connections, and triggers.
+- [Kognitos Exceptions API](https://apis.io/apis/kognitos/kognitos-exceptions-api/) — Track exceptions, view analytics, manage agent events, and access troubleshooting guides.
+- [Kognitos Files API](https://apis.io/apis/kognitos/kognitos-files-api/) — Upload, download, and manage files.
+- [Kognitos Organizations API](https://apis.io/apis/kognitos/kognitos-organizations-api/) — Manage organizations, users, roles, invitations, and preferences.
+- [Kognitos Runs API](https://apis.io/apis/kognitos/kognitos-runs-api/) — Execute automations and manage run lifecycle — start, pause, continue, and view events.
+- [Kognitos Workspaces API](https://apis.io/apis/kognitos/kognitos-workspaces-api/) — Manage workspaces, members, roles, invitations, and preferences.
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [Kognitos MCP Server](https://apis.io/servers/kognitos/kognitos-mcp-server/)
+
+#### Agentic access (1)
+
+Which operations an agent can call, which act, and which need a human in the loop.
+
+- [Kognitos Agentic Access](https://apis.io/agentic-access/kognitos/kognitos-agentic-access/)
+
+#### JSON Schema (6)
+
+The data models the API reads and writes.
+
+- [apiHttpBody](https://apis.io/schemas/kognitos/kognitos-api-http-body/)
+- [v1Automation](https://apis.io/schemas/kognitos/kognitos-v1-automation/)
+- [v1Exception](https://apis.io/schemas/kognitos/kognitos-v1-exception/)
+- [A troubleshooting guide entry for an automation](https://apis.io/schemas/kognitos/kognitos-v1-guide-entry/)
+- [v1ListRunEventsResponse](https://apis.io/schemas/kognitos/kognitos-v1-list-run-events-response/)
+- [v1Run](https://apis.io/schemas/kognitos/kognitos-v1-run/)
+
+#### JSON-LD (1)
+
+Linked-data contexts for the provider's vocabulary.
+
+- [Kognitos Context](https://apis.io/jsonld/kognitos/kognitos-context/)
+
+#### Overlays (1)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [Kognitos Openapi Overlay](https://apis.io/overlays/kognitos/kognitos-openapi-overlay/)
+
+#### Governance rules (2)
+
+Spectral rulesets for the provider's contracts.
+
+- [Kognitos — openapi rules](https://apis.io/rules/kognitos/kognitos-openapi-spectral-rules/)
+- [Kognitos API Rules](https://apis.io/rules/kognitos/kognitos-rules/)
+
+#### Security (3)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Kognitos Authentication](https://apis.io/security/kognitos/kognitos-authentication/)
+- [Kognitos Domain Security](https://apis.io/security/kognitos/kognitos-domain-security/)
+- [Kognitos Trust Center](https://apis.io/security/kognitos/kognitos-trust-center/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Kognitos Plans Pricing](https://apis.io/plans/kognitos/kognitos-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Kognitos Rate Limits](https://apis.io/rate-limits/kognitos/kognitos-rate-limits/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://www.kognitos.com)
+- [Documentation](https://docs.kognitos.com/)
+- [Getting started](https://docs.kognitos.com/guides/getting-started/quick-start)
+- [API reference](https://docs.kognitos.com/guides/api-reference/api-reference)
+- [Support](https://www.kognitos.com/contact-us/)
+- [Blog](https://www.kognitos.com/blog/)
+- [Compliance](https://trust.kognitos.com/)
+- [Trust centre](https://trust.kognitos.com/)
+- [Terms of service](https://www.kognitos.com/terms/)
+- [Privacy policy](https://www.kognitos.com/privacy/)
+- [GitHub](https://github.com/kognitos)
+- [Status](https://status.kognitos.com/)
+
+## API Evangelist rating
+
+**Kin Score 61.0** — strong · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 76.7 |
+| Contract quality | 60.0 |
+| Contract governance | 35.6 |
+| Operational transparency | 28.9 |
+| Developer ergonomics | 73.2 |
+| Access clarity | 71.1 |
+
+**Agent readiness 45.9** — agent-ready (gated down from agent-native)
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | documented (partial credit) |
+| MCP Server | documented (partial credit) |
+| Auth Clarity | served (partial credit) |
+| Idempotency | — |
+| Error Semantics | derived (partial credit) |
+| OpenAPI Examples | — |
+| Rate Limit Signal | documented (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | served (partial credit) |
+| Protected Resource Metadata | verified |
+| Dynamic Client Registration | yes |
+| Agentic Commerce | — |
+| Pagination Ratio | paginated |
+| Operation Distinctiveness | distinct |
+
+**Regulatory alignment 29.4** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/kognitos/](https://apis.io/providers/kognitos/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Kognitos: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/kognitos/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
